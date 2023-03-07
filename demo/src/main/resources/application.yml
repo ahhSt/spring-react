@@ -1,0 +1,48 @@
+logging:
+  config: classpath:logback.xml   # Logger Setting
+
+logging.level: #???? ??
+  org.hibernate.sql: debug #???? 2?
+  org.hibernate.type: trace #???? 2?
+
+server:
+  port: 82
+
+spring:
+  datasource:
+    #Oracle setting
+    #    url: jdbc:oracle:thin:@210.182.144.83:1521:AFCDB
+    #    url: jdbc:oracle:thin:@192.168.56.1:31521:XE
+    #    username: OPS
+    #    password: OPS_123
+    #    driver-class-name: oracle.jdbc.OracleDriver
+
+    # Postgresql setting
+    url: jdbc:postgresql://192.168.56.1:35432/OPS
+    #    url: jdbc:postgresql://172.20.30.177:5432/postgres
+    username: OPS
+    password: OPS_123
+    # MySQL setting
+  #    url: jdbc:mysql://192.168.56.1:3306/OPS
+  #    username: OPS
+  #    password: OPS_123
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+    #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000 #lazy loading ?? ?????
+
+springdoc:
+  swagger-ui:
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
+
+mybatis:
+  mapper-locations:
+    - classpath:mybatis/**/*.xml

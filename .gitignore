@@ -1,0 +1,5 @@
+.idea/
+logs/
+demo/logs/
+demo/.mvn/
+demo/target/
