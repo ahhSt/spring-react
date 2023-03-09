@@ -1,14 +1,17 @@
 logging:
   config: classpath:logback.xml   # Logger Setting
 
-logging.level: #???? ??
-  org.hibernate.sql: debug #???? 2?
-  org.hibernate.type: trace #???? 2?
+logging.level:
+  org.hibernate.sql: debug
+  org.hibernate.type: trace
 
 server:
   port: 82
 
 spring:
+  web:
+    resources:
+      static-locations: classpath:/static, classpath:/webapp
   datasource:
     #Oracle setting
     #    url: jdbc:oracle:thin:@210.182.144.83:1521:AFCDB
@@ -36,7 +39,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-        default_batch_fetch_size: 1000 #lazy loading ?? ?????
+        default_batch_fetch_size: 1000 #lazy loading
 
 springdoc:
   swagger-ui:
