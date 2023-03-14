@@ -21,6 +21,7 @@ import java.util.Optional;
 
 @Tag(name = "(SAMPLE) Customer Controller")
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/customer")
 @Slf4j
 public class CustomerController {
