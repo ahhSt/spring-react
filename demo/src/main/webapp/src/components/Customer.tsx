@@ -1,24 +1,31 @@
-import React from "react";
-
-type Customer = {
-  src: string;
-  alt: string;
-};
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 interface CustomerProps {
-  customer?: Customer;
+  id?: string;
   date: string;
   email: string;
   name: string;
 }
 
-const Customer = ({ customer, date, email, name }: CustomerProps) => {
-  return (
-    <div>
-      {customer && <img src={customer.src} alt={customer.alt} />}
-      <h3>{name}</h3>
-      <p>{email}</p>
-      <p>{date}</p>
-    </div>
-  );
+const Customer = () => {
+
+    const [data, setData] = useState<CustomerProps[]>([] as CustomerProps[]);
+
+    useEffect(() => {
+
+        axios.get("http://localhost:82/api/customer",{} )
+        .then((response) => {
+            console.log(response.data);
+            return setData(response.data);
+        });
+    }, []);
+
+    return (
+        <div>
+            <ul>{data.map((str, idx) => (<li key={idx}>{str.name}</li>))}</ul>
+        </div>
+    );
 };
+
+export default Customer;
