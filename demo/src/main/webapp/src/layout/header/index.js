@@ -5,7 +5,13 @@ import React from "react";
  */
 export default function DefaultHeader() {
   return (
-    <header>
+    <header
+        style={{
+                  backgroundColor: "green",
+                  padding: 20,
+                  color: "white",
+              }}
+    >
       <div>기본 Header 영역</div>
     </header>
   )

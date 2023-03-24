@@ -13,6 +13,7 @@ const appearFromRight = keyframes`
 
 export const Container = styled.div`
 	height: 100%;
+	background-color: #454545;
 `;
 
 export const Content = styled.div`

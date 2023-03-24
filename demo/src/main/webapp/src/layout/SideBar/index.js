@@ -61,9 +61,6 @@ export function SideBar() {
 										<FaArrowRight />
 									</button>
 								</span>
-								<div>
-									<h1>Minha logo </h1>
-								</div>
 
 								{/* Icones principais do app */}
 								<ul>
@@ -101,10 +98,6 @@ export function SideBar() {
 										<p> Sair da conta </p>
 									</a>
 								</ul>
-
-								<span>
-									<p>Tiago Gonçalves de Castro</p>
-								</span>
 							</div>
 						</section>
 						<aside onClick={handleChangeSideBar} />
