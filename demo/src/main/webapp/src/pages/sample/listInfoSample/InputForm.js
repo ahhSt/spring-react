@@ -13,14 +13,45 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const InputForm = (props) => {
 
-  const [item, setItem] = useState(props.item);
+  const [index, setIndex] = useState(props.id);
+  const [customerInfo, setCustomerInfo] = useState({});
 
   useEffect(() => {
-    console.log('useEffect');
-  }, []);
+    console.log('222222222');
+    setIndex(props.id);
+  });
+
+  useEffect(() => {
+    console.log('useEffect11111');
+
+    const DetailInfo = (idx) =>{
+      const fetchCustomerInfo = async (idx) => {
+        try {
+          const response = await axios.get(
+              '/api/customer/' + idx
+          );
+          console.log(response.data);
+          setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
+        } catch (e) {
+          console.log("error");
+        }
+      };
+  
+      fetchCustomerInfo(idx);
+    }
+    
+    DetailInfo(index);
+  },[index]);
 
   const onClick = () => {
-    console.log(props.item);
+    console.log(customerInfo);
+  }
+
+  const onChange = (e, field) => {
+    let obj = {};
+    obj[field] = e.target.value;
+
+    setCustomerInfo({...customerInfo, ...obj});
   }
 
   return (
@@ -36,13 +67,12 @@ const InputForm = (props) => {
             name="id"
             label="ID"
             fullWidth
-            autoComplete="id"
+            // autoComplete="id"
             variant="standard"
-            value={item.id || ""}
-            onChange={ (newValue) => {
-                newValue && setItem({...item, ...{ id: newValue}})
-              }
-            }
+            value={ customerInfo.id || ""}
+            onChange={ (e) => {
+              onChange(e, "id");
+            } }
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -52,21 +82,27 @@ const InputForm = (props) => {
             name="Name"
             label="Name"
             fullWidth
-            autoComplete="name"
+            // autoComplete="name"
             variant="standard"
-            value={props.item.name || ""}
+            value={ customerInfo.name || ""}
+            onChange={ (e) => {
+              onChange(e, "name");
+            } }
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             required
-            id="date"
-            name="date"
-            label="Date"
+            id="email"
+            name="email"
+            label="E-Mail"
             fullWidth
-            autoComplete="shipping address-line1"
+            // autoComplete="shipping address-line1"
             variant="standard"
-            value={props.item.date || ""}
+            value={ customerInfo.email || ""}
+            onChange={ (e) => {
+              onChange(e, "email");
+            } }
           />
         </Grid>
         <Grid item xs={12}>
@@ -75,8 +111,9 @@ const InputForm = (props) => {
             name="address2"
             label="Address line 2"
             fullWidth
-            autoComplete="shipping address-line2"
+            // autoComplete="shipping address-line2"
             variant="standard"
+            defaultValue="2222"
           />
         </Grid>
         <Grid item xs={12} sm={6}>

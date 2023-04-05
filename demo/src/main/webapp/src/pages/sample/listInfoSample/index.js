@@ -18,16 +18,26 @@ import InputForm from './InputForm';
 export default function TestPage(){
 
     const [customers, setCustomers] = useState(null);
-    const [customerInfo, setCustomerInfo] = useState({});
+    // const [customerInfo, setCustomerInfo] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const [selectedIndex, setSelectedIndex] = useState(1);
-      
-    const handleListItemClick = (event, index) => {
-      setSelectedIndex(index);
-      DetailInfo(index);
-    };
+
+    // const DetailInfo = (idx) =>{
+    //   const fetchCustomerInfo = async (idx) => {
+    //     try {
+    //       const response = await axios.get(
+    //           '/api/customer/' + idx
+    //       );
+    //       setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
+    //     } catch (e) {
+    //       console.log("error");
+    //     }
+    //   };
+  
+    //   fetchCustomerInfo(idx);
+    // }
 
     useEffect(() => {
         console.log("parent useeffect");
@@ -48,26 +58,17 @@ export default function TestPage(){
         };
     
         fetchCustomers();
+        // DetailInfo(1);
       }, []);
 
     if (loading) return <div>로딩중..</div>;
     if (error) return <div>에러가 발생했습니다</div>;
     if (!customers) return null;
 
-    const DetailInfo = (idx) =>{
-      const fetchCustomer = async (idx) => {
-        try {
-          const response = await axios.get(
-              '/api/customer/' + idx
-          );
-          setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
-        } catch (e) {
-          console.log("error");
-        }
-      };
-  
-      fetchCustomer(idx);
-    }
+    const handleListItemClick = (event, index) => {
+      setSelectedIndex(index);
+      // DetailInfo(index);
+    };
 
     const ListItems = () => {
 
@@ -124,7 +125,7 @@ export default function TestPage(){
                     <SelectedListItem />
                 </Grid>
                 <Grid xs={8}>
-                    <InputForm item={ customerInfo }/>
+                    <InputForm id={ selectedIndex } />
                 </Grid>
             </Grid>
         </Container>
