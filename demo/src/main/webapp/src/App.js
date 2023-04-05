@@ -6,16 +6,20 @@ import { BrowserRouter as Router,} from "react-router-dom";
 import { NavigationBar } from './components/NavigationBar';
 import Sidebar from './components/Sidebar';
 
-import Contents from './routes';
+import Routes from './routes';
+import Dashboard from 'pages/Dashboard';
 
 function App() {
 
   return (
         <React.Fragment>
-          <Router>
+          {/* <Router>
             <NavigationBar />
             <Sidebar />
-            <Contents />
+            <Routes />
+          </Router> */}
+          <Router>
+            <Dashboard />
           </Router>
         </React.Fragment>
   );
