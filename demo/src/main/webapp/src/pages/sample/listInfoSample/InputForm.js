@@ -14,10 +14,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const InputForm = (props) => {
 
   const [index, setIndex] = useState(props.id);
+  const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
+
+  function clearInfo() {
+    setCustomerInfo({id:index});
+  }
 
   useEffect(() => {
     console.log('222222222');
+    setIsNew(props.isNew);
     setIndex(props.id);
   });
 
@@ -40,16 +46,65 @@ const InputForm = (props) => {
       fetchCustomerInfo(idx);
     }
     
-    DetailInfo(index);
+    if (isNew){
+      clearInfo();
+    }
+    else{
+      DetailInfo(index);
+    }
   },[index]);
 
-  const onClick = () => {
+  const onSave = () => {
     console.log(customerInfo);
+
+    const saveCustomerInfo = async () => {
+      try{
+        if (isNew) {
+          await axios.post(
+            '/api/customer', customerInfo
+          )
+        } 
+        else {
+          await axios.put(
+            '/api/customer/'+customerInfo.id, customerInfo
+          )
+        }        
+        alert('Save');
+        props.fetchCustomers();
+      }
+      catch (e) {
+        alert('Error');
+      }
+    }
+
+    if(window.confirm("저장하시겠습니까?")) {
+      saveCustomerInfo();
+    }
+  }
+
+  const onDelete = () => {
+    const deleteCustomerInfo = async () => {
+      try{
+        await axios.delete(
+          '/api/customer/'+customerInfo.id
+        ) 
+        alert('Delete');
+        props.fetchCustomers();
+      }
+      catch (e) {
+        alert('Error');
+      }
+    }
+
+    if(window.confirm("삭제제하시겠습니까?")) {
+      deleteCustomerInfo();
+    }
   }
 
   const onChange = (e, field) => {
     let obj = {};
     obj[field] = e.target.value;
+    console.log(customerInfo);
 
     setCustomerInfo({...customerInfo, ...obj});
   }
@@ -62,13 +117,15 @@ const InputForm = (props) => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="id"
             name="id"
             label="ID"
             fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
             // autoComplete="id"
-            variant="standard"
+            variant="filled"
             value={ customerInfo.id || ""}
             onChange={ (e) => {
               onChange(e, "id");
@@ -166,10 +223,10 @@ const InputForm = (props) => {
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
-        <Button variant="outlined" startIcon={<DeleteIcon />}>
+        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={onDelete}>
           Delete
         </Button>
-        <Button variant="contained" endIcon={<SaveIcon />} onClick={onClick}>
+        <Button variant="contained" endIcon={<SaveIcon />} onClick={onSave}>
           Save
         </Button>
       </Stack>
