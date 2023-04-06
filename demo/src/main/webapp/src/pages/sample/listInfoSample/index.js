@@ -91,14 +91,10 @@ export default function TestPage(){
     function BoxComponent() {
         return (
           <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-            <Button>Save</Button>
+            <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
+              Add
+            </Button>
           </Box>
-        );
-    }
-    
-    function Item() {
-        return (
-            <TextField id="outlined-basic" label="Outlined" variant="outlined" />
         );
     }
 
@@ -121,18 +117,12 @@ export default function TestPage(){
         );
     }
 
-    function reRender () {
-      setSearch(true);
-    }
-
     return (
         <Container maxwidth="sm">
             <Grid container spacing={2}>
                 <Grid xs={4}>
                   <SelectedListItem />
-                  <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
-                    Add
-                  </Button>
+                  <BoxComponent />
                 </Grid>
                 <Grid xs={8}>
                   <InputForm id={ selectedIndex } isNew= { isNew } fetchCustomers = { fetchCustomers }/>
