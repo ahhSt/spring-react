@@ -54,14 +54,14 @@ export const mainListItems = (
 export const secondaryListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
-      Saved reports
+      Sample Screen
     </ListSubheader>
     <Link to="/list-info">
     <ListItemButton>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="(샘플)리스트 상세 정보" />
+      <ListItemText primary="(CRUD) Sample 1" />
     </ListItemButton>
     </Link>
     <ListItemButton>

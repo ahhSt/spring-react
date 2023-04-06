@@ -12,62 +12,51 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 import InputForm from './InputForm';
 
 export default function TestPage(){
 
     const [customers, setCustomers] = useState(null);
-    // const [customerInfo, setCustomerInfo] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isNew, setIsNew] = useState(false);
+    const [search, setSearch] = useState(false);
 
-    const [selectedIndex, setSelectedIndex] = useState(1);
+    const [selectedIndex, setSelectedIndex] = useState(null);
 
-    // const DetailInfo = (idx) =>{
-    //   const fetchCustomerInfo = async (idx) => {
-    //     try {
-    //       const response = await axios.get(
-    //           '/api/customer/' + idx
-    //       );
-    //       setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
-    //     } catch (e) {
-    //       console.log("error");
-    //     }
-    //   };
-  
-    //   fetchCustomerInfo(idx);
-    // }
+    const fetchCustomers = async () => {
+      try {
+        setError(null);
+        setCustomers(null);
+        // loading 상태를 true 로 바꿉니다.
+        setLoading(true);
+        const response = await axios.get(
+            '/api/customer'
+        );
+        setCustomers(response.data); // 데이터는 response.data 안에 들어있습니다.
+
+        let minId = response.data[0].id;
+        setSelectedIndex(minId);
+      } catch (e) {
+        setError(e);
+      }
+      setLoading(false);
+    };
 
     useEffect(() => {
-        console.log("parent useeffect");
-        const fetchCustomers = async () => {
-          try {
-            setError(null);
-            setCustomers(null);
-            // loading 상태를 true 로 바꿉니다.
-            setLoading(true);
-            const response = await axios.get(
-                '/api/customer'
-            );
-            setCustomers(response.data); // 데이터는 response.data 안에 들어있습니다.
-          } catch (e) {
-            setError(e);
-          }
-          setLoading(false);
-        };
-    
         fetchCustomers();
-        // DetailInfo(1);
       }, []);
 
     if (loading) return <div>로딩중..</div>;
     if (error) return <div>에러가 발생했습니다</div>;
     if (!customers) return null;
 
-    const handleListItemClick = (event, index) => {
-      setSelectedIndex(index);
-      // DetailInfo(index);
+    const handleListItemClick = (event, item) => {
+      console.log(item.isNew);
+      setIsNew(item.isNew);
+      setSelectedIndex(item.id);
     };
 
     const ListItems = () => {
@@ -75,7 +64,7 @@ export default function TestPage(){
       const listItem = customers.map((item, idx) => 
                 <ListItemButton key={ item.id }
                 selected={selectedIndex === item.id}
-                onClick={(event) => handleListItemClick(event, item.id)}
+                onClick={(event) => handleListItemClick(event, item)}
                 >
                 <ListItemText primary={ item.name } />
                 </ListItemButton>
@@ -84,10 +73,15 @@ export default function TestPage(){
       return <List component="nav" aria-label="secondary mailbox folder">{ listItem }</List>;
     };
 
+    const onSubmit = (e) => {
+      e.preventDefault();
+      fetchCustomers();
+    }
+
     const SearchItem = () => {
 
         return (
-            <form className="d-flex" role="search">
+            <form className="d-flex" role="search" onSubmit={onSubmit}>
                 <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                 <button className="btn btn-outline-success" type="submit">Search</button>
             </form>
@@ -108,6 +102,15 @@ export default function TestPage(){
         );
     }
 
+    function onAdd() {
+      console.log(customers);
+      // const lastCust = customers.reduce( (prev, current) => prev.id > current.id ? prev : current);
+      // const newId = lastCust.id + 1;
+      setCustomers([...customers, {id: null, name:"New Data", isNew:true}]);
+      setIsNew(true);
+      setSelectedIndex(null);
+    }
+
     function SelectedListItem() {
       
         return (
@@ -118,14 +121,21 @@ export default function TestPage(){
         );
     }
 
+    function reRender () {
+      setSearch(true);
+    }
+
     return (
         <Container maxwidth="sm">
             <Grid container spacing={2}>
                 <Grid xs={4}>
-                    <SelectedListItem />
+                  <SelectedListItem />
+                  <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
+                    Add
+                  </Button>
                 </Grid>
                 <Grid xs={8}>
-                    <InputForm id={ selectedIndex } />
+                  <InputForm id={ selectedIndex } isNew= { isNew } fetchCustomers = { fetchCustomers }/>
                 </Grid>
             </Grid>
         </Container>
