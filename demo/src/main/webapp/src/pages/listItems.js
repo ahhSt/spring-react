@@ -64,17 +64,21 @@ export const secondaryListItems = (
       <ListItemText primary="(CRUD) Sample 1" />
     </ListItemButton>
     </Link>
+    <Link to="/list-info-JH">
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="(샘플화면)_JH" />
+      </ListItemButton>
+    </Link>
+    <Link to="/word-management">
     <ListItemButton>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Last quarter" />
+      <ListItemText primary="단어관리" />
     </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItemButton>
+    </Link>
   </React.Fragment>
 );

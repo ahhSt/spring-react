@@ -8,6 +8,8 @@ import { About } from '../pages/About';
 import { TestPage } from '../pages/TestPage';
 import { NoMatch } from '../pages/NoMatch';
 import ListInfoSample from '../pages/sample/listInfoSample';
+import ListInfoSampleJH from '../pages/sample/sampleJH';
+import WordManagement from '../pages/sample/wordManagement';
 
 export default function Router() {
   return (
@@ -18,6 +20,8 @@ export default function Router() {
         <Route path="/dashboard" element={<TestPage />} />
         <Route path="/orders" element={<About />} />
         <Route path="/list-info" element={<ListInfoSample />} />
+        <Route path="/list-info-JH" element={<ListInfoSampleJH />} />
+        <Route path="word-management" element={<WordManagement />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
   )
