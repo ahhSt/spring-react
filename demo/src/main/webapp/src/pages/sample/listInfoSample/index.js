@@ -10,32 +10,82 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import Pagination from '@mui/material/Pagination';
+
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 import InputForm from './InputForm';
 
+// const SearchItem = (props) => {
+
+//   const {originCustomers, customers, setCustomers} = {...props};
+
+//   const onSubmit = (e) => {
+//     e.preventDefault();
+//     // fetchCustomers();
+//   }
+
+//   const handleChange = ({target: {value}}) => {
+//     let listItems = originCustomers.filter(item => item.name.indexOf(value) > -1);
+  
+//     console.log(listItems);
+//     setCustomers({
+//       query: value,
+//       list: listItems
+//     });
+  
+//   }
+
+//   return (
+//       <form className="d-flex" role="search" onSubmit={onSubmit}>
+//           <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={customers.query} onChange={handleChange} />
+//           <button className="btn btn-outline-success" type="submit">Search</button>
+//       </form>
+//   )
+// };
+
+const SearchBox = (props) => {
+
+  const handleChange = props.handleChange;
+  const setUserInput = props.setUserInput;
+  const onChange = (e) => {
+    setUserInput(e.target.value.toLowerCase());
+  }
+
+  return (
+      <form className="d-flex" role="search">
+          <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={onChange} />
+          <button className="btn btn-outline-success" type="submit">Search</button>
+      </form>
+  )
+};
+
 export default function TestPage(){
 
-    const [customers, setCustomers] = useState(null);
+    const [originCustomers, setOriginCustomers] = useState(null);
+    const [customers, setCustomers] = useState({query:'', list: []});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isNew, setIsNew] = useState(false);
-    const [search, setSearch] = useState(false);
+    const [userInput, setUserInput] = useState('');
+
+    // const [search, setSearch] = useState("");
 
     const [selectedIndex, setSelectedIndex] = useState(null);
 
     const fetchCustomers = async () => {
       try {
         setError(null);
-        setCustomers(null);
+        setCustomers({query: "", list: null});
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
         const response = await axios.get(
             '/api/customer'
         );
-        setCustomers(response.data); // 데이터는 response.data 안에 들어있습니다.
+        setOriginCustomers(response.data); // 데이터는 response.data 안에 들어있습니다.
+        setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
         let minId = response.data[0].id;
         setSelectedIndex(minId);
@@ -51,7 +101,7 @@ export default function TestPage(){
 
     if (loading) return <div>로딩중..</div>;
     if (error) return <div>에러가 발생했습니다</div>;
-    if (!customers) return null;
+    if (!customers.list) return null;
 
     const handleListItemClick = (event, item) => {
       console.log(item.isNew);
@@ -59,9 +109,17 @@ export default function TestPage(){
       setSelectedIndex(item.id);
     };
 
+    const searched = customers.list.filter((item) => {
+      if (userInput === "") return true;
+      return item.name.toLowerCase().includes(userInput);
+    }
+    );
+
     const ListItems = () => {
 
-      const listItem = customers.map((item, idx) => 
+      // let listItems = [...customers.list];
+
+      const listItem = searched.map((item, idx) => 
                 <ListItemButton key={ item.id }
                 selected={selectedIndex === item.id}
                 onClick={(event) => handleListItemClick(event, item)}
@@ -71,21 +129,6 @@ export default function TestPage(){
             );
 
       return <List component="nav" aria-label="secondary mailbox folder">{ listItem }</List>;
-    };
-
-    const onSubmit = (e) => {
-      e.preventDefault();
-      fetchCustomers();
-    }
-
-    const SearchItem = () => {
-
-        return (
-            <form className="d-flex" role="search" onSubmit={onSubmit}>
-                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                <button className="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        )
     };
 
     function BoxComponent() {
@@ -102,16 +145,30 @@ export default function TestPage(){
       console.log(customers);
       // const lastCust = customers.reduce( (prev, current) => prev.id > current.id ? prev : current);
       // const newId = lastCust.id + 1;
-      setCustomers([...customers, {id: null, name:"New Data", isNew:true}]);
+      setCustomers({query: customers.query, list: [...customers.list, {id: null, name:"New Data", isNew:true}]});
       setIsNew(true);
       setSelectedIndex(null);
+    }
+
+    const handleChange = ({target: {value}}) => {
+
+      setUserInput(value.toLowerCase());
+      // let listItems = originCustomers.filter(item => item.name.indexOf(value) > -1);
+    
+      // setCustomers({
+      //   query: value,
+      //   list: listItems
+      // });
+    
     }
 
     function SelectedListItem() {
       
         return (
           <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
-            <SearchItem />
+            {/* <SearchItem originCustomers={originCustomers} customers={customers} setCustomers={setCustomers}/> */}
+            <SearchBox setUserInput={setUserInput} handleChange={handleChange}/>
+            {/* <input onChange={handleChange}/> */}
             <ListItems />
           </Box>
         );
@@ -122,6 +179,7 @@ export default function TestPage(){
             <Grid container spacing={2}>
                 <Grid xs={4}>
                   <SelectedListItem />
+                  <Pagination count={10} color="primary" />
                   <BoxComponent />
                 </Grid>
                 <Grid xs={8}>
