@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import axios from 'axios';
 import { Container } from 'react-bootstrap';
 import Button from '@mui/material/Button/Button';
@@ -18,49 +18,73 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 import InputForm from './InputForm';
 
-// const SearchItem = (props) => {
-
-//   const {originCustomers, customers, setCustomers} = {...props};
-
-//   const onSubmit = (e) => {
-//     e.preventDefault();
-//     // fetchCustomers();
-//   }
-
-//   const handleChange = ({target: {value}}) => {
-//     let listItems = originCustomers.filter(item => item.name.indexOf(value) > -1);
-  
-//     console.log(listItems);
-//     setCustomers({
-//       query: value,
-//       list: listItems
-//     });
-  
-//   }
-
-//   return (
-//       <form className="d-flex" role="search" onSubmit={onSubmit}>
-//           <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={customers.query} onChange={handleChange} />
-//           <button className="btn btn-outline-success" type="submit">Search</button>
-//       </form>
-//   )
-// };
-
 const SearchBox = (props) => {
-
-  const handleChange = props.handleChange;
+  // const onChange = props.handleChange;
+  const userInput = props.userInput;
   const setUserInput = props.setUserInput;
-  const onChange = (e) => {
-    setUserInput(e.target.value.toLowerCase());
+
+  const handleChange = ({target: {value}}) => {
+    console.log('handleChange');
+    setUserInput(value.toLowerCase());
+    // ref.current.focus();
   }
 
   return (
       <form className="d-flex" role="search">
-          <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={onChange} />
+          <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={handleChange} />
           <button className="btn btn-outline-success" type="submit">Search</button>
       </form>
   )
 };
+
+SearchBox.displayName = "SearchBox";
+
+const SelectedListItem = (props) => {
+
+  console.log('SelectedListItemSelectedListItem');
+
+  const customers = {...props.customers || {query:"", list:[]}};
+  const userInput = props.userInput;
+  const setUserInput = props.setUserInput;
+  const selectedIndex = props.selectedIndex;
+  const setSelectedIndex = props.setSelectedIndex;
+
+  const selectedList = customers.list.filter((item) => {
+    if (userInput === "") return true;
+    return item.name.toLowerCase().includes(userInput);
+  })
+
+  const ListItems = (props) => {
+
+    const handleListItemClick = (event, item) => {
+      setSelectedIndex(item.id);
+    };
+
+    let listItems = props.items;
+
+    const listItem = listItems.map((item, idx) => 
+              <ListItemButton key={ item.id }
+              selected={selectedIndex === item.id}
+              onClick={(event) => handleListItemClick(event, item)}
+              >
+              <ListItemText primary={ item.name } />
+              </ListItemButton>
+          );
+
+    return <List component="nav" aria-label="secondary mailbox folder">{ listItem }</List>;
+  };
+  
+  return (
+    <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
+      {/* <SearchItem originCustomers={originCustomers} customers={customers} setCustomers={setCustomers}/> */}
+      <SearchBox userInput={userInput} setUserInput={setUserInput} />
+      {/* <input onChange={handleChange}/> */}
+      <ListItems items={selectedList} setSelectId={props.setSelectId} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex}/>
+    </Box>
+  );
+};
+
+SelectedListItem.displayName = "SelectedListItem";
 
 export default function TestPage(){
 
@@ -69,11 +93,13 @@ export default function TestPage(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isNew, setIsNew] = useState(false);
+    // const [selectId, setSelectId] = useState(null);
     const [userInput, setUserInput] = useState('');
-
-    // const [search, setSearch] = useState("");
-
     const [selectedIndex, setSelectedIndex] = useState(null);
+
+    // const nameInput = useRef();
+
+    console.log('first');
 
     const fetchCustomers = async () => {
       try {
@@ -88,7 +114,7 @@ export default function TestPage(){
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
         let minId = response.data[0].id;
-        setSelectedIndex(minId);
+        // setSelectedIndex(minId);
       } catch (e) {
         setError(e);
       }
@@ -103,33 +129,11 @@ export default function TestPage(){
     if (error) return <div>에러가 발생했습니다</div>;
     if (!customers.list) return null;
 
-    const handleListItemClick = (event, item) => {
-      console.log(item.isNew);
-      setIsNew(item.isNew);
-      setSelectedIndex(item.id);
-    };
-
-    const searched = customers.list.filter((item) => {
-      if (userInput === "") return true;
-      return item.name.toLowerCase().includes(userInput);
-    }
-    );
-
-    const ListItems = () => {
-
-      // let listItems = [...customers.list];
-
-      const listItem = searched.map((item, idx) => 
-                <ListItemButton key={ item.id }
-                selected={selectedIndex === item.id}
-                onClick={(event) => handleListItemClick(event, item)}
-                >
-                <ListItemText primary={ item.name } />
-                </ListItemButton>
-            );
-
-      return <List component="nav" aria-label="secondary mailbox folder">{ listItem }</List>;
-    };
+    // const handleListItemClick = (event, item) => {
+    //   console.log(item.isNew);
+    //   setIsNew(item.isNew);
+    //   setSelectedIndex(item.id);
+    // };
 
     function BoxComponent() {
         return (
@@ -147,43 +151,26 @@ export default function TestPage(){
       // const newId = lastCust.id + 1;
       setCustomers({query: customers.query, list: [...customers.list, {id: null, name:"New Data", isNew:true}]});
       setIsNew(true);
-      setSelectedIndex(null);
+      // setSelectedIndex(null);
     }
 
-    const handleChange = ({target: {value}}) => {
-
-      setUserInput(value.toLowerCase());
-      // let listItems = originCustomers.filter(item => item.name.indexOf(value) > -1);
-    
-      // setCustomers({
-      //   query: value,
-      //   list: listItems
-      // });
-    
-    }
-
-    function SelectedListItem() {
-      
-        return (
-          <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
-            {/* <SearchItem originCustomers={originCustomers} customers={customers} setCustomers={setCustomers}/> */}
-            <SearchBox setUserInput={setUserInput} handleChange={handleChange}/>
-            {/* <input onChange={handleChange}/> */}
-            <ListItems />
-          </Box>
-        );
-    }
+    // const onChange = (e) => {
+    //   setUserInput(e.target.value.toLowerCase());
+    // }
 
     return (
         <Container maxwidth="sm">
             <Grid container spacing={2}>
                 <Grid xs={4}>
-                  <SelectedListItem />
+                  <SelectedListItem userInput={userInput} setUserInput={setUserInput} customers={customers} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+                  {/* <SearchBox /> */}
+                  {/* <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange= {onChange} /> */}
+                  {/* <ListItems items={ searched }/> */}
                   <Pagination count={10} color="primary" />
                   <BoxComponent />
                 </Grid>
                 <Grid xs={8}>
-                  <InputForm id={ selectedIndex } isNew= { isNew } fetchCustomers = { fetchCustomers }/>
+                  <InputForm selectedIndex={selectedIndex} />
                 </Grid>
             </Grid>
         </Container>

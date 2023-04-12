@@ -11,64 +11,46 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+let setIndex;
+
 const InputForm = (props) => {
 
-  const [index, setIndex] = useState(props.id);
-  const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
+  const selectedIndex = props.selectedIndex;
 
-  function clearInfo() {
-    setCustomerInfo({id:index});
+  console.log('InputFormInputForm');
+
+  const fetchCustomerInfo = async (idx) => {
+    try {
+      const response = await axios.get(
+          '/api/customer/' + idx
+      );
+      console.log(response.data);
+      setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
+    } catch (e) {
+      console.log("error");
+    }
+  };
+
+  console.log(setIndex);
+
+  if (setIndex != selectedIndex) {
+    fetchCustomerInfo(selectedIndex);
+    setIndex = selectedIndex;
   }
 
   useEffect(() => {
-    console.log('222222222');
-    setIsNew(props.isNew);
-    setIndex(props.id);
-  });
-
-  useEffect(() => {
-    console.log('useEffect11111');
-
-    const DetailInfo = (idx) =>{
-      const fetchCustomerInfo = async (idx) => {
-        try {
-          const response = await axios.get(
-              '/api/customer/' + idx
-          );
-          console.log(response.data);
-          setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
-        } catch (e) {
-          console.log("error");
-        }
-      };
-  
-      fetchCustomerInfo(idx);
-    }
-    
-    if (isNew){
-      clearInfo();
-    }
-    else{
-      DetailInfo(index);
-    }
-  },[index]);
+      console.log('2222222');
+    }, [selectedIndex]);
 
   const onSave = () => {
     console.log(customerInfo);
 
     const saveCustomerInfo = async () => {
       try{
-        if (isNew) {
-          await axios.post(
-            '/api/customer', customerInfo
-          )
-        } 
-        else {
-          await axios.put(
-            '/api/customer/'+customerInfo.id, customerInfo
-          )
-        }        
+        await axios.put(
+          '/api/customer/'+customerInfo.id, customerInfo
+        )    
         alert('Save');
         props.fetchCustomers();
       }
@@ -141,7 +123,7 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="name"
             variant="standard"
-            value={ customerInfo.name || ""}
+            // value={ customerInfo.name || ""}
             onChange={ (e) => {
               onChange(e, "name");
             } }
@@ -156,7 +138,7 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping address-line1"
             variant="standard"
-            value={ customerInfo.email || ""}
+            // value={ customerInfo.email || ""}
             onChange={ (e) => {
               onChange(e, "email");
             } }
