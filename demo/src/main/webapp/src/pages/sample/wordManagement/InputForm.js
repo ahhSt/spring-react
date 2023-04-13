@@ -18,7 +18,7 @@ const InputForm = (props) => {
   const [index, setIndex] = useState(props.id);
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
-  const [age, setAge] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기. 
+  const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기. 
 
   function clearInfo() {
     setCustomerInfo({ id: index });
@@ -105,7 +105,7 @@ const InputForm = (props) => {
   }
 
   const handleSelectChange = (event) => {
-    setAge(event.target.value);
+    setDataType(event.target.value);
   };
 
 
@@ -250,13 +250,13 @@ const InputForm = (props) => {
               id="data_type"
               name="data_type"
               // value={age}
-              value={age}
+              value={dataType}
               label="Data type"
               onChange={handleSelectChange}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={"varchar"}>varchar</MenuItem>
+              <MenuItem value={"int"}>int</MenuItem>
+              <MenuItem value={"timestamp"}>timestamp</MenuItem>
             </Select>
           </FormControl>
         </Grid>
