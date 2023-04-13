@@ -80,7 +80,7 @@ const InputForm = (props) => {
       }
     }
 
-    if (window.confirm("저장하시겠습니까?")) {
+    if (window.confirm("저장,하시겠습니까?")) {
       saveCustomerInfo();
     }
   }
@@ -126,20 +126,22 @@ const InputForm = (props) => {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="id"
-            name="id"
+            id="name_kor"
+            name="name_kor"
             label="한글명"
             fullWidth
             // InputProps={{
             //   readOnly: true,
             // }}
-            autoComplete="id"
+            autoComplete="name_kor"
             variant="standard"
-            value={customerInfo.id || ""}
+            value={customerInfo.name_kor || ""}
             onChange={(e) => {
-              onChange(e, "id");
+              onChange(e, "name_kor");
             }}
           />
+        </Grid>
+        <Grid item xs={12} sm={6}>
         </Grid>
         {/* <Grid item xs={12} sm={6}>
           <TextField
@@ -161,35 +163,35 @@ const InputForm = (props) => {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="Name"
-            name="Name"
+            id="name_eng"
+            name="name_eng"
             label="영문명"
             fullWidth
             // autoComplete="name"
             variant="standard"
-            value={customerInfo.name || ""}
+            value={customerInfo.name_eng || ""}
             onChange={(e) => {
-              onChange(e, "name");
+              onChange(e, "name_eng");
             }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="email"
-            name="email"
+            id="abbreviation_eng"
+            name="abbreviation_eng"
             label="영문 약어명"
             fullWidth
             // autoComplete="shipping address-line1"
             variant="standard"
-            value={customerInfo.email || ""}
+            value={customerInfo.abbreviation_eng || ""}
             onChange={(e) => {
-              onChange(e, "email");
+              onChange(e, "abbreviation_eng");
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
+        {/* <Grid item xs={12} sm={6}> */}
+          {/* <TextField
             required
             id="tbd1"
             name="tbd1"
@@ -201,28 +203,35 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "tbd1");
             }}
-          />
-        </Grid>
+          /> */}
+        {/* </Grid> */}
         <Grid item xs={12}>
           <TextField
-            id="address2"
-            name="address2"
+            id="explanation"
+            name="explanation"
             label="단어 설명"
             fullWidth
             // autoComplete="shipping address-line2"
             variant="standard"
-            defaultValue="2222"
+            value={customerInfo.explanation || ""}
+            onChange={(e) => {
+              onChange(e, "explanation");
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="city"
-            name="city"
+            id="data_length"
+            name="data_length"
             label="데이터 길이(숫자만 입력) "
             fullWidth
-            autoComplete="shipping address-level2"
+            autoComplete="standard"
             variant="standard"
+            value={customerInfo.data_length || ""}
+            onChange={(e) => {
+              onChange(e, "data_length");
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -234,13 +243,15 @@ const InputForm = (props) => {
             variant="standard"
           /> */}
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            {/* 아래는 다시한번 확인 필요 */}
+            <InputLabel id="demo-simple-select-label">Data type</InputLabel>
             <Select
               labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              id="data_type"
+              name="data_type"
               // value={age}
               value={age}
-              label="Age"
+              label="Data type"
               onChange={handleSelectChange}
             >
               <MenuItem value={10}>Ten</MenuItem>
