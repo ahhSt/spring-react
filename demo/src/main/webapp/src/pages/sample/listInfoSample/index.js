@@ -56,8 +56,6 @@ const SelectedListItem = (props) => {
       setSelectedIndex(item.id);
     };
 
-    // let listItems = props.items;
-
     const listItem = selectedList.map((item, idx) => 
               <ListItemButton key={ item.id }
               selected={selectedIndex === item.id}
@@ -114,10 +112,10 @@ export default function TestPage(){
 
     const fetchCustomers = async () => {
       try {
-        // setError(null);
-        // setCustomers({query: "", list: []});
+        setError(null);
+        setCustomers({query: "", list: []});
         // loading 상태를 true 로 바꿉니다.
-        // setLoading(true);
+        setLoading(true);
         const response = await axios.get(
             '/api/customer'
         );
@@ -130,7 +128,7 @@ export default function TestPage(){
       } catch (e) {
         setError(e);
       }
-      // setLoading(false);
+      setLoading(false);
     };
 
     useEffect(() => {
