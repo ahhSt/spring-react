@@ -24,6 +24,7 @@ import Customer from '../../../components/Customer';
 
 
 
+let addIndex = 0;
 
 const SearchItem = (props) => {
 
@@ -63,7 +64,11 @@ const SelectedListItem = (props) => {
 
     const selectedList = customers.list.filter((item) => {
       if (userInput === "") return true;
-      return item.name.toLowerCase().includes(userInput);
+      return (tabIndex == 0? (item.korName.toLowerCase().includes(userInput)) 
+                           : (tabIndex == 1? (item.engName.toLowerCase().includes(userInput)) : (item.engInitName.toLowerCase().includes(userInput))));
+      // return (
+      //   item.korName.toLowerCase().includes(userInput)
+      // )
      })
     
     const listItem = selectedList.map((item, idx) =>
@@ -71,7 +76,7 @@ const SelectedListItem = (props) => {
         selected={selectedIndex === item.id}
         onClick={(event) => handleListItemClick(event, item)}
       >
-        <ListItemText primary={tabIndex == 0 ? (item.name) : (tabIndex == 1 ? (item.email) : (item.date))} />
+        <ListItemText primary={tabIndex == 0 ? (item.korName) : (tabIndex == 1 ? (item.engName) : (item.engInitName))} />
       </ListItemButton>
     );
   
@@ -96,6 +101,7 @@ const BoxComponent = (props) => {
 
   const onAdd = () => {
     if (isNew == false){
+      console.log("index.js - onAdd");
       console.log(customers);
       // const lastCust = customers.reduce( (prev, current) => prev.id > current.id ? prev : current);
       // const newId = lastCust.id + 1;
@@ -105,12 +111,12 @@ const BoxComponent = (props) => {
       setCustomers({query: "new", list: [...customers.list, {
           id: null, 
           name: "New Data", 
-          name_kor: "새 데이터", 
-          name_eng: "New Data", 
-          abbreviation_eng: "New Data", 
+          korName: "새 데이터", 
+          engName: "New Data - English Name", 
+          engInitName: "New Data - English short Name", 
           data_type: "varchar", 
           data_length: "255", 
-          explanation: "none", 
+          description: "none", 
           isNew: true 
         }]});
     
@@ -128,8 +134,6 @@ const BoxComponent = (props) => {
 
 export default function TestPage() {
 
-  let tempInputValue = "";
-
   // const [customers, setCustomers] = useState(null);
   const [customers, setCustomers] = useState({query:'', list: []});
   const [loading, setLoading] = useState(false);
@@ -146,18 +150,39 @@ export default function TestPage() {
       // loading 상태를 true 로 바꿉니다.
       setLoading(true);
       const response = await axios.get(
-        '/api/customer'
+        'api/word/getAll', { params: {"page": 0,
+                                      "size": 16,
+                                      "sort": "string"}}
       );
-      // setCustomers(response.data); // 데이터는 response.data 안에 들어있습니다.
-      setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
-      let minId = response.data[0].id;
+      console.log("index ");
+      console.log(response.data);
+
+      // setCustoers(response.data); // 데이터는 response.data 안에 들어있습니다.
+      console.log(response.data.content[0]);
+      setCustomers({query:"", list: response.data.content}); // 데이터는 response.data 안에 들어있습니다.
+      
+      // console.log(" After setCustomers ");
+      // console.log(customers); //??
+
+      addIndex = response.data.totalElements;
+      console.log("addIndex ?:" + addIndex);
+
+
+      let minId = response.data.content[0].id;
+      console.log(" After minId -  " + minId);
       setSelectedIndex(minId);
+      console.log(" After setSelectedIndex ");
     } catch (e) {
       setError(e);
     }
     setLoading(false);
+
+  
+
   };
+  console.log(" -----!!!!!------------ ");
+    console.log(customers); //??
 
   useEffect(() => {
     fetchCustomers();
@@ -169,7 +194,6 @@ export default function TestPage() {
 
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다</div>;
-  // if (!customers) return null;
   if (!customers.list) return null;
 
   // function BoxComponent() {
@@ -192,18 +216,20 @@ export default function TestPage() {
     console.log("tabIndex value: " + tabIndex);
   };
 
+  const clearIsNew = () => {
+    setIsNew(false);
+  }
 
   return (
     <Container maxwidth="sm">
       <Grid container spacing={2}>
         <Grid xs={4}>
-          {/* TabPanel에서 Index 요소를 하나 받아와서, selectedListItem에 뿌려줄 수 있도록 해야함, add button도 영향이 있게 하려면..  */}
           <BasicTabs11 onChangeTab={onChangeTab} />
           <SelectedListItem customers={customers} setCustomers={setCustomers} tabIndex={tabIndex} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex}/>
           <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} />
         </Grid>
         <Grid xs={8}>
-          <InputForm id={selectedIndex} isNew={isNew} fetchCustomers={fetchCustomers} />
+          <InputForm id={selectedIndex} addIndex={addIndex} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew}/>
         </Grid>
       </Grid>
     </Container>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -15,72 +15,115 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const InputForm = (props) => {
 
+  let tempReqeustBody;
+  let addIndex = props.addIndex;
+  console.log("addIndex  :" + addIndex );
   const [index, setIndex] = useState(props.id);
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
   const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기. 
 
   function clearInfo() {
-    setCustomerInfo({ id: index });
+    setCustomerInfo({ id: index, korName: "", engName:"", engInitName:"", description:"" });
   }
 
   useEffect(() => {
-    console.log('222222222');
+    console.log('InputForm - 222222222');
     setIsNew(props.isNew);
     setIndex(props.id);
   });
 
   useEffect(() => {
-    console.log('useEffect11111');
+    console.log('InputForm - useEffect11111');
 
     const DetailInfo = (idx) => {
       const fetchCustomerInfo = async (idx) => {
         try {
+          // const response = await axios.get(
+          //   '/api/customer/' + idx
+          // );
           const response = await axios.get(
-            '/api/customer/' + idx
+            'api/word/getAll', { params: {"page": 0,
+                                          "size": 16,
+                                          "sort": "string"}}
           );
+          console.log("InputForm - ");
           console.log(response.data);
-          setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
+          console.log("idx - " + idx);
+          console.log(response.data.content[Number(idx) - 1]);
+
+     
+          setCustomerInfo(response.data.content[Number(idx) - 1]); // 데이터는 response.data 안에 들어있습니다.
+          
         } catch (e) {
           console.log("error");
         }
       };
 
       fetchCustomerInfo(idx);
+     
     }
 
     if (isNew) {
       clearInfo();
+
+      console.log("InputForm.js - clearInfo ");
     }
     else {
       DetailInfo(index);
     }
   }, [index]);
 
+
+
+    
+  const saveCustomerInfo = async () => {
+    try {
+      if (isNew) {
+        console.log("saveCustomerInfo");
+        console.log(customerInfo);
+        const res = await axios.post(
+          '/api/word/insert', tempReqeustBody
+        )
+        console.log("res");
+        console.log(res);
+        props.clearIsNew();
+      }
+      else {
+        console.log("putput ");
+        await axios.put(
+          '/api/customer/' + customerInfo.id, customerInfo
+        )
+      }
+      alert('Save');
+      props.fetchCustomers();
+    }
+    catch (e) {
+      alert('Error');
+    }
+  }
+
+  const tempsss = () =>{
+    let obj = {};
+    obj["id"] = (Number(addIndex) + 1).toString();
+    console.log("...customerInfo, ...obj");
+    console.log({...customerInfo, ...obj});
+
+    tempReqeustBody = {...customerInfo, ...obj};
+
+    console.log("tempReqeustBody");
+    console.log(tempReqeustBody);
+
+    setCustomerInfo(() => {
+      return {...customerInfo, ...obj}});
+    console.log(customerInfo);
+  }
+
   const onSave = () => {
     console.log(customerInfo);
+    tempsss();
 
-    const saveCustomerInfo = async () => {
-      try {
-        if (isNew) {
-          await axios.post(
-            '/api/customer', customerInfo
-          )
-        }
-        else {
-          await axios.put(
-            '/api/customer/' + customerInfo.id, customerInfo
-          )
-        }
-        alert('Save');
-        props.fetchCustomers();
-      }
-      catch (e) {
-        alert('Error');
-      }
-    }
-
-    if (window.confirm("저장,하시겠습니까?")) {
+    if (window.confirm("저장하시겠습니까?")) {
       saveCustomerInfo();
     }
   }
@@ -89,7 +132,7 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try {
         await axios.delete(
-          '/api/customer/' + customerInfo.id
+          '/api/word/' + customerInfo.id
         )
         alert('Delete');
         props.fetchCustomers();
@@ -120,24 +163,24 @@ const InputForm = (props) => {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Word Management
+        단어 관리 화면 - Word Management
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="name_kor"
-            name="name_kor"
+            id="korName"
+            name="korName"
             label="한글명"
             fullWidth
             // InputProps={{
             //   readOnly: true,
             // }}
-            autoComplete="name_kor"
+            // autoComplete="korName"
             variant="standard"
-            value={customerInfo.name_kor || ""}
+            value={customerInfo.korName || ""}
             onChange={(e) => {
-              onChange(e, "name_kor");
+              onChange(e, "korName");
             }}
           />
         </Grid>
@@ -163,30 +206,30 @@ const InputForm = (props) => {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="name_eng"
-            name="name_eng"
+            id="engName"
+            name="engName"
             label="영문명"
             fullWidth
             // autoComplete="name"
             variant="standard"
-            value={customerInfo.name_eng || ""}
+            value={customerInfo.engName || ""}
             onChange={(e) => {
-              onChange(e, "name_eng");
+              onChange(e, "engName");
             }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="abbreviation_eng"
-            name="abbreviation_eng"
+            id="engInitName"
+            name="engInitName"
             label="영문 약어명"
             fullWidth
             // autoComplete="shipping address-line1"
             variant="standard"
-            value={customerInfo.abbreviation_eng || ""}
+            value={customerInfo.engInitName || ""}
             onChange={(e) => {
-              onChange(e, "abbreviation_eng");
+              onChange(e, "engInitName");
             }}
           />
         </Grid>
@@ -207,19 +250,20 @@ const InputForm = (props) => {
         {/* </Grid> */}
         <Grid item xs={12}>
           <TextField
-            id="explanation"
-            name="explanation"
+            required
+            id="description"
+            name="description"
             label="단어 설명"
             fullWidth
             // autoComplete="shipping address-line2"
             variant="standard"
-            value={customerInfo.explanation || ""}
+            value={customerInfo.description || ""}
             onChange={(e) => {
-              onChange(e, "explanation");
+              onChange(e, "description");
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        {/* <Grid item xs={12} sm={6}>
           <TextField
             required
             id="data_length"
@@ -235,21 +279,12 @@ const InputForm = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          {/* <TextField
-            id="state"
-            name="state"
-            label="Data Type (To do Change into comboBox)"
-            fullWidth
-            variant="standard"
-          /> */}
           <FormControl fullWidth>
-            {/* 아래는 다시한번 확인 필요 */}
             <InputLabel id="demo-simple-select-label">Data type</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="data_type"
               name="data_type"
-              // value={age}
               value={dataType}
               label="Data type"
               onChange={handleSelectChange}
@@ -259,34 +294,34 @@ const InputForm = (props) => {
               <MenuItem value={"timestamp"}>timestamp</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={6}>
           <TextField
-            required
+            // required
             id="zip"
             name="zip"
             label="TBD"
             fullWidth
-            autoComplete="shipping postal-code"
+            // autoComplete="shipping postal-code"
             variant="standard"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
+            // required
             id="country"
             name="country"
             label="TBD"
             fullWidth
-            autoComplete="shipping country"
+            // autoComplete="shipping country"
             variant="standard"
           />
         </Grid>
         <Grid item xs={12}>
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
             label="Use this address for payment details"
-          />
+          /> */}
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
