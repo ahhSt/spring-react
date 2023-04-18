@@ -10,6 +10,7 @@ import { NoMatch } from '../pages/NoMatch';
 import ListInfoSample from '../pages/sample/listInfoSample';
 import ListInfoSampleJH from '../pages/sample/sampleJH';
 import WordManagement from '../pages/sample/wordManagement';
+import DomainManagement from '../pages/sample/domainManagement';
 
 export default function Router() {
   return (
@@ -22,6 +23,7 @@ export default function Router() {
         <Route path="/list-info" element={<ListInfoSample />} />
         <Route path="/list-info-JH" element={<ListInfoSampleJH />} />
         <Route path="word-management" element={<WordManagement />} />
+        <Route path="domain-management" element={<DomainManagement />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
   )
