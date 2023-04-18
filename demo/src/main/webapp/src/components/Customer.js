@@ -1,16 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 
-interface CustomerProps {
-  id?: string;
-  date: string;
-  email: string;
-  name: string;
-}
-
 const Customer = () => {
 
-    const [data, setData] = useState<CustomerProps[]>([] as CustomerProps[]);
+    const [data, setData] = useState([]);
 
     useEffect(() => {
 
