@@ -22,7 +22,7 @@ spring:
 
     # Postgresql setting
     url: jdbc:postgresql://192.168.56.1:35432/OPS
-    #    url: jdbc:postgresql://172.20.30.177:5432/postgres
+    # url: jdbc:postgresql://172.20.30.177:5432/postgres
     username: OPS
     password: OPS_123
     # MySQL setting

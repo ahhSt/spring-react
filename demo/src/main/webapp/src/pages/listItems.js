@@ -42,12 +42,14 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItemButton>
+    <Link to="/term">
     <ListItemButton>
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>
-      <ListItemText primary="Integrations" />
+      <ListItemText primary="용어 관리" />
     </ListItemButton>
+    </Link>
   </React.Fragment>
 );
 
@@ -72,13 +74,11 @@ export const secondaryListItems = (
       <ListItemText primary="filter Sample" />
     </ListItemButton>
     </Link>
-    <Link to="/list-info2">
     <ListItemButton>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="(CRUD) Sample 1" />
     </ListItemButton>
-    </Link>
   </React.Fragment>
 );
