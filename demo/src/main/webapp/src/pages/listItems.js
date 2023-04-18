@@ -80,5 +80,13 @@ export const secondaryListItems = (
       <ListItemText primary="단어관리" />
     </ListItemButton>
     </Link>
+    <Link to="/domain-management">
+    <ListItemButton>
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary="도메인 관리" />
+    </ListItemButton>
+    </Link>
   </React.Fragment>
 );

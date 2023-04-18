@@ -3,8 +3,6 @@ import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
@@ -17,14 +15,14 @@ const InputForm = (props) => {
 
   let tempReqeustBody;
   let addIndex = props.addIndex;
-  console.log("addIndex  :" + addIndex );
-  const [index, setIndex] = useState(props.id);
+  console.log("addIndex  :" + addIndex);
+  const [index, setIndex] = useState(props.id);   // MEMO: id : selected Index
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
   const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기. 
 
   function clearInfo() {
-    setCustomerInfo({ id: index, korName: "", engName:"", engInitName:"", description:"" });
+    setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "" });
   }
 
   useEffect(() => {
@@ -39,29 +37,30 @@ const InputForm = (props) => {
     const DetailInfo = (idx) => {
       const fetchCustomerInfo = async (idx) => {
         try {
-          // const response = await axios.get(
-          //   '/api/customer/' + idx
-          // );
           const response = await axios.get(
-            'api/word/getAll', { params: {"page": 0,
-                                          "size": 16,
-                                          "sort": "string"}}
+            'api/domain/getAll', {
+              params: {
+                "page": 0,
+                "size": 16,
+                "sort": "string"
+              }
+          }
           );
           console.log("InputForm - ");
           console.log(response.data);
           console.log("idx - " + idx);
           console.log(response.data.content[Number(idx) - 1]);
 
-     
+
           setCustomerInfo(response.data.content[Number(idx) - 1]); // 데이터는 response.data 안에 들어있습니다.
-          
+
         } catch (e) {
           console.log("error");
         }
       };
 
       fetchCustomerInfo(idx);
-     
+
     }
 
     if (isNew) {
@@ -74,16 +73,13 @@ const InputForm = (props) => {
     }
   }, [index]);
 
-
-
-    
   const saveCustomerInfo = async () => {
     try {
       if (isNew) {
         console.log("saveCustomerInfo");
         console.log(customerInfo);
         const res = await axios.post(
-          '/api/word/insert', tempReqeustBody
+          '/api/domain/insert', tempReqeustBody
         )
         console.log("res");
         console.log(res);
@@ -103,19 +99,20 @@ const InputForm = (props) => {
     }
   }
 
-  const tempsss = () =>{
+  const tempsss = () => {
     let obj = {};
     obj["id"] = (Number(addIndex) + 1).toString();
     console.log("...customerInfo, ...obj");
-    console.log({...customerInfo, ...obj});
+    console.log({ ...customerInfo, ...obj });
 
-    tempReqeustBody = {...customerInfo, ...obj};
+    tempReqeustBody = { ...customerInfo, ...obj };
 
     console.log("tempReqeustBody");
     console.log(tempReqeustBody);
 
     setCustomerInfo(() => {
-      return {...customerInfo, ...obj}});
+      return { ...customerInfo, ...obj }
+    });
     console.log(customerInfo);
   }
 
@@ -132,7 +129,7 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try {
         await axios.delete(
-          '/api/word/' + customerInfo.id
+          '/api/domain/' + customerInfo.id
         )
         alert('Delete');
         props.fetchCustomers();
@@ -148,7 +145,20 @@ const InputForm = (props) => {
   }
 
   const handleSelectChange = (event) => {
-    setDataType(event.target.value);
+    // setDataType(event.target.value);
+    let obj = {};
+    obj["dataTypeId"] = event.target.value;
+    console.log("...customerInfo, ...obj");
+    console.log({ ...customerInfo, ...obj });
+
+    tempReqeustBody = { ...customerInfo, ...obj };
+
+    console.log("tempReqeustBody");
+    console.log(tempReqeustBody);
+
+    setCustomerInfo(() => {
+      return { ...customerInfo, ...obj }
+    });
   };
 
 
@@ -160,10 +170,37 @@ const InputForm = (props) => {
     setCustomerInfo({ ...customerInfo, ...obj });
   }
 
+  //   const handleValidation = (e) => {
+  //     const reg = new RegExp("[a-z]");
+  //     setValid(reg.test(e.target.value));
+  //     setValue(e.target.value);
+  //   };
+
+  const setDataTypeNum = (dataTypeId) => {
+    let result = "";
+
+    switch (dataTypeId) {
+      case '1':
+        result = "varchar";
+        break;
+      case '2':
+        result = "int";
+        break;
+      case '3':
+        result = "timeStamp";
+        break;
+      default:
+        result = "null";
+        break;
+    }
+    console.log(result);
+    return result;
+  }
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        단어 관리 화면 - Word Management
+        도메인 관리 화면 - Domain Management
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -234,7 +271,7 @@ const InputForm = (props) => {
           />
         </Grid>
         {/* <Grid item xs={12} sm={6}> */}
-          {/* <TextField
+        {/* <TextField
             required
             id="tbd1"
             name="tbd1"
@@ -263,18 +300,18 @@ const InputForm = (props) => {
             }}
           />
         </Grid>
-        {/* <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="data_length"
-            name="data_length"
+            id="length"
+            name="length"
             label="데이터 길이(숫자만 입력) "
             fullWidth
             autoComplete="standard"
             variant="standard"
-            value={customerInfo.data_length || ""}
+            value={customerInfo.length || ""}
             onChange={(e) => {
-              onChange(e, "data_length");
+              onChange(e, "length");
             }}
           />
         </Grid>
@@ -283,18 +320,20 @@ const InputForm = (props) => {
             <InputLabel id="demo-simple-select-label">Data type</InputLabel>
             <Select
               labelId="demo-simple-select-label"
-              id="data_type"
-              name="data_type"
-              value={dataType}
+              id="dataTypeId"
+              name="dataTypeId"
+              // value={setDataTypeNum(customerInfo.dataTypeId)}
+              value={customerInfo.dataTypeId || ""}
               label="Data type"
               onChange={handleSelectChange}
             >
-              <MenuItem value={"varchar"}>varchar</MenuItem>
-              <MenuItem value={"int"}>int</MenuItem>
-              <MenuItem value={"timestamp"}>timestamp</MenuItem>
+              <MenuItem value={"1"}>varchar</MenuItem>
+              <MenuItem value={"2"}>int</MenuItem>
+              <MenuItem value={"3"}>timestamp</MenuItem>
+              <MenuItem value={"4"}>null</MenuItem>
             </Select>
           </FormControl>
-        </Grid> */}
+        </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             // required
