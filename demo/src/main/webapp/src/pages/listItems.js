@@ -66,19 +66,29 @@ export const secondaryListItems = (
       <ListItemText primary="(CRUD) Sample 1" />
     </ListItemButton>
     </Link>
-    <Link to="/filter-sample">
+    <Link to="/list-info-JH">
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="(샘플화면)_JH" />
+      </ListItemButton>
+    </Link>
+    <Link to="/word-management">
     <ListItemButton>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="filter Sample" />
+      <ListItemText primary="단어관리" />
     </ListItemButton>
     </Link>
+    <Link to="/domain-management">
     <ListItemButton>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="(CRUD) Sample 1" />
+      <ListItemText primary="도메인 관리" />
     </ListItemButton>
+    </Link>
   </React.Fragment>
 );

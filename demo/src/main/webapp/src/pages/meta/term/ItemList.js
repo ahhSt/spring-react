@@ -87,7 +87,7 @@ export default function DenseTable(props) {
                 { item.dataType && <TableCell align="left">{item.dataType}</TableCell>}
                 <TableCell align="center">
                   <ThemeProvider theme={theme}>
-                    <IconButton color="inherit" size="small">
+                    <IconButton style={{padding:'0 0 0 0'}} color="inherit" size="small">
                       <DoubleArrowRoundedIcon fontSize="small"/>
                     </IconButton>
                   </ThemeProvider>
