@@ -9,10 +9,10 @@ import { TestPage } from '../pages/TestPage';
 import { NoMatch } from '../pages/NoMatch';
 import ListInfoSample from '../pages/sample/listInfoSample';
 import SearchSample from '../pages/sample/searchSample';
-import Term from '../pages/meta/term';
 import ListInfoSampleJH from '../pages/sample/sampleJH';
-import WordManagement from '../pages/sample/wordManagement';
-import DomainManagement from '../pages/sample/domainManagement';
+import Term from '../pages/meta/term';
+import WordManagement from '../pages/meta/domain';
+import DomainManagement from '../pages/meta/word';
 
 export default function Router() {
   return (
