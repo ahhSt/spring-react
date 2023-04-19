@@ -25,6 +25,9 @@ spring:
     # url: jdbc:postgresql://172.20.30.177:stgres
     username: OPS
     password: OPS_123
+  sql:
+    init:
+      encoding: UTF-8
     # MySQL setting
   #    url: jdbc:mysql://192.168.56.1:3306/OPS
   #    username: OPS

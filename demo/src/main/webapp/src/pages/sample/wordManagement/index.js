@@ -19,7 +19,6 @@ import { BasicTabs11, test11 } from './TapPanel';
 import InputForm from './InputForm';
 import { func } from 'prop-types';
 import { SearchBar } from 'rsuite/esm/Picker';
-import Customer from '../../../components/Customer';
 
 
 
