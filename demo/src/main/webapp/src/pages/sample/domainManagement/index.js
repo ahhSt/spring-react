@@ -14,17 +14,40 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { ListItem } from '@mui/material';
 import { BasicTabs11, test11 } from './TapPanel';
+import { Provider, useSelector, useDispatch } from 'react-redux';
+import { createSlice, configureStore } from '@reduxjs/toolkit'
 
 import InputForm from './InputForm';
 
-let addIndex = 0;
+
+let totalElements = 0;
+let clickedId = 0;
+
+const addBtnSlice = createSlice({
+  name: 'isAddBtnClicked',
+  initialState: { value: false },
+  reducers: {
+    click: (state, action) => {
+      state.value = !state.value;
+      console.log("addBtnSlice!!!!!!!!!!")
+    }
+  }
+});
+const addBtnStore = configureStore({
+  reducer: {
+    isAddBtnClicked: addBtnSlice.reducer
+  }
+});
+
+
+
 
 const SearchItem = (props) => {
 
   // MEMO: setUserInput에 상관 없이, SearchItem에서는 전체 화면 렌더링이 안되므로 포커스 유지가 가능한건가?
   const userInput = props.userInput;
   const setUserInput = props.setUserInput;
-  
+
   console.log("userSearchInput - " + userInput);
 
   return (
@@ -49,32 +72,42 @@ const SelectedListItem = (props) => {
 
   const ListItems = () => {
 
+
+    const isAddBtnClicked = useSelector(state => {
+      return state.isAddBtnClicked.value;
+    });
+
     const handleListItemClick = (event, item) => {
       setSelectedIndex(item.id);
+      console.log(" ------- handleListItemClick ----------");
+      console.log("selectedIndex - " + selectedIndex);
+      console.log("item.id - " + item.id);
+      clickedId = item.id;
     };
 
     const selectedList = customers.list.filter((item) => {
       if (userInput === "") return true;
-      return (tabIndex == 0? (item.korName.toLowerCase().includes(userInput)) 
-                           : (tabIndex == 1? (item.engName.toLowerCase().includes(userInput)) : (item.engInitName.toLowerCase().includes(userInput))));
-     })
-    
+      return (tabIndex == 0 ? (item.korName.toLowerCase().includes(userInput))
+        : (tabIndex == 1 ? (item.engName.toLowerCase().includes(userInput)) : (item.engInitName.toLowerCase().includes(userInput))));
+    })
+
     const listItem = selectedList.map((item, idx) =>
       <ListItemButton key={item.id}
         selected={selectedIndex === item.id}
         onClick={(event) => handleListItemClick(event, item)}
+        disabled={isAddBtnClicked}
       >
         <ListItemText primary={tabIndex == 0 ? (item.korName) : (tabIndex == 1 ? (item.engName) : (item.engInitName))} />
       </ListItemButton>
     );
-  
+
     return <List component="nav" aria-label="secondary mailbox folder">{listItem}</List>;
   };
 
   return (
     <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
       <SearchItem userInput={userInput} setUserInput={setUserInput} />
-      <ListItems  />
+      <ListItems />
     </Box>
   );
 }
@@ -85,39 +118,48 @@ const BoxComponent = (props) => {
   const setCustomers = props.setCustomers;
   const setIsNew = props.setIsNew;
   const setSelectedIndex = props.setSelectedIndex;
-
+  const addBtnDispatch = useDispatch();
   const onAdd = () => {
-    if (isNew == false){
+    if (isNew == false) {
       console.log("index.js - onAdd");
       console.log(customers);
 
-      setCustomers({query: "new", list: [...customers.list, {
-          id: null, 
-          name: "New Data", 
-          korName: "새 데이터", 
-          engName: "New Data - English Name", 
-          engInitName: "New Data - English short Name", 
-          dataTypeId: "varchar", 
-          length: "255", 
-          description: "none", 
-          isNew: true 
-        }]});
-    
+      setCustomers({
+        query: "new", list: [...customers.list, {
+          id: null,
+          name: "New Data",
+          korName: "새 데이터",
+          engName: "New Data - English Name",
+          engInitName: "New Data - English short Name",
+          dataTypeId: "varchar",
+          length: "255",
+          description: "none",
+          isNew: true
+        }]
+      });
+
       setIsNew(true);
       setSelectedIndex(null);
     }
+    // if (addBtnClicked === false)
+    //   setAddBtnClicked(true);
+    // else
+    //   setAddBtnClicked(false);
+    // addBtnDispatch({type:'addBtnSlice/click'});
+    addBtnDispatch(addBtnSlice.actions.click());
+    console.log("addBtnClicked!!!!!!!!!!  ");
   }
 
   return (
     <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
-       Add
+      Add
     </Button>
   );
 }
 
 export default function TestPage() {
 
-  const [customers, setCustomers] = useState({query:'', list: []});
+  const [customers, setCustomers] = useState({ query: '', list: [] });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isNew, setIsNew] = useState(false);
@@ -128,23 +170,27 @@ export default function TestPage() {
   const fetchCustomers = async () => {
     try {
       setError(null);
-      setCustomers({query:'', list: null});
+      setCustomers({ query: '', list: null });
       // loading 상태를 true 로 바꿉니다.
       setLoading(true);
       const response = await axios.get(
-        'api/domain/getAll', { params: {"page": 0,
-                                      "size": 16,
-                                      "sort": "string"}}
+        'api/domain/getAll', {
+        params: {
+          "page": 0,
+          "size": 16,
+          "sort": "string"
+        }
+      }
       );
 
       console.log("index ");
       console.log(response.data);
 
       console.log(response.data.content[0]);
-      setCustomers({query:"", list: response.data.content}); // 데이터는 response.data 안에 들어있습니다.
-      
-      addIndex = response.data.totalElements;
-      console.log("addIndex ?:" + addIndex);
+      setCustomers({ query: "", list: response.data.content }); // 데이터는 response.data 안에 들어있습니다.
+
+      totalElements = response.data.totalElements;
+      console.log("totalElements ?:" + totalElements);
 
 
       let minId = response.data.content[0].id;
@@ -156,11 +202,11 @@ export default function TestPage() {
     }
     setLoading(false);
 
-  
+
 
   };
   console.log(" -----!!!!!------------ ");
-    console.log(customers); //??
+  console.log(customers); //??
 
   useEffect(() => {
     fetchCustomers();
@@ -189,12 +235,14 @@ export default function TestPage() {
     <Container maxwidth="sm">
       <Grid container spacing={2}>
         <Grid xs={4}>
-          <BasicTabs11 onChangeTab={onChangeTab} />
-          <SelectedListItem customers={customers} setCustomers={setCustomers} tabIndex={tabIndex} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex}/>
-          <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} />
+          <Provider store={addBtnStore}>
+            <BasicTabs11 onChangeTab={onChangeTab} />
+            <SelectedListItem customers={customers} setCustomers={setCustomers} tabIndex={tabIndex} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+            <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} />
+          </Provider>
         </Grid>
         <Grid xs={8}>
-          <InputForm id={selectedIndex} addIndex={addIndex} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew}/>
+          <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId} />
         </Grid>
       </Grid>
     </Container>

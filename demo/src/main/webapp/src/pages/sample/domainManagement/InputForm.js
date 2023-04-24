@@ -14,8 +14,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const InputForm = (props) => {
 
   let tempReqeustBody;
-  let addIndex = props.addIndex;
-  console.log("addIndex  :" + addIndex);
+  let totalElements = props.totalElements;
+  let clickedId = props.clickedId;
+
+  console.log("totalElements in INPUTFORM :" + totalElements );
+  console.log("clickedId in INPUTFORM :" + clickedId );
+
   const [index, setIndex] = useState(props.id);   // MEMO: id : selected Index
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
@@ -25,10 +29,40 @@ const InputForm = (props) => {
     setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "" });
   }
 
+  
+  const getClickedIndexData = (respData, clickedDataID) =>{
+    console.log("getClickedIndexData - respData ");
+    console.log(respData);
+    console.log("getClickedIndexData - clickedDataID " + clickedDataID);
+    let testObj = respData.data.content;
+
+    for (let arrObj of respData.data.content) {
+      console.log("respData.data.content ");
+      console.log(respData.data.content);
+      console.log("aaaaaa ");
+      console.log(arrObj);
+
+
+      if (arrObj.id == (Number(clickedDataID))){
+        console.log("//////////////////////////");
+        console.log("                          ");
+        console.log(arrObj);
+        console.log("                          ");
+        console.log("//////////////////////////");
+
+        testObj = arrObj;
+      }
+    }
+    return testObj;
+  }
+
+
   useEffect(() => {
     console.log('InputForm - 222222222');
     setIsNew(props.isNew);
     setIndex(props.id);
+    console.log(" ------- handleListItemClick  in inputform----------");
+    console.log("Clicked the Index!!! - " + index);
   });
 
   useEffect(() => {
@@ -52,7 +86,12 @@ const InputForm = (props) => {
           console.log(response.data.content[Number(idx) - 1]);
 
 
-          setCustomerInfo(response.data.content[Number(idx) - 1]); // 데이터는 response.data 안에 들어있습니다.
+          // setCustomerInfo(response.data.content[Number(idx) - 1]); // 데이터는 response.data 안에 들어있습니다.
+          let testArr = getClickedIndexData(response, clickedId);
+          console.log("After getClickedIndexData ");
+          console.log(testArr);
+          setCustomerInfo(testArr);
+
 
         } catch (e) {
           console.log("error");
@@ -101,7 +140,7 @@ const InputForm = (props) => {
 
   const tempsss = () => {
     let obj = {};
-    obj["id"] = (Number(addIndex) + 1).toString();
+    obj["id"] = (Number(totalElements) + 1).toString();
     console.log("...customerInfo, ...obj");
     console.log({ ...customerInfo, ...obj });
 
