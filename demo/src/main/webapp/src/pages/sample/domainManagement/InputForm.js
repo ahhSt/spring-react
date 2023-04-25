@@ -6,8 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
-import { Provider, useSelector, useDispatch } from 'react-redux';
-import { createSlice, configureStore } from '@reduxjs/toolkit'
+import { useDispatch,useSelector } from 'react-redux';
 
 import { MenuItem, FormControl, Select, InputLabel } from '@mui/material'
 
@@ -15,7 +14,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { reset } from './addBtnSlice';
-// import addBtnStore from './addBtnStore';
 
 const InputForm = (props) => {
 
@@ -32,7 +30,9 @@ const InputForm = (props) => {
   const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기. 
    
   const addBtnDispatch = useDispatch();
-
+  const isAddBtnClicked = useSelector(state => {
+    return state.isAddBtnClicked.value;
+  });
   
   function clearInfo() {
     setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "" });
@@ -277,6 +277,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "korName");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -311,6 +312,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "engName");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -326,6 +328,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "engInitName");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         {/* <Grid item xs={12} sm={6}> */}
@@ -356,6 +359,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "description");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -371,6 +375,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "length");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -384,6 +389,7 @@ const InputForm = (props) => {
               value={customerInfo.dataTypeId || ""}
               label="Data type"
               onChange={handleSelectChange}
+              disabled={!isAddBtnClicked}
             >
               <MenuItem value={"1"}>varchar</MenuItem>
               <MenuItem value={"2"}>int</MenuItem>
@@ -401,6 +407,8 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping postal-code"
             variant="standard"
+            disabled={!isAddBtnClicked}
+
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -412,6 +420,7 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping country"
             variant="standard"
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12}>

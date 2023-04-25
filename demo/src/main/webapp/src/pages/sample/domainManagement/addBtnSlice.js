@@ -6,11 +6,9 @@ const addBtnSlice = createSlice({
     reducers: {
       click: (state, action) => {
         state.value = !state.value;
-        console.log("addBtnSlice!!!!!!!!!!")
       },
       reset: (state) => {
         state.value = false;
-        console.log("clickCancel!!!!!!!!!!")
       }
     }
   });
