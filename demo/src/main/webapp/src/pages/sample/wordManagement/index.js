@@ -23,7 +23,8 @@ import { SearchBar } from 'rsuite/esm/Picker';
 
 
 
-let addIndex = 0;
+let totalElements = 0;
+let clickedId = 0;
 
 const SearchItem = (props) => {
 
@@ -59,6 +60,10 @@ const SelectedListItem = (props) => {
       // console.log(item.isNew);
       // setIsNew(item.isNew);
       setSelectedIndex(item.id);
+      console.log(" ------- handleListItemClick ----------");
+      console.log("selectedIndex - " + selectedIndex);
+      console.log("item.id - " + item.id);
+      clickedId = item.id;
     };
 
     const selectedList = customers.list.filter((item) => {
@@ -161,11 +166,11 @@ export default function TestPage() {
       console.log(response.data.content[0]);
       setCustomers({query:"", list: response.data.content}); // 데이터는 response.data 안에 들어있습니다.
       
-      // console.log(" After setCustomers ");
-      // console.log(customers); //??
+      console.log(" After setCustomers ");
+      console.log(customers); //??
 
-      addIndex = response.data.totalElements;
-      console.log("addIndex ?:" + addIndex);
+      totalElements = response.data.totalElements;
+      console.log("totalElements ?:" + totalElements);
 
 
       let minId = response.data.content[0].id;
@@ -228,7 +233,7 @@ export default function TestPage() {
           <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} />
         </Grid>
         <Grid xs={8}>
-          <InputForm id={selectedIndex} addIndex={addIndex} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew}/>
+          <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId}/>
         </Grid>
       </Grid>
     </Container>
