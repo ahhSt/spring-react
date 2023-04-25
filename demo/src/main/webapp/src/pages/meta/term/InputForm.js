@@ -11,114 +11,39 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-let setIndex;
-let newItem;
-
 const InputForm = (props) => {
 
-  const [customerInfo, setCustomerInfo] = useState({});
-  const selectedIndex = props.selectedIndex;
-  
-  console.log('InputFormInputForm');
-
-  const clearInfo = () => {
-    console.log('clear Info');
-    let newInfo = {id: null, name:"", email:"", date:""};
-    setCustomerInfo(newInfo);
-  }
-
-  const fetchCustomerInfo = async (idx) => {
-    console.log('fetch info : ' + idx);
-    // if (idx == "new"){
-    //   clearInfo();
-    // }
-    // else{
-      try {
-        const response = await axios.get(
-            '/api/customer/' + idx
-        );
-        console.log("############################response.data");
-        console.log(response.data);
-        setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
-      } catch (e) {
-        console.log("error"); 
-        clearInfo();
-      }
-    // }
-  };
-
-  // useEffect(() =>{
-  //   console.log('@@@@@@@@@@@@@@@@@@@@@@@@@useEffect');
-  //   if (selectedIndex){
-  //     console.log("@@@@@@@ selectedIndex : " + selectedIndex);
-  //     fetchCustomerInfo(selectedIndex);
-  //   }
-  // },[])
-
-  console.log("selectedIndex : "+ selectedIndex);
-  console.log("setIndex : "+ setIndex);
-
-  if (setIndex != selectedIndex) {
-    console.log('eeeeeeee');
-    fetchCustomerInfo(selectedIndex);
-    setIndex = selectedIndex;
-  }
+  const {wordItem, domain} = props;
+  const [term, setTerm] = useState({});
 
   const onSave = () => {
   
-    const saveCustomerInfo = async () => {
-      try{
-        if (customerInfo.id == null){
-          await axios.post(
-            '/api/customer', customerInfo
-          )
-        }else{
-          await axios.put(
-            '/api/customer/'+customerInfo.id, customerInfo
-          ) 
-        }
-           
+    const saveInfo = async () => {
+      try{ 
+        console.log(wordItem);
+        console.log(domain);
+        console.log(term);
         alert('Save');
-        props.fetchCustomers();
       }
       catch (e) {
         alert('Error');
       }
     }
 
-    console.log(customerInfo);
-
-    if(window.confirm("저장하시겠습니까?")) {
-      saveCustomerInfo();
-    }
+    saveInfo();
   }
 
   const onDelete = () => {
-    const deleteCustomerInfo = async () => {
-      try{
-        await axios.delete(
-          '/api/customer/'+customerInfo.id
-        ) 
-        alert('Delete');
-        props.fetchCustomers();
-      }
-      catch (e) {
-        alert('Error');
-      }
-    }
-
-    if(window.confirm("삭제제하시겠습니까?")) {
-      deleteCustomerInfo();
-    }
+    alert('delete');
   }
 
-  const onChange = (e, field) => {
+  const concatTxt = (wordItem, domain, key) => {
+    let domainName = domain[key] ? '_' + domain[key] : '';
+    let termTxt = wordItem.map(u => u[key]).join('_') + domainName;
     let obj = {};
-    obj[field] = e.target.value;
-    console.log("customerInfo");
-    console.log(customerInfo);
-
-    setCustomerInfo({...customerInfo, ...obj});
+    obj[key] = termTxt;
+    setTerm(...term, ...obj);
+    return termTxt;
   }
 
   return (
@@ -138,9 +63,6 @@ const InputForm = (props) => {
             }}
             // autoComplete="id"
             variant="filled"
-            onChange={ (e) => {
-              onChange(e, "id");
-            } }
           />
         </Grid>
         <Grid item xs={11}>
@@ -153,6 +75,7 @@ const InputForm = (props) => {
               readOnly: true,
             }}
             variant="filled"
+            value={ concatTxt(wordItem, domain, 'korName') }
             // autoComplete="shipping address-line2"
           />
         </Grid>
@@ -165,8 +88,8 @@ const InputForm = (props) => {
             InputProps={{
               readOnly: true,
             }}
-            // autoComplete="shipping address-line1"
             variant="filled"
+            value={ concatTxt(wordItem, domain, 'engName') }
           />
         </Grid>
         <Grid item xs={11}>
@@ -180,6 +103,7 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
+            value={ concatTxt(wordItem, domain, 'engInitName') }
           />
         </Grid>
         <Grid item xs={11}>
@@ -193,6 +117,7 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
+            value={ domain.dataType || ''}
           />
         </Grid>
 

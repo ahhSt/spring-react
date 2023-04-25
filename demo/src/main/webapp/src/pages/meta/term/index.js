@@ -21,36 +21,77 @@ export default function Main() {
   const wordHeader = ['단어명', '영문명', '영문약어명'];
   const domainHeader = ['도메인명', '영문명', '영문약어명', '데이터타입'];
 
+  const [wordItem, concatWordItem] = useState([]);
+  const [domain, selectDomain] = useState({});
+
   const wordData = [
     {'korName': '카드', 'engName':'Card', 'engInitName':'CRD'},
-    {'korName': '번호', 'engName':'Numbeer', 'engInitName':'NUM'},
+    {'korName': '번호', 'engName':'Number', 'engInitName':'NUM'},
     {'korName': '시리얼', 'engName':'Serial', 'engInitName':'SRL'},
     {'korName': '등록', 'engName':'Registry', 'engInitName':'REG'},
     {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
   ];
   const domainData = [
-    {'korName': '번호', 'engName':'Numbeer', 'engInitName':'NUM', 'dataType':'varchar(10)'},
+    {'korName': '번호', 'engName':'Number', 'engInitName':'NUM', 'dataType':'varchar(10)'},
     {'korName': '날짜', 'engName':'Date', 'engInitName':'DT', 'dataType':'varchar(8)'},
     {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
   ];
 
+  const handleClick = (event, item) => {
+    concatWordItem([...wordItem, item]);
+  }
+
+  const domainSelect = (event, item) => {
+    selectDomain(item);
+  }
 
   return(
         <Container maxwidth="sm">
             <Grid container spacing={2}>
                 <Grid xs={5}>
-                    <Container maxwidth="sm" minheight="1600">
+                    <Container maxwidth="sm">
                         <p>단어</p>
-                        <ItemList header={wordHeader} items={wordData}/>
+                        <ItemList header={wordHeader} items={wordData} height={450} handleClick={handleClick}/>
                     </Container>
 
-                    <Container maxwidth="sm" minheight="800">
+                    <Container maxwidth="sm">
                         <p>도메인</p>
-                        <ItemList header={domainHeader} items={domainData}/>
+                        <ItemList header={domainHeader} items={domainData} height={300} handleClick={domainSelect}/>
                     </Container>
                 </Grid>
                 <Grid xs={7}>
-                    <InputForm />
+                    <InputForm wordItem={wordItem} domain={domain}/>
                 </Grid>
             </Grid>
         </Container>
