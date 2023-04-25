@@ -17,30 +17,16 @@ import { BasicTabs11, test11 } from './TapPanel';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { createSlice, configureStore } from '@reduxjs/toolkit'
 
+import Stack from '@mui/material/Stack';
+import { SaveIcon } from '@mui/icons-material';
 import InputForm from './InputForm';
+import CancelIcon from '@mui/icons-material/Cancel';
 
+import { click, reset } from './addBtnSlice';
+import addBtnStore from './addBtnStore';
 
 let totalElements = 0;
 let clickedId = 0;
-
-const addBtnSlice = createSlice({
-  name: 'isAddBtnClicked',
-  initialState: { value: false },
-  reducers: {
-    click: (state, action) => {
-      state.value = !state.value;
-      console.log("addBtnSlice!!!!!!!!!!")
-    }
-  }
-});
-const addBtnStore = configureStore({
-  reducer: {
-    isAddBtnClicked: addBtnSlice.reducer
-  }
-});
-
-
-
 
 const SearchItem = (props) => {
 
@@ -112,6 +98,7 @@ const SelectedListItem = (props) => {
   );
 }
 
+
 const BoxComponent = (props) => {
   const isNew = props.isNew;
   const customers = props.customers;
@@ -119,6 +106,7 @@ const BoxComponent = (props) => {
   const setIsNew = props.setIsNew;
   const setSelectedIndex = props.setSelectedIndex;
   const addBtnDispatch = useDispatch();
+
   const onAdd = () => {
     if (isNew == false) {
       console.log("index.js - onAdd");
@@ -146,14 +134,29 @@ const BoxComponent = (props) => {
     // else
     //   setAddBtnClicked(false);
     // addBtnDispatch({type:'addBtnSlice/click'});
-    addBtnDispatch(addBtnSlice.actions.click());
+    addBtnDispatch(click());
     console.log("addBtnClicked!!!!!!!!!!  ");
   }
 
+  const onCancel = () => {
+    props.fetchCustomers();
+    setIsNew(false);
+    addBtnDispatch(reset());
+    console.log("cancelBtnClicked!!!!!!!!!!  ");
+    clickedId = 0;
+  }
+
   return (
-    <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
-      Add
-    </Button>
+    <div>
+      <Stack direction="row" spacing={2}>
+        <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
+          Add
+        </Button>
+        <Button variant="contained" endIcon={<CancelIcon />} onClick={onCancel} >
+          Cancel
+        </Button>
+      </Stack>
+    </div>
   );
 }
 
@@ -234,16 +237,20 @@ export default function TestPage() {
   return (
     <Container maxwidth="sm">
       <Grid container spacing={2}>
-        <Grid xs={4}>
-          <Provider store={addBtnStore}>
+        <Provider store={addBtnStore}>
+          <Grid xs={4}>
+
             <BasicTabs11 onChangeTab={onChangeTab} />
             <SelectedListItem customers={customers} setCustomers={setCustomers} tabIndex={tabIndex} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
-            <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} />
-          </Provider>
-        </Grid>
-        <Grid xs={8}>
-          <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId} />
-        </Grid>
+            <Stack direction="row" spacing={2}>
+              <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} fetchCustomers={fetchCustomers} />
+            </Stack>
+
+          </Grid>
+          <Grid xs={8}>
+            <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId} />
+          </Grid>
+        </Provider>
       </Grid>
     </Container>
   )
