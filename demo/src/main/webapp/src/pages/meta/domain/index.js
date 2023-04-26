@@ -1,27 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Provider, useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { Container } from 'react-bootstrap';
-import Button from '@mui/material/Button/Button';
+import { Button, Box, List, ListItemButton, ListItemText, Stack } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
-import TextField from '@mui/material/TextField/TextField';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import { ListItem } from '@mui/material';
-import { BasicTabs11, test11 } from './TapPanel';
-import { Provider, useSelector, useDispatch } from 'react-redux';
-import { createSlice, configureStore } from '@reduxjs/toolkit'
-
-import Stack from '@mui/material/Stack';
-import { SaveIcon } from '@mui/icons-material';
-import InputForm from './InputForm';
 import CancelIcon from '@mui/icons-material/Cancel';
-
+import InputForm from './InputForm';
+import { BasicTabs11 } from './TapPanel';
 import { click, reset } from './addBtnSlice';
 import addBtnStore from './addBtnStore';
 
@@ -29,7 +15,6 @@ let totalElements = 0;
 let clickedId = 0;
 
 const SearchItem = (props) => {
-
   // MEMO: setUserInput에 상관 없이, SearchItem에서는 전체 화면 렌더링이 안되므로 포커스 유지가 가능한건가?
   const userInput = props.userInput;
   const setUserInput = props.setUserInput;
@@ -46,18 +31,14 @@ const SearchItem = (props) => {
 
 
 const SelectedListItem = (props) => {
-
   const customers = props.customers;
   const setCustomers = props.setCustomers;
   const selectedIndex = props.selectedIndex;
   const setSelectedIndex = props.setSelectedIndex;
   const tabIndex = props.tabIndex;
-
   const [userInput, setUserInput] = useState("");
 
-
   const ListItems = () => {
-
 
     const isAddBtnClicked = useSelector(state => {
       return state.isAddBtnClicked.value;
@@ -107,11 +88,12 @@ const BoxComponent = (props) => {
   const setSelectedIndex = props.setSelectedIndex;
   const addBtnDispatch = useDispatch();
 
+  useEffect(() => {
+    addBtnDispatch(reset());
+  }, []);
+
   const onAdd = () => {
     if (isNew == false) {
-      console.log("index.js - onAdd");
-      console.log(customers);
-
       setCustomers({
         query: "new", list: [...customers.list, {
           id: null,
@@ -125,24 +107,16 @@ const BoxComponent = (props) => {
           isNew: true
         }]
       });
-
       setIsNew(true);
       setSelectedIndex(null);
     }
-    // if (addBtnClicked === false)
-    //   setAddBtnClicked(true);
-    // else
-    //   setAddBtnClicked(false);
-    // addBtnDispatch({type:'addBtnSlice/click'});
     addBtnDispatch(click());
-    console.log("addBtnClicked!!!!!!!!!!  ");
   }
 
   const onCancel = () => {
     props.fetchCustomers();
     setIsNew(false);
     addBtnDispatch(reset());
-    console.log("cancelBtnClicked!!!!!!!!!!  ");
     clickedId = 0;
   }
 
@@ -161,7 +135,6 @@ const BoxComponent = (props) => {
 }
 
 export default function TestPage() {
-
   const [customers, setCustomers] = useState({ query: '', list: [] });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -204,9 +177,6 @@ export default function TestPage() {
       setError(e);
     }
     setLoading(false);
-
-
-
   };
   console.log(" -----!!!!!------------ ");
   console.log(customers); //??
@@ -223,9 +193,7 @@ export default function TestPage() {
   if (error) return <div>에러가 발생했습니다</div>;
   if (!customers.list) return null;
 
-
   const onChangeTab = (indexNum) => {
-
     setTabIndex(indexNum);
     console.log("tabIndex value: " + tabIndex);
   };
@@ -239,13 +207,11 @@ export default function TestPage() {
       <Grid container spacing={2}>
         <Provider store={addBtnStore}>
           <Grid xs={4}>
-
             <BasicTabs11 onChangeTab={onChangeTab} />
             <SelectedListItem customers={customers} setCustomers={setCustomers} tabIndex={tabIndex} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
             <Stack direction="row" spacing={2}>
               <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} fetchCustomers={fetchCustomers} />
             </Stack>
-
           </Grid>
           <Grid xs={8}>
             <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId} />
@@ -254,6 +220,4 @@ export default function TestPage() {
       </Grid>
     </Container>
   )
-
-
 }
