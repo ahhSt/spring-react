@@ -6,53 +6,104 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
+import { useDispatch,useSelector } from 'react-redux';
+
 import { MenuItem, FormControl, Select, InputLabel } from '@mui/material'
 
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import { reset } from './addBtnSlice';
+
 const InputForm = (props) => {
 
   let tempReqeustBody;
-  let addIndex = props.addIndex;
-  console.log("addIndex  :" + addIndex);
+  let totalElements = props.totalElements;
+  let clickedId = props.clickedId;
+
+  // console.log("totalElements in INPUTFORM :" + totalElements );
+  // console.log("clickedId in INPUTFORM :" + clickedId );
+
   const [index, setIndex] = useState(props.id);   // MEMO: id : selected Index
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
   const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기. 
-
+   
+  const addBtnDispatch = useDispatch();
+  const isAddBtnClicked = useSelector(state => {
+    return state.isAddBtnClicked.value;
+  });
+  
   function clearInfo() {
     setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "" });
   }
 
+
+  const getClickedIndexData = (respData, clickedDataID) => {
+    // console.log("getClickedIndexData - respData ");
+    // console.log(respData);
+    // console.log("getClickedIndexData - clickedDataID " + clickedDataID);
+    let testObj = respData.data.content;
+
+    for (let arrObj of respData.data.content) {
+      // console.log("respData.data.content ");
+      // console.log(respData.data.content);
+      // console.log("aaaaaa ");
+      // console.log(arrObj);
+
+
+      if (arrObj.id == (Number(clickedDataID))) {
+        console.log("//////////////////////////");
+        console.log("                          ");
+        console.log(arrObj);
+        console.log("                          ");
+        console.log("//////////////////////////");
+
+        testObj = arrObj;
+      }
+    }
+    return testObj;
+  }
+
+
   useEffect(() => {
-    console.log('InputForm - 222222222');
+    // console.log('InputForm - 222222222');
     setIsNew(props.isNew);
     setIndex(props.id);
+    // console.log(" ------- handleListItemClick  in inputform----------");
+    // console.log("Clicked the Index!!! - " + index);
+
+    console.log(" ------- useEffect  in inputform----------");
+    console.log(" the Index!!! - " + index);
   });
 
   useEffect(() => {
-    console.log('InputForm - useEffect11111');
+    // console.log('InputForm - useEffect11111');
 
     const DetailInfo = (idx) => {
       const fetchCustomerInfo = async (idx) => {
         try {
           const response = await axios.get(
             'api/domain/getAll', {
-              params: {
-                "page": 0,
-                "size": 16,
-                "sort": "string"
-              }
+            params: {
+              "page": 0,
+              "size": 16,
+              "sort": "string"
+            }
           }
           );
-          console.log("InputForm - ");
-          console.log(response.data);
-          console.log("idx - " + idx);
-          console.log(response.data.content[Number(idx) - 1]);
+          // console.log("InputForm - ");
+          // console.log(response.data);
+          // console.log("idx - " + idx);
+          // console.log(response.data.content[Number(idx) - 1]);
 
 
-          setCustomerInfo(response.data.content[Number(idx) - 1]); // 데이터는 response.data 안에 들어있습니다.
+          // setCustomerInfo(response.data.content[Number(idx) - 1]); // 데이터는 response.data 안에 들어있습니다.
+          let testArr = getClickedIndexData(response, clickedId);
+          console.log("After getClickedIndexData ");
+          console.log(testArr);
+          setCustomerInfo(testArr);
+
 
         } catch (e) {
           console.log("error");
@@ -74,6 +125,12 @@ const InputForm = (props) => {
   }, [index]);
 
   const saveCustomerInfo = async () => {
+    // const isAddBtnClicked = useSelector(state => {
+    //   return state.isAddBtnClicked.value;
+    // });
+    // const addBtnDispatch = useDispatch();
+
+
     try {
       if (isNew) {
         console.log("saveCustomerInfo");
@@ -93,6 +150,7 @@ const InputForm = (props) => {
       }
       alert('Save');
       props.fetchCustomers();
+      addBtnDispatch(reset());
     }
     catch (e) {
       alert('Error');
@@ -101,14 +159,14 @@ const InputForm = (props) => {
 
   const tempsss = () => {
     let obj = {};
-    obj["id"] = (Number(addIndex) + 1).toString();
-    console.log("...customerInfo, ...obj");
-    console.log({ ...customerInfo, ...obj });
+    obj["id"] = (Number(totalElements) + 1).toString();
+    // console.log("...customerInfo, ...obj");
+    // console.log({ ...customerInfo, ...obj });
 
     tempReqeustBody = { ...customerInfo, ...obj };
 
-    console.log("tempReqeustBody");
-    console.log(tempReqeustBody);
+    // console.log("tempReqeustBody");
+    // console.log(tempReqeustBody);
 
     setCustomerInfo(() => {
       return { ...customerInfo, ...obj }
@@ -148,13 +206,13 @@ const InputForm = (props) => {
     // setDataType(event.target.value);
     let obj = {};
     obj["dataTypeId"] = event.target.value;
-    console.log("...customerInfo, ...obj");
-    console.log({ ...customerInfo, ...obj });
+    // console.log("...customerInfo, ...obj");
+    // console.log({ ...customerInfo, ...obj });
 
     tempReqeustBody = { ...customerInfo, ...obj };
 
-    console.log("tempReqeustBody");
-    console.log(tempReqeustBody);
+    // console.log("tempReqeustBody");
+    // console.log(tempReqeustBody);
 
     setCustomerInfo(() => {
       return { ...customerInfo, ...obj }
@@ -165,7 +223,7 @@ const InputForm = (props) => {
   const onChange = (e, field) => {
     let obj = {};
     obj[field] = e.target.value;
-    console.log(customerInfo);
+    // console.log(customerInfo);
 
     setCustomerInfo({ ...customerInfo, ...obj });
   }
@@ -193,7 +251,7 @@ const InputForm = (props) => {
         result = "null";
         break;
     }
-    console.log(result);
+    // console.log(result);
     return result;
   }
 
@@ -219,6 +277,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "korName");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -253,6 +312,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "engName");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -268,6 +328,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "engInitName");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         {/* <Grid item xs={12} sm={6}> */}
@@ -298,6 +359,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "description");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -313,6 +375,7 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "length");
             }}
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -326,6 +389,7 @@ const InputForm = (props) => {
               value={customerInfo.dataTypeId || ""}
               label="Data type"
               onChange={handleSelectChange}
+              disabled={!isAddBtnClicked}
             >
               <MenuItem value={"1"}>varchar</MenuItem>
               <MenuItem value={"2"}>int</MenuItem>
@@ -343,6 +407,8 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping postal-code"
             variant="standard"
+            disabled={!isAddBtnClicked}
+
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -354,6 +420,7 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping country"
             variant="standard"
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12}>
