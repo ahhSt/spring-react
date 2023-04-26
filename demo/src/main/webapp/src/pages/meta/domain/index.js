@@ -10,7 +10,7 @@ import InputForm from './InputForm';
 import { BasicTabs11 } from './TapPanel';
 import { click, reset } from './addBtnSlice';
 import addBtnStore from './addBtnStore';
-
+import { FixedSizeList } from 'react-window';
 let totalElements = 0;
 let clickedId = 0;
 
@@ -40,6 +40,10 @@ const SelectedListItem = (props) => {
 
   const ListItems = () => {
 
+    useEffect(() => {
+      console.log(" ------- SelectedListItem rendering!!!!!!!!! ----------");
+    }, []);
+
     const isAddBtnClicked = useSelector(state => {
       return state.isAddBtnClicked.value;
     });
@@ -68,7 +72,14 @@ const SelectedListItem = (props) => {
       </ListItemButton>
     );
 
-    return <List component="nav" aria-label="secondary mailbox folder">{listItem}</List>;
+    return <List component="nav" aria-label="secondary mailbox folder" sx={{
+      width: '100%',
+      bgcolor: 'background.paper',
+      // position: 'unset',
+      overflow: 'auto',
+      maxHeight: 600,
+      // '& ul': { padding: 0 },
+    }}>{listItem}</List>;
   };
 
   return (
@@ -184,10 +195,6 @@ export default function TestPage() {
   useEffect(() => {
     fetchCustomers();
   }, []);
-
-  useEffect(() => {
-    console.log("test");
-  }, [tabIndex]);
 
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다</div>;
