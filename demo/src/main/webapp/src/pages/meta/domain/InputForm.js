@@ -299,10 +299,10 @@ const InputForm = (props) => {
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
-        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={onDelete}>
+        <Button variant="outlined" startIcon={<DeleteIcon />} disabled={isAddBtnClicked} onClick={onDelete}>
           Delete
         </Button>
-        <Button variant="contained" endIcon={<SaveIcon />} onClick={onSave}>
+        <Button variant="contained" endIcon={<SaveIcon />} disabled={!isAddBtnClicked} onClick={onSave}>
           Save
         </Button>
       </Stack>

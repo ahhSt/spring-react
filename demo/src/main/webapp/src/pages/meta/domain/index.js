@@ -99,6 +99,10 @@ const BoxComponent = (props) => {
   const setSelectedIndex = props.setSelectedIndex;
   const addBtnDispatch = useDispatch();
 
+  const isAddBtnClicked = useSelector(state => {
+    return state.isAddBtnClicked.value;
+  });
+
   useEffect(() => {
     addBtnDispatch(reset());
   }, []);
@@ -134,10 +138,10 @@ const BoxComponent = (props) => {
   return (
     <div>
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
+        <Button variant="contained" startIcon={<PersonAddAltIcon />} disabled={isAddBtnClicked} onClick={onAdd}>
           Add
         </Button>
-        <Button variant="contained" endIcon={<CancelIcon />} onClick={onCancel} >
+        <Button variant="contained" endIcon={<CancelIcon />} disabled={!isAddBtnClicked} onClick={onCancel} >
           Cancel
         </Button>
       </Stack>
