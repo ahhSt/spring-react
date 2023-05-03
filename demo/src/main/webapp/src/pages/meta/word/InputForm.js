@@ -27,6 +27,7 @@ const InputForm = (props) => {
 
   const getClickedIndexData = (respData, clickedDataID) => {
     let testObj = respData.data.content;
+    let isFindClickedId = false;
     for (let arrObj of respData.data.content) {
       if (arrObj.id == (Number(clickedDataID))) {
         console.log("//////////////////////////");
@@ -35,9 +36,14 @@ const InputForm = (props) => {
         console.log("                          ");
         console.log("//////////////////////////");
         testObj = arrObj;
+        isFindClickedId = true;
       }
     }
-    return testObj;
+    if (isFindClickedId)
+      return testObj;
+    else {
+      return respData.data.content[0];
+    }
   }
 
   useEffect(() => {
@@ -82,6 +88,38 @@ const InputForm = (props) => {
   const saveCustomerInfo = async () => {
     try {
       if (isNew) {
+
+        // 아래는 domain 부분 잠시 갖다둔거. 다음 커밋에 삭제 예정.
+        // let obj = {};
+        // const response = await axios.get(
+        //   'api/domain/maxId' );
+        //   console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
+        //   console.log(response.data);
+
+        // // obj["id"] = (Number(totalElements) + 1).toString();
+        // obj["id"] = ((response.data+ 1).toString());
+
+        // tempReqeustBody = { ...customerInfo, ...obj };
+
+        // console.log("saveCustomerInfo");
+        // console.log(tempReqeustBody);
+        // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
+
+        let obj = {};
+        const response = await axios.get(
+          'api/word/maxId');
+        console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
+        console.log(response.data);
+
+        // obj["id"] = (Number(totalElements) + 1).toString();
+        obj["id"] = ((response.data + 1).toString());
+
+        tempReqeustBody = { ...customerInfo, ...obj };
+
+        console.log(tempReqeustBody);
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
+
+
         console.log("saveCustomerInfo");
         console.log(customerInfo);
         const res = await axios.post(
@@ -132,6 +170,7 @@ const InputForm = (props) => {
           '/api/word/' + customerInfo.id
         )
         alert('Delete');
+//        props.clearIsNew();
         props.fetchCustomers();
       }
       catch (e) {
