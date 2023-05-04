@@ -11,8 +11,8 @@ import java.util.List;
 @Entity
 public class DataType {
     @Id
-    @Column(name="DATA_TYPE_ID", columnDefinition = "varchar(5)")
-    private String id;
+    @Column(name="DATA_TYPE_ID")
+    private Long id;
 
     @Column(columnDefinition = "varchar(10)")
     private String type;

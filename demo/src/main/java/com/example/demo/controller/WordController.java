@@ -7,25 +7,47 @@ import com.example.demo.dto.DomainDto;
 import com.example.demo.dto.WordDto;
 import com.example.demo.repository.DomainRepository;
 import com.example.demo.repository.WordRepository;
+import com.example.demo.service.WordService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/word")
 public class WordController {
-    private final WordRepository wordRepository;
+    private final WordService wordService;
 
     @GetMapping("/getAll")
     public Page<WordDto> search(Pageable pageable){
-        return wordRepository.search(pageable);
+        return wordService.search(pageable);
     }
 
-    @PostMapping("/insert")
+    @Operation(summary = "findMaxId", description = "Max ID")
+    @GetMapping("/getMaxId")
+    public long getWordMaxId() throws Exception{
+        return wordService.getWordMaxId();
+    }
+
+    @Operation(summary = "findOne", description = "API to get information about one WordId.")
+    @GetMapping("/getOne")
+    public List<WordDto> getDomainListById(@RequestParam Long wordId) throws Exception{
+        List<Word> fareZones = wordService.findById(wordId);
+        List<WordDto> result = fareZones.stream()
+                .map(o -> new WordDto(o.getId(), o.getKorName(), o.getEngName(), o.getEngInitName(),
+                        o.getDescription()))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    @PostMapping("")
     public void insert(@RequestBody WordDto wordDto) throws Exception{
         try{
             Word word = new Word();
@@ -35,7 +57,7 @@ public class WordController {
             word.setEngInitName(wordDto.getEngInitName());
             word.setDescription(wordDto.getDescription());
 
-            wordRepository.insert(word);
+            wordService.insert(word);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -44,17 +66,12 @@ public class WordController {
         }
     }
 
+    @Operation(summary = "Delete", description = "API to Delete wordId.")
     @DeleteMapping("/{wordId}")
-    public void deleteDomainId (@PathVariable String wordId) throws Exception{
-        try {
-//            Domain domain = domainRepository.findById(doaminId)
-//                    .orElseThrow(IllegalArgumentException::new);
-            wordRepository.delete(wordId);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            throw new Exception("Delete Error");
-        }
+    public void deleteById(@PathVariable Long wordId){
+        Word word = new Word();
+        word.setId(wordId);
+        wordService.deleteById(word);
     }
 
 }

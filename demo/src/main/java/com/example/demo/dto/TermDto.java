@@ -7,16 +7,16 @@ import lombok.Data;
 @Data
 public class TermDto {
     @NotNull
-    private String id;
+    private Long id;
     private String korName;
     private String engName;
     private String engInitName;
     @NotNull
-    private String domainId;
+    private Long domainId;
     private String description;
 
     @QueryProjection
-    public TermDto(String id, String korName, String engName, String engInitName, String domainId, String description) {
+    public TermDto(Long id, String korName, String engName, String engInitName, Long domainId, String description) {
         this.id = id;
         this.korName = korName;
         this.engName = engName;
