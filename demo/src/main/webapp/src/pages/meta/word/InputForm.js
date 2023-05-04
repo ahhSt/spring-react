@@ -1,72 +1,77 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-
-import { MenuItem, FormControl, Select, InputLabel } from '@mui/material'
-
+import { MenuItem, FormControl, Select, InputLabel, Button, Stack, TextField, Typography, Grid } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { reset } from './addBtnSlice';
 
 const InputForm = (props) => {
-
   let tempReqeustBody;
-  let addIndex = props.addIndex;
-  console.log("addIndex  :" + addIndex );
-  const [index, setIndex] = useState(props.id);
+  let totalElements = props.totalElements;
+  let clickedId = props.clickedId;
+
+  const [index, setIndex] = useState(props.id); // MEMO: 부모 컴포넌트 index.js의 selectedIndex 값이 id로 들어옴.
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
-  const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기. 
+  const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기.
+
+  const addBtnDispatch = useDispatch();
+  const isAddBtnClicked = useSelector(state => {
+    return state.isAddBtnClicked.value;
+  });
 
   function clearInfo() {
-    setCustomerInfo({ id: index, korName: "", engName:"", engInitName:"", description:"" });
+    setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "" });
+  }
+
+  const getClickedIndexData = (respData, clickedDataID) => {
+    let testObj = respData.data.content;
+    for (let arrObj of respData.data.content) {
+      if (arrObj.id == (Number(clickedDataID))) {
+        console.log("//////////////////////////");
+        console.log("                          ");
+        console.log(arrObj);
+        console.log("                          ");
+        console.log("//////////////////////////");
+        testObj = arrObj;
+      }
+    }
+    return testObj;
   }
 
   useEffect(() => {
-    console.log('InputForm - 222222222');
     setIsNew(props.isNew);
     setIndex(props.id);
+    console.log(" ------- handleListItemClick  in inputform----------");
+    console.log("Clicked the Index!!! - " + index);
   });
 
   useEffect(() => {
-    console.log('InputForm - useEffect11111');
-
     const DetailInfo = (idx) => {
       const fetchCustomerInfo = async (idx) => {
         try {
-          // const response = await axios.get(
-          //   '/api/customer/' + idx
-          // );
           const response = await axios.get(
-            'api/word/getAll', { params: {"page": 0,
-                                          "size": 16,
-                                          "sort": "string"}}
+            'api/word/getAll', {
+              params: {
+                "page": 0,
+                "size": 16,
+                "sort": "string"
+              }
+          }
           );
-          console.log("InputForm - ");
-          console.log(response.data);
-          console.log("idx - " + idx);
-          console.log(response.data.content[Number(idx) - 1]);
-
-     
-          setCustomerInfo(response.data.content[Number(idx) - 1]); // 데이터는 response.data 안에 들어있습니다.
-          
+          let testArr = getClickedIndexData(response, clickedId);
+          console.log("After getClickedIndexData ");
+          console.log(testArr);
+          setCustomerInfo(testArr);
         } catch (e) {
           console.log("error");
         }
       };
-
       fetchCustomerInfo(idx);
-     
     }
-
     if (isNew) {
       clearInfo();
-
       console.log("InputForm.js - clearInfo ");
     }
     else {
@@ -74,9 +79,6 @@ const InputForm = (props) => {
     }
   }, [index]);
 
-
-
-    
   const saveCustomerInfo = async () => {
     try {
       if (isNew) {
@@ -97,31 +99,26 @@ const InputForm = (props) => {
       }
       alert('Save');
       props.fetchCustomers();
+      addBtnDispatch(reset());
     }
     catch (e) {
       alert('Error');
     }
   }
 
-  const tempsss = () =>{
+  const addNewId = () => {
     let obj = {};
-    obj["id"] = (Number(addIndex) + 1).toString();
-    console.log("...customerInfo, ...obj");
-    console.log({...customerInfo, ...obj});
-
-    tempReqeustBody = {...customerInfo, ...obj};
-
-    console.log("tempReqeustBody");
-    console.log(tempReqeustBody);
-
+    obj["id"] = (Number(totalElements) + 1).toString();
+    tempReqeustBody = { ...customerInfo, ...obj };
     setCustomerInfo(() => {
-      return {...customerInfo, ...obj}});
+      return { ...customerInfo, ...obj }
+    });
     console.log(customerInfo);
   }
 
   const onSave = () => {
     console.log(customerInfo);
-    tempsss();
+    addNewId();
 
     if (window.confirm("저장하시겠습니까?")) {
       saveCustomerInfo();
@@ -147,16 +144,13 @@ const InputForm = (props) => {
     }
   }
 
-  const handleSelectChange = (event) => {
-    setDataType(event.target.value);
-  };
-
+  // const handleSelectChange = (event) => {
+  //   setDataType(event.target.value);
+  // };
 
   const onChange = (e, field) => {
     let obj = {};
     obj[field] = e.target.value;
-    console.log(customerInfo);
-
     setCustomerInfo({ ...customerInfo, ...obj });
   }
 
@@ -173,36 +167,17 @@ const InputForm = (props) => {
             name="korName"
             label="한글명"
             fullWidth
-            // InputProps={{
-            //   readOnly: true,
-            // }}
-            // autoComplete="korName"
             variant="standard"
             value={customerInfo.korName || ""}
             onChange={(e) => {
               onChange(e, "korName");
             }}
+            disabled={!isAddBtnClicked}
+            inputProps={{ maxLength: 20 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
         </Grid>
-        {/* <Grid item xs={12} sm={6}>
-          <TextField
-            id="id"
-            name="id"
-            label="ID"
-            fullWidth
-            InputProps={{
-              readOnly: true,
-            }}
-            // autoComplete="id"
-            variant="filled"
-            value={ customerInfo.id || ""}
-            onChange={ (e) => {
-              onChange(e, "id");
-            } }
-          />
-        </Grid> */}
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -216,6 +191,8 @@ const InputForm = (props) => {
             onChange={(e) => {
               onChange(e, "engName");
             }}
+            disabled={!isAddBtnClicked}
+            inputProps={{maxLength: 30}}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -225,29 +202,15 @@ const InputForm = (props) => {
             name="engInitName"
             label="영문 약어명"
             fullWidth
-            // autoComplete="shipping address-line1"
             variant="standard"
             value={customerInfo.engInitName || ""}
             onChange={(e) => {
               onChange(e, "engInitName");
             }}
+            disabled={!isAddBtnClicked}
+            inputProps={{maxLength: 20}}
           />
         </Grid>
-        {/* <Grid item xs={12} sm={6}> */}
-          {/* <TextField
-            required
-            id="tbd1"
-            name="tbd1"
-            label="TBD"
-            fullWidth
-            // autoComplete="shipping address-line1"
-            variant="standard"
-            value={customerInfo.tbd1 || ""}
-            onChange={(e) => {
-              onChange(e, "tbd1");
-            }}
-          /> */}
-        {/* </Grid> */}
         <Grid item xs={12}>
           <TextField
             required
@@ -255,46 +218,15 @@ const InputForm = (props) => {
             name="description"
             label="단어 설명"
             fullWidth
-            // autoComplete="shipping address-line2"
             variant="standard"
             value={customerInfo.description || ""}
             onChange={(e) => {
               onChange(e, "description");
             }}
+            disabled={!isAddBtnClicked}
+            inputProps={{maxLength: 100}}
           />
         </Grid>
-        {/* <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="data_length"
-            name="data_length"
-            label="데이터 길이(숫자만 입력) "
-            fullWidth
-            autoComplete="standard"
-            variant="standard"
-            value={customerInfo.data_length || ""}
-            onChange={(e) => {
-              onChange(e, "data_length");
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Data type</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="data_type"
-              name="data_type"
-              value={dataType}
-              label="Data type"
-              onChange={handleSelectChange}
-            >
-              <MenuItem value={"varchar"}>varchar</MenuItem>
-              <MenuItem value={"int"}>int</MenuItem>
-              <MenuItem value={"timestamp"}>timestamp</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid> */}
         <Grid item xs={12} sm={6}>
           <TextField
             // required
@@ -302,8 +234,8 @@ const InputForm = (props) => {
             name="zip"
             label="TBD"
             fullWidth
-            // autoComplete="shipping postal-code"
             variant="standard"
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -313,29 +245,23 @@ const InputForm = (props) => {
             name="country"
             label="TBD"
             fullWidth
-            // autoComplete="shipping country"
             variant="standard"
+            disabled={!isAddBtnClicked}
           />
         </Grid>
         <Grid item xs={12}>
-          {/* <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Use this address for payment details"
-          /> */}
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
-        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={onDelete}>
+        <Button variant="outlined" startIcon={<DeleteIcon />} disabled={isAddBtnClicked} onClick={onDelete}>
           Delete
         </Button>
-        <Button variant="contained" endIcon={<SaveIcon />} onClick={onSave}>
+        <Button variant="contained" endIcon={<SaveIcon />}  disabled={!isAddBtnClicked} onClick={onSave}>
           Save
         </Button>
       </Stack>
     </React.Fragment>
   );
 };
-
-// InputForm.displayName = "InputForm"
 
 export default InputForm;

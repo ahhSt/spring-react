@@ -1,97 +1,7 @@
-// import React, { useState } from "react";
-// import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-
-// export default function TapPanels (props) {
-//   const [index, setIndex] = useState(0);
-//   return (
-//     <div>
-//       <Tabs selectedIndex={index} onSelect={index => setIndex(index)}>
-//         <TabList>
-//           <Tab>
-//             <span>TAB1</span>
-//           </Tab>
-//           <Tab>
-//             <span>TAB2</span>
-//           </Tab>
-//           <Tab>
-//             <span>TAB3</span>
-//           </Tab>
-//         </TabList>
-//         <div>now is {index}</div>
-//         <TabPanel>
-//           <div>IM ONE</div>
-//         </TabPanel>
-//         <TabPanel>
-//           <div>IM TWO</div>
-//         </TabPanel>
-//         <TabPanel>
-//           <div>IM THREE</div>
-//         </TabPanel>
-//       </Tabs>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
 import React, { Component } from 'react';
-// import AppBar from '@material-ui/core/AppBar';
-// import Tabs from '@material-ui/core/Tabs';
-// import Tab from '@material-ui/core/Tab';
-// import Typography from '@material-ui/core/Typography';
-// import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
 import { AppBar, Tabs, Tab, Typography, Box } from '@mui/material';
 
-
-const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
-
-  // const listItemss = props.selectedListItem();
-
-  // return (
-  //   <div
-  //     role="tabpanel"
-  //     hidden={value !== index}
-  //     id={`simple-tabpanel-${index}`}
-  //     aria-labelledby={`simple-tab-${index}`}
-  //     {...other}
-  //   >
-  //     {value === index && (
-  //       <Box sx={{ p: 3 }}>
-  //         <Typography>{children}</Typography>
-  //       </Box>
-  //     )}
-  //   </div>
-  // );
-
-  return (
-
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
 
 const a11yProps = (index) => {
   return {
@@ -99,8 +9,6 @@ const a11yProps = (index) => {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-
-
 
 export function BasicTabs11(props) {
   const [value, setValue] = React.useState(0);
@@ -120,16 +28,6 @@ export function BasicTabs11(props) {
           <Tab label="영문 약어명" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      {/* <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel> */}
     </Box>
-    
   );
 }
