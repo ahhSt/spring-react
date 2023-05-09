@@ -13,6 +13,7 @@ const InputForm = (props) => {
 
   const [index, setIndex] = useState(props.id);   // MEMO: id : selected Index
   const [isNew, setIsNew] = useState(props.isNew);
+  const isDataExist = props.isDataExist;
   const [customerInfo, setCustomerInfo] = useState({});
    
   const addBtnDispatch = useDispatch();
@@ -87,7 +88,7 @@ const InputForm = (props) => {
 
   const saveCustomerInfo = async () => {
     try {
-      if (isNew) {
+      if (isNew && isDataExist) {
 
         let obj = {};
         const response = await axios.get(
@@ -110,6 +111,17 @@ const InputForm = (props) => {
           '/api/domain/insert', tempReqeustBody
         )
         console.log("res");
+        console.log(res);
+        props.clearIsNew();
+      }
+      else if (isNew && !isDataExist){
+        let obj = {}; 
+        obj["id"] = ('1');
+    
+        tempReqeustBody = { ...customerInfo, ...obj };
+        const res = await axios.post(
+          '/api/domain/insert', tempReqeustBody
+        )
         console.log(res);
         props.clearIsNew();
       }
