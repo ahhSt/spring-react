@@ -108,7 +108,7 @@ const InputForm = (props) => {
 
         let obj = {};
         const response = await axios.get(
-          'api/word/maxId');
+          'api/word/getMaxId');
         console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
         console.log(response.data);
 
@@ -124,7 +124,7 @@ const InputForm = (props) => {
         console.log("saveCustomerInfo");
         console.log(customerInfo);
         const res = await axios.post(
-          '/api/word/insert', tempReqeustBody
+          '/api/word', tempReqeustBody
         )
         console.log("res");
         console.log(res);
@@ -136,7 +136,7 @@ const InputForm = (props) => {
     
         tempReqeustBody = { ...customerInfo, ...obj };
         const res = await axios.post(
-          '/api/word/insert', tempReqeustBody
+          '/api/word', tempReqeustBody
         )
         console.log(res);
         props.clearIsNew();

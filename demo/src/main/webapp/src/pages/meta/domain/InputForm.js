@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { MenuItem, FormControl, Select, InputLabel, Stack, Button, TextField, Typography, Grid} from '@mui/material'
+import { MenuItem, FormControl, Select, InputLabel, Stack, Button, TextField, Typography, Grid } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { reset } from './addBtnSlice';
@@ -15,14 +15,14 @@ const InputForm = (props) => {
   const [isNew, setIsNew] = useState(props.isNew);
   const isDataExist = props.isDataExist;
   const [customerInfo, setCustomerInfo] = useState({});
-   
+
   const addBtnDispatch = useDispatch();
   const isAddBtnClicked = useSelector(state => {
     return state.isAddBtnClicked.value;
   });
-  
+
   function clearInfo() {
-    setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "" });
+    setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "", dataTypeName: "", });
   }
 
   const getClickedIndexData = (respData, clickedDataID) => {
@@ -41,8 +41,7 @@ const InputForm = (props) => {
     }
     if (isFindClickedId)
       return testObj;
-    else 
-    {
+    else {
       return respData.data.content[0];
     }
   }
@@ -92,13 +91,13 @@ const InputForm = (props) => {
 
         let obj = {};
         const response = await axios.get(
-          'api/domain/maxId' );
-          console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
-          console.log(response.data);
-    
+          'api/domain/getMaxId');
+        console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
+        console.log(response.data);
+
         // obj["id"] = (Number(totalElements) + 1).toString();
-        obj["id"] = ((response.data+ 1).toString());
-    
+        obj["id"] = ((response.data + 1).toString());
+
         tempReqeustBody = { ...customerInfo, ...obj };
 
         console.log(tempReqeustBody);
@@ -108,19 +107,19 @@ const InputForm = (props) => {
         console.log("saveCustomerInfo");
         console.log(customerInfo);
         const res = await axios.post(
-          '/api/domain/insert', tempReqeustBody
+          '/api/domain', tempReqeustBody
         )
         console.log("res");
         console.log(res);
         props.clearIsNew();
       }
-      else if (isNew && !isDataExist){
-        let obj = {}; 
+      else if (isNew && !isDataExist) {
+        let obj = {};
         obj["id"] = ('1');
-    
+
         tempReqeustBody = { ...customerInfo, ...obj };
         const res = await axios.post(
-          '/api/domain/insert', tempReqeustBody
+          '/api/domain', tempReqeustBody
         )
         console.log(res);
         props.clearIsNew();
@@ -180,7 +179,37 @@ const InputForm = (props) => {
 
   const handleSelectChange = (event) => {
     let obj = {};
-    obj["dataTypeId"] = event.target.value;
+    // obj["dataTypeId"] = event.target.value;
+    switch (event.target.value) {
+      case "INTEGER":
+        obj["dataTypeName"] = "INTEGER";
+        obj["dataTypeId"] = "1";
+        break;
+      case "STRING":
+        obj["dataTypeName"] = "STRING";
+        obj["dataTypeId"] = "2";
+        break;
+
+      case "VARCHAR":
+        obj["dataTypeName"] = "VARCHAR";
+        obj["dataTypeId"] = "3";
+        break;
+
+      case "TIMESTAMP":
+        obj["dataTypeName"] = "TIMESTAMP";
+        obj["dataTypeId"] = "6";
+        break;
+
+      case "NULL":
+        obj["dataTypeName"] = "NULL";
+        obj["dataTypeId"] = "7";
+        break;
+
+      default:
+        obj["dataTypeName"] = "NULL";
+        obj["dataTypeId"] = "7";
+        break;
+    }
     tempReqeustBody = { ...customerInfo, ...obj };
     setCustomerInfo(() => {
       return { ...customerInfo, ...obj }
@@ -221,7 +250,7 @@ const InputForm = (props) => {
               onChange(e, "korName");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 20}}
+            inputProps={{ maxLength: 20 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -239,7 +268,7 @@ const InputForm = (props) => {
               onChange(e, "engName");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 30}}
+            inputProps={{ maxLength: 30 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -255,7 +284,7 @@ const InputForm = (props) => {
               onChange(e, "engInitName");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 20}}
+            inputProps={{ maxLength: 20 }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -271,7 +300,7 @@ const InputForm = (props) => {
               onChange(e, "description");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 100}}
+            inputProps={{ maxLength: 100 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -288,7 +317,7 @@ const InputForm = (props) => {
               onChangeOnlyNumber(e, "length");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 5}}
+            inputProps={{ maxLength: 5 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -296,17 +325,22 @@ const InputForm = (props) => {
             <InputLabel id="demo-simple-select-label">Data type</InputLabel>
             <Select
               labelId="demo-simple-select-label"
-              id="dataTypeId"
-              name="dataTypeId"
-              value={customerInfo.dataTypeId || ""}
+              id="dataTypeName"
+              name="dataTypeName"
+              value={customerInfo.dataTypeName || ""}
               label="Data type"
               onChange={handleSelectChange}
               disabled={!isAddBtnClicked}
             >
-              <MenuItem value={"1"}>varchar</MenuItem>
+              {/* <MenuItem value={"1"}>varchar</MenuItem>
               <MenuItem value={"2"}>int</MenuItem>
               <MenuItem value={"3"}>timestamp</MenuItem>
-              <MenuItem value={"4"}>null</MenuItem>
+              <MenuItem value={"4"}>null</MenuItem> */}
+              <MenuItem value={"INTEGER"}>INTEGER</MenuItem>
+              <MenuItem value={"STRING"}>STRING</MenuItem>
+              <MenuItem value={"VARCHAR"}>VARCHAR</MenuItem>
+              <MenuItem value={"TIMESTAMP"}>TIMESTAMP</MenuItem>
+              <MenuItem value={"NULL"}>NULL</MenuItem>
             </Select>
           </FormControl>
         </Grid>
