@@ -11,8 +11,8 @@ import java.util.List;
 @Entity
 public class Domain {
     @Id
-    @Column(name="DOMAIN_ID", columnDefinition = "varchar(5)")
-    private String id;
+    @Column(name="DOMAIN_ID")
+    private Long id;
 
     @Column(columnDefinition = "varchar(20)")
     private String korName;
@@ -36,10 +36,10 @@ public class Domain {
 //	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 //	private List<Order> orders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private List<Term> terms;
+    @OneToMany(mappedBy = "domains", cascade = CascadeType.ALL)
+    private List<Term> domainTerms;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "data_type_id", referencedColumnName = "data_type_id")
+    @JoinColumn(name = "data_type_id", referencedColumnName = "data_type_id", nullable = true)
     private DataType dataTypes;
 }

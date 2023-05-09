@@ -1,9 +1,6 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +12,8 @@ import java.util.List;
 @Entity
 public class Word {
     @Id
-    @Column(name="WORD_ID", columnDefinition = "varchar(5)")
-    private String id;
+    @Column(name="WORD_ID")
+    private Long id;
 
     @Column(columnDefinition = "varchar(20)")
     private String korName;

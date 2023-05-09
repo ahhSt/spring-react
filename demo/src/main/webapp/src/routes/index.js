@@ -11,8 +11,8 @@ import ListInfoSample from '../pages/sample/listInfoSample';
 import SearchSample from '../pages/sample/searchSample';
 import ListInfoSampleJH from '../pages/sample/sampleJH';
 import Term from '../pages/meta/term';
-import WordManagement from '../pages/meta/domain';
-import DomainManagement from '../pages/meta/word';
+import DomainManagement from '../pages/meta/domain';
+import WordManagement from '../pages/meta/word';
 
 export default function Router() {
   return (
