@@ -9,12 +9,12 @@ public class TermWordDto {
     @NotNull
     private Long id;
     @NotNull
-    private String termId;
+    private Long termId;
     @NotNull
     private String wordId;
 
     @QueryProjection
-    public TermWordDto(Long id, String termId, String wordId) {
+    public TermWordDto(Long id, Long termId, String wordId) {
         this.id = id;
         this.termId = termId;
         this.wordId = wordId;

@@ -21,15 +21,15 @@ export default function Main() {
   const wordHeader = ['단어명', '영문명', '영문약어명'];
   const domainHeader = ['도메인명', '영문명', '영문약어명', '데이터타입'];
 
-  const [wordItem, concatWordItem] = useState([]);
+  const [words, concatWords] = useState([]);
   const [domain, selectDomain] = useState({});
 
   const wordData = [
-    {'korName': '카드', 'engName':'Card', 'engInitName':'CRD'},
-    {'korName': '번호', 'engName':'Number', 'engInitName':'NUM'},
-    {'korName': '시리얼', 'engName':'Serial', 'engInitName':'SRL'},
-    {'korName': '등록', 'engName':'Registry', 'engInitName':'REG'},
-    {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
+    {id: 1, 'korName': '카드', 'engName':'Card', 'engInitName':'CRD'},
+    {id: 2, 'korName': '번호', 'engName':'Number', 'engInitName':'NUM'},
+    {id: 3, 'korName': '시리얼', 'engName':'Serial', 'engInitName':'SRL'},
+    {id: 4, 'korName': '등록', 'engName':'Registry', 'engInitName':'REG'},
+    {id: 5, 'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
     // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
     // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
     // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
@@ -52,9 +52,9 @@ export default function Main() {
     // {'korName': '수정', 'engName':'Update', 'engInitName':'UPD'},
   ];
   const domainData = [
-    {'korName': '번호', 'engName':'Number', 'engInitName':'NUM', 'dataType':'varchar(10)'},
-    {'korName': '날짜', 'engName':'Date', 'engInitName':'DT', 'dataType':'varchar(8)'},
-    {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
+    {id: 1, 'korName': '번호', 'engName':'Number', 'engInitName':'NUM', 'dataType':'varchar(10)'},
+    {id: 2, 'korName': '날짜', 'engName':'Date', 'engInitName':'DT', 'dataType':'varchar(8)'},
+    {id: 3, 'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
     // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
     // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
     // {'korName': '일시', 'engName':'DateTime', 'engInitName':'DT', 'dataType':'varchar(14)'},
@@ -69,7 +69,7 @@ export default function Main() {
   ];
 
   const handleClick = (event, item) => {
-    concatWordItem([...wordItem, item]);
+    concatWords([...words, item]);
   }
 
   const domainSelect = (event, item) => {
@@ -91,7 +91,7 @@ export default function Main() {
                     </Container>
                 </Grid>
                 <Grid xs={7}>
-                    <InputForm wordItem={wordItem} domain={domain}/>
+                    <InputForm words={words} domain={domain}/>
                 </Grid>
             </Grid>
         </Container>

@@ -9,6 +9,7 @@ import com.example.demo.dto.TermWordDto;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -44,5 +45,10 @@ public class TermWordRepository {
                 ;
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+    }
+
+    @Transactional
+    public void insert(TermWord termWord){
+        em.persist(termWord);
     }
 }

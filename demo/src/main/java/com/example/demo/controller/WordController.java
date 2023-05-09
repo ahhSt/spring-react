@@ -28,6 +28,7 @@ public class WordController {
     @PostMapping("/insert")
     public void insert(@RequestBody WordDto wordDto) throws Exception{
         try{
+            System.out.println(wordDto.toString());
             Word word = new Word();
             word.setId(wordDto.getId());
             word.setKorName(wordDto.getKorName());

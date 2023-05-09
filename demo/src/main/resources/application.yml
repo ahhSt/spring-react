@@ -7,8 +7,15 @@ logging.level:
 
 server:
   port: 82
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 spring:
+  # main:
+  #   allow-bean-definition-overriding: true
   web:
     resources:
       static-locations: classpath:/static, classpath:/webapp

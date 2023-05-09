@@ -12,8 +12,10 @@ import java.util.List;
 @Entity
 public class Term {
     @Id
-    @Column(name="TERM_ID", columnDefinition = "varchar(5)")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TERM_SEQ")
+    @SequenceGenerator(sequenceName = "term_seq", allocationSize = 1, name = "TERM_SEQ")
+    @Column(name="TERM_ID")
+    private Long id;
 
     @Column(columnDefinition = "varchar(20)")
     private String korName;

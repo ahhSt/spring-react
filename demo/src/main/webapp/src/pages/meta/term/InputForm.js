@@ -11,19 +11,27 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+
+let term = {};
+let desc = '';
+
 const InputForm = (props) => {
 
-  const {wordItem, domain} = props;
-  const [term, setTerm] = useState({});
+  const {words, domain} = props;
 
   const onSave = () => {
   
     const saveInfo = async () => {
       try{ 
-        console.log(wordItem);
-        console.log(domain);
+        term = {...term, words, domain, description: desc};
         console.log(term);
         alert('Save');
+        let data = { ...term };
+        const response = await axios.post(
+          '/api/term', 
+          data,
+          {headers: {"Content-Type": 'application/json; charset=UTF-8'}}
+        );
       }
       catch (e) {
         alert('Error');
@@ -37,12 +45,14 @@ const InputForm = (props) => {
     alert('delete');
   }
 
-  const concatTxt = (wordItem, domain, key) => {
+  const handleOnChange = (event) => {
+    desc = event.target.value;
+  }
+
+  const concatTxt = (words, domain, key) => {
     let domainName = domain[key] ? '_' + domain[key] : '';
-    let termTxt = wordItem.map(u => u[key]).join('_') + domainName;
-    let obj = {};
-    obj[key] = termTxt;
-    setTerm(...term, ...obj);
+    let termTxt = words.map(u => u[key]).join('_') + domainName;
+    term[key] = termTxt;
     return termTxt;
   }
 
@@ -75,7 +85,7 @@ const InputForm = (props) => {
               readOnly: true,
             }}
             variant="filled"
-            value={ concatTxt(wordItem, domain, 'korName') }
+            value={ concatTxt(words, domain, 'korName') }
             // autoComplete="shipping address-line2"
           />
         </Grid>
@@ -89,7 +99,7 @@ const InputForm = (props) => {
               readOnly: true,
             }}
             variant="filled"
-            value={ concatTxt(wordItem, domain, 'engName') }
+            value={ concatTxt(words, domain, 'engName') }
           />
         </Grid>
         <Grid item xs={11}>
@@ -103,7 +113,7 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
-            value={ concatTxt(wordItem, domain, 'engInitName') }
+            value={ concatTxt(words, domain, 'engInitName') }
           />
         </Grid>
         <Grid item xs={11}>
@@ -129,6 +139,7 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping address-line2"
             variant="standard"
+            onChange={handleOnChange}
           />
         </Grid>
         
