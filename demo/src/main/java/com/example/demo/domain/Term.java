@@ -12,8 +12,8 @@ import java.util.List;
 @Entity
 public class Term {
     @Id
-    @Column(name="TERM_ID", columnDefinition = "varchar(5)")
-    private String id;
+    @Column(name="TERM_ID")
+    private Long id;
 
     @Column(columnDefinition = "varchar(20)")
     private String korName;

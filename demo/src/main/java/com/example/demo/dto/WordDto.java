@@ -7,14 +7,14 @@ import lombok.Data;
 @Data
 public class WordDto {
     @NotNull
-    private String id;
+    private Long id;
     private String korName;
     private String engName;
     private String engInitName;
     private String description;
 
     @QueryProjection
-    public WordDto(String id, String korName, String engName, String engInitName, String description) {
+    public WordDto(Long id, String korName, String engName, String engInitName, String description) {
         this.id = id;
         this.korName = korName;
         this.engName = engName;
