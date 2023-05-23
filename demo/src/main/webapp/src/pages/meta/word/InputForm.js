@@ -15,7 +15,8 @@ const InputForm = (props) => {
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
   const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기.
-
+  const isDataExist = props.isDataExist;
+  
   const addBtnDispatch = useDispatch();
   const isAddBtnClicked = useSelector(state => {
     return state.isAddBtnClicked.value;
@@ -27,6 +28,7 @@ const InputForm = (props) => {
 
   const getClickedIndexData = (respData, clickedDataID) => {
     let testObj = respData.data.content;
+    let isFindClickedId = false;
     for (let arrObj of respData.data.content) {
       if (arrObj.id == (Number(clickedDataID))) {
         console.log("//////////////////////////");
@@ -35,9 +37,14 @@ const InputForm = (props) => {
         console.log("                          ");
         console.log("//////////////////////////");
         testObj = arrObj;
+        isFindClickedId = true;
       }
     }
-    return testObj;
+    if (isFindClickedId)
+      return testObj;
+    else {
+      return respData.data.content[0];
+    }
   }
 
   useEffect(() => {
@@ -81,13 +88,56 @@ const InputForm = (props) => {
 
   const saveCustomerInfo = async () => {
     try {
-      if (isNew) {
+      if (isNew && isDataExist) {
+
+        // 아래는 domain 부분 잠시 갖다둔거. 다음 커밋에 삭제 예정.
+        // let obj = {};
+        // const response = await axios.get(
+        //   'api/domain/maxId' );
+        //   console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
+        //   console.log(response.data);
+
+        // // obj["id"] = (Number(totalElements) + 1).toString();
+        // obj["id"] = ((response.data+ 1).toString());
+
+        // tempReqeustBody = { ...customerInfo, ...obj };
+
+        // console.log("saveCustomerInfo");
+        // console.log(tempReqeustBody);
+        // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
+
+        let obj = {};
+        const response = await axios.get(
+          'api/word/getMaxId');
+        console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
+        console.log(response.data);
+
+        // obj["id"] = (Number(totalElements) + 1).toString();
+        obj["id"] = ((response.data + 1).toString());
+
+        tempReqeustBody = { ...customerInfo, ...obj };
+
+        console.log(tempReqeustBody);
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
+
+
         console.log("saveCustomerInfo");
         console.log(customerInfo);
         const res = await axios.post(
-          '/api/word/insert', tempReqeustBody
+          '/api/word', tempReqeustBody
         )
         console.log("res");
+        console.log(res);
+        props.clearIsNew();
+      }
+      else if (isNew && !isDataExist){
+        let obj = {}; 
+        obj["id"] = ('1');
+    
+        tempReqeustBody = { ...customerInfo, ...obj };
+        const res = await axios.post(
+          '/api/word', tempReqeustBody
+        )
         console.log(res);
         props.clearIsNew();
       }
@@ -132,6 +182,7 @@ const InputForm = (props) => {
           '/api/word/' + customerInfo.id
         )
         alert('Delete');
+//        props.clearIsNew();
         props.fetchCustomers();
       }
       catch (e) {

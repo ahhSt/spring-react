@@ -13,6 +13,7 @@ import addBtnStore from './addbtnStore';
 
 let totalElements = 0;
 let clickedId = 0;
+let isDataNotExistStatic = false;
 
 const SearchItem = (props) => {
   // MEMO: setUserInput에 상관 없이, SearchItem에서는 전체 화면 렌더링이 안되므로 포커스 유지가 가능한건가?
@@ -105,6 +106,15 @@ const BoxComponent = (props) => {
     addBtnDispatch(reset());
   }, []);
 
+  useEffect(() => {
+    if (isDataNotExistStatic == true) {
+      addBtnDispatch(click());
+      // onAdd();
+      console.log("    useEffect if (isDataExistStatic == false)");
+    }
+  }, [isDataNotExistStatic]);
+
+
   const onAdd = () => {
     if (isNew == false) {
       setCustomers({
@@ -137,10 +147,10 @@ const BoxComponent = (props) => {
   return (
     <div>
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" startIcon={<PersonAddAltIcon />} disabled={isAddBtnClicked} onClick={onAdd}>
+        <Button variant="contained" startIcon={<PersonAddAltIcon />} disabled={isAddBtnClicked || isDataNotExistStatic} onClick={onAdd}>
           Add
         </Button>
-        <Button variant="contained" endIcon={<CancelIcon />} disabled={!isAddBtnClicked} onClick={onCancel} >
+        <Button variant="contained" endIcon={<CancelIcon />} disabled={!isAddBtnClicked || isDataNotExistStatic} onClick={onCancel} >
           Cancel
         </Button>
       </Stack>
@@ -178,11 +188,31 @@ export default function TestPage() {
       console.log("index ");
       console.log(response.data);
 
-      if (response.data.numberOfElements == 0){
-        setIsDataExist(false);
-        // isDataExist = false;
+      if (response.data.numberOfElements == 0) {
+        console.log("response.data.numberOfElements == 0");
+        isDataNotExistStatic = true;
+        console.log("isDataNotExistStatic: " + isDataNotExistStatic);
+
+        if (isNew == false) {
+          setCustomers({
+            query: "new", list: [{
+              id: null,
+              name: "New Data",
+              korName: "새 데이터",
+              engName: "New Data - English Name",
+              engInitName: "New Data - English short Name",
+              data_type: "varchar",
+              data_length: "255",
+              description: "none",
+              isNew: true
+            }]
+          });
+          setIsNew(true);
+          setSelectedIndex(null);
+        }
       }
-      else{
+      else {
+        isDataNotExistStatic = false;
         console.log(response.data.content[0]);
         setCustomers({query:"", list: response.data.content}); // 데이터는 response.data 안에 들어있습니다.
   
@@ -233,7 +263,7 @@ export default function TestPage() {
             </Stack>
           </Grid>
           <Grid xs={8}>
-            <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId} />
+            <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId}  isDataExist={!isDataNotExistStatic}/>
           </Grid>
         </Provider>
       </Grid>
