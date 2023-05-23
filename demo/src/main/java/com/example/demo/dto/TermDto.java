@@ -9,10 +9,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
-@AllArgsConstructor
-@Builder(builderMethodName = "TermDtoBuilder")
+// @AllArgsConstructor
+@Getter
+@Setter
+// @Builder(builderMethodName = "TermDtoBuilder")
 public class TermDto {
     @NotNull
     private Long id;
@@ -36,13 +40,13 @@ public class TermDto {
         this.description = description;
     }
 
-    public static TermDtoBuilder builder(TermDto termDto) {
-        return TermDtoBuilder()
-        .id(termDto.getId())
-        .korName(termDto.getKorName())
-        .engName(termDto.getEngName())
-        .engInitName(termDto.getEngInitName())
-        .domainId(termDto.getDomainId())
-        .description(termDto.getDescription());
-    }
+    // public static TermDtoBuilder builder(TermDto termDto) {
+    //     return TermDtoBuilder()
+    //     .id(termDto.getId())
+    //     .korName(termDto.getKorName())
+    //     .engName(termDto.getEngName())
+    //     .engInitName(termDto.getEngInitName())
+    //     .domainId(termDto.getDomainId())
+    //     .description(termDto.getDescription());
+    // }
 }

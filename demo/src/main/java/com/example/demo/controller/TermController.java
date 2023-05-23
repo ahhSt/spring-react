@@ -28,7 +28,7 @@ public class TermController {
     private final TermRepository termRepository;
     private final TermWordRepository termWordRepository;
 
-    @GetMapping("/getAll")
+    @GetMapping("")
     public Page<TermDto> search(Pageable pageable){
         return termRepository.search(pageable);
     }

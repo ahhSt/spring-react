@@ -127,7 +127,22 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
-            value={ domain.dataType || ''}
+            value={ domain.dataTypeName || ''}
+          />
+        </Grid>
+
+        <Grid item xs={11}>
+          <TextField
+            id="length"
+            name="Length"
+            label="길이"
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+            // autoComplete="shipping address-line2"
+            variant="filled"
+            value={ domain.length || ''}
           />
         </Grid>
 

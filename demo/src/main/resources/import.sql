@@ -40,8 +40,8 @@ INSERT INTO term (term_id, description, eng_init_name, eng_name, kor_name, domai
 INSERT INTO term (term_id, description, eng_init_name, eng_name, kor_name, domain_id) VALUES (4, null, null, 'nn', 'ㅜㅜ', 14);
 INSERT INTO term (term_id, description, eng_init_name, eng_name, kor_name, domain_id) VALUES (2, null, null, 'yy', 'ㅛㅛ', 15);
 
-INSERT INTO term_word (id, term_id, word_id) VALUES (1, 1, 5);
-INSERT INTO term_word (id, term_id, word_id) VALUES (2, 5, 2);
-INSERT INTO term_word (id, term_id, word_id) VALUES (3, 5, 6);
-INSERT INTO term_word (id, term_id, word_id) VALUES (4, 5, 3);
-INSERT INTO term_word (id, term_id, word_id) VALUES (5, 2, 1);
+SELECT NEXTVAL('term_seq');
+SELECT NEXTVAL('term_seq');
+SELECT NEXTVAL('term_seq');
+SELECT NEXTVAL('term_seq');
+SELECT NEXTVAL('term_seq');

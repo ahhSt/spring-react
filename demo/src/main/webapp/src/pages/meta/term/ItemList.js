@@ -46,6 +46,7 @@ export default function DenseTable(props) {
               <TableCell align="left">{header[1]}</TableCell>
               <TableCell align="left">{header[2]}</TableCell>
               { header[3] && <TableCell align="left">{header[3]}</TableCell>}
+              { header[4] && <TableCell align="left">{header[4]}</TableCell>}
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
@@ -63,7 +64,8 @@ export default function DenseTable(props) {
                 </TableCell>
                 <TableCell align="left">{item.engName}</TableCell>
                 <TableCell align="left">{item.engInitName}</TableCell>
-                { item.dataType && <TableCell align="left">{item.dataType}</TableCell>}
+                { item.dataTypeName && <TableCell align="left">{item.dataTypeName}</TableCell>}
+                { item.dataTypeName && <TableCell align="left">{item.length}</TableCell>}
                 <TableCell align="center" onClick={(event) => handleClick(event, item)}>
                   <CIconButton >
                     <DoubleArrowRoundedIcon fontSize="small" />
