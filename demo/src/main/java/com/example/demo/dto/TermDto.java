@@ -20,14 +20,14 @@ public class TermDto {
     private String engName;
     private String engInitName;
     @NotNull
-    private String domainId;
+    private Long domainId;
     private String description;
 
     private Domain domain;
     private List<Word> words;
 
     @QueryProjection
-    public TermDto(Long id, String korName, String engName, String engInitName, String domainId, String description) {
+    public TermDto(Long id, String korName, String engName, String engInitName, Long domainId, String description) {
         this.id = id;
         this.korName = korName;
         this.engName = engName;
