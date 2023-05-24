@@ -10,6 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import CommentIcon from '@mui/icons-material/Comment';
 import IconButton from '@mui/material/IconButton';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 
@@ -71,6 +72,8 @@ export default function Main() {
   const [domain, selectDomain] = useState({});
   const [wordData, setWordData] = useState([]);
   const [domainData, setDomainData] = useState([]);
+  const [reload, setReload] = useState([]);
+
 
   const fetchDomains = async () => {
     try {
@@ -110,7 +113,6 @@ export default function Main() {
     }
   };
 
-  
   useEffect(() => {
     fetchDomains();
     fetchWords();
@@ -126,30 +128,71 @@ export default function Main() {
     selectDomain(item);
   }
 
+  const saveCallback = () => {
+    let toggle = reload === 1 ? 0 : 1;
+    setReload(toggle);
+  }
+
+  const theme = createTheme({
+    components: {
+      // Name of the component
+      MuiTableCell: {
+        styleOverrides: {
+          // Name of the slot
+          root: {
+            // Some CSS
+            fontSize: '0.8rem',
+            padding: '3px',
+          },
+        },
+      },
+      MuiTableRow: {
+        styleOverrides: {
+          // Name of the slot
+          root: {
+            // Some CSS
+            height: '10px',
+          },
+        },
+      },
+      MuiContainer:{
+        styleOverrides: {
+          root: {
+            // Some CSS
+            leftMargin: '',
+            rightMargin: '',
+          },
+        },
+      },
+    }
+  });
+
   return(
       <>
-        <Container maxwidth="sm">
-            <Grid container spacing={3}>
-                <Grid xs={5}>
-                    <p>용어 목록</p>
-                    <TermList header={wordHeader} items={wordData} height={800} handleClick={handleClick}/>
-                </Grid>
-                <Grid xs={5}>
-                    <Container maxwidth="sm">
-                        <p>단어</p>
-                        <ItemList header={wordHeader} items={wordData} height={300} handleClick={handleClick}/>
-                    </Container>
+        <ThemeProvider theme={theme}>
+          <Container maxwidth="sm">
+              <Grid container spacing={1}>
+                  <Grid xs={5}>
+                      <p>용어 목록</p>
+                      <TermList header={wordHeader} items={wordData} height={'100%'} reload={reload}/>
+                  </Grid>
+                  <Grid xs={4}>
+                      <Container maxwidth="sm">
+                          <p>단어</p>
+                          <ItemList header={wordHeader} items={wordData} height={300} handleClick={handleClick}/>
+                      </Container>
 
-                    <Container maxwidth="sm">
-                        <p>도메인</p>
-                        <ItemList header={domainHeader} items={domainData} height={300} handleClick={domainSelect}/>
-                    </Container>
-                </Grid>
-                <Grid xs={5}>
-                    <InputForm words={words} domain={domain}/>
-                </Grid>
-            </Grid>
-        </Container>
+                      <Container maxwidth="sm">
+                          <p>도메인</p>
+                          <ItemList header={domainHeader} items={domainData} height={300} handleClick={domainSelect}/>
+                      </Container>
+                  </Grid>
+                  <Grid xs={3}>
+                      <InputForm words={words} concatWords={concatWords} selectDomain={selectDomain} domain={domain} saveCallback={saveCallback}/>
+                  </Grid>
+              </Grid>
+          </Container>
+        </ThemeProvider>
       </>
     )
   }

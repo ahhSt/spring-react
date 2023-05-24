@@ -39,7 +39,7 @@ export default function DenseTable(props) {
   return (
     <>
       <TableContainer sx={{ minHeight: 300, maxHeight: height }} component={Paper}>
-        <Table sx={{ minWidth: 450 }} size="small" stickyHeader aria-label="sticky table">
+        <Table sx={{ minWidth: 400 }} size="small" stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell>{header[0]}</TableCell>

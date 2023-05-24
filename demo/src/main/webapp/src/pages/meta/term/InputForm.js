@@ -17,7 +17,7 @@ let desc = '';
 
 const InputForm = (props) => {
 
-  const {words, domain} = props;
+  const {words, concatWords, domain, selectDomain, saveCallback} = props;
 
   const onSave = () => {
   
@@ -32,6 +32,10 @@ const InputForm = (props) => {
           data,
           {headers: {"Content-Type": 'application/json; charset=UTF-8'}}
         );
+
+        concatWords([]);
+        selectDomain([]);
+        saveCallback();
       }
       catch (e) {
         alert('Error');
@@ -59,7 +63,7 @@ const InputForm = (props) => {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        상세 정보
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -75,7 +79,7 @@ const InputForm = (props) => {
             variant="filled"
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="korName"
             name="korName"
@@ -89,7 +93,7 @@ const InputForm = (props) => {
             // autoComplete="shipping address-line2"
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="engName"
             name="engName"
@@ -102,7 +106,7 @@ const InputForm = (props) => {
             value={ concatTxt(words, domain, 'engName') }
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="engInitName"
             name="engInitName"
@@ -116,7 +120,7 @@ const InputForm = (props) => {
             value={ concatTxt(words, domain, 'engInitName') }
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="dataType"
             name="dataType"
@@ -131,7 +135,7 @@ const InputForm = (props) => {
           />
         </Grid>
 
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="length"
             name="Length"
@@ -146,7 +150,7 @@ const InputForm = (props) => {
           />
         </Grid>
 
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="description"
             name="description"

@@ -25,32 +25,8 @@ const CIconButton = styled(IconButton, { shouldForwardProp: (prop) => prop })(
   }),
 );
 
-const theme = createTheme({
-  components: {
-    // Name of the component
-    MuiTableCell: {
-      styleOverrides: {
-        // Name of the slot
-        root: {
-          // Some CSS
-          fontSize: '0.8rem',
-          padding: '3px',
-        },
-      },
-    },
-    MuiTableRow: {
-      styleOverrides: {
-        // Name of the slot
-        root: {
-          // Some CSS
-          height: '10px',
-        },
-      },
-    }
-  },
-});
-
 export default function DenseTable(props) {
+  const {height, reload} = props;
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [terms, setTerms] = useState([]);
@@ -72,13 +48,16 @@ export default function DenseTable(props) {
     fetchTerms();
   }, []);
 
+  useEffect(() => {
+    fetchTerms();
+  }, [reload]);
+
   const onClick = (event, idx) => {
     setSelectedIndex(idx);
   };
   
   return (
-    <ThemeProvider theme={theme}>
-      <TableContainer sx={{ minHeight: 300 }} component={Paper}>
+      <TableContainer sx={{ minHeight: 300, height: height}} component={Paper}>
           <Button>font-size: 1rem</Button>
           <Table sx={{ minWidth: 600 }} size="medium" stickyHeader aria-label="sticky table">
             <TableHead>
@@ -113,6 +92,5 @@ export default function DenseTable(props) {
             </TableBody>
           </Table>
       </TableContainer>
-    </ThemeProvider>
   );
 }
