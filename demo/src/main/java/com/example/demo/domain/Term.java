@@ -12,6 +12,8 @@ import java.util.List;
 @Entity
 public class Term {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TERM_SEQ")
+    @SequenceGenerator(sequenceName = "term_seq", allocationSize = 1, name = "TERM_SEQ")
     @Column(name="TERM_ID")
     private Long id;
 

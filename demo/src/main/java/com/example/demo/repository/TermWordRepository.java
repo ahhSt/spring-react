@@ -1,11 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.domain.Domain;
-import com.example.demo.domain.Term;
+import com.example.demo.domain.TermWord;
 import com.example.demo.dto.DomainDto;
 import com.example.demo.dto.QDomainDto;
-import com.example.demo.dto.QTermDto;
-import com.example.demo.dto.TermDto;
+import com.example.demo.dto.QTermWordDto;
+import com.example.demo.dto.TermWordDto;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -19,42 +19,36 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.demo.domain.QDomain.domain;
-import static com.example.demo.domain.QTerm.term;
+import static com.example.demo.domain.QTermWord.termWord;
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class TermRepository {
+public class TermWordRepository {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
-    public Page<TermDto> search(Pageable pageable) {
-        List<TermDto> content = queryFactory
-                .select(new QTermDto(
-                        term.id.as("termId"),
-                        term.korName,
-                        term.engName,
-                        term.engInitName,
-                        term.domains.id.as("domainId"),
-                        term.description
-                ))
-                .from(term)
 
+    public Page<TermWordDto> search(Pageable pageable) {
+        List<TermWordDto> content = queryFactory
+                .select(new QTermWordDto(
+                        termWord.id,
+                        termWord.terms.id.as("termId"),
+                        termWord.words.id.as("wordId")
+                ))
+                .from(termWord)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Term> countQuery = queryFactory
-                .selectFrom(term)
-
+        JPAQuery<TermWord> countQuery = queryFactory
+                .selectFrom(termWord)
                 ;
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
     @Transactional
-    public Term insert(Term term){
-        em.persist(term);
-        return term;
+    public void insert(TermWord termWord){
+        em.persist(termWord);
     }
 }

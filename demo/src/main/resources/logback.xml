@@ -24,11 +24,14 @@
 
     <!-- CONSOLE에 로그 출력 세팅 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <!-- <layout class="ch.qos.logback.classic.PatternLayout"> -->
+        <encoder>
+            <charset>UTF-8</charset>
             <Pattern>
-                [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} : %30logger{5} - %msg%n
+                [%-5level] %green(%d{yyyy-MM-dd HH:mm:ss.SSS}) : %30logger{5} - %msg%n
             </Pattern>
-        </layout>
+        </encoder>
+        <!-- </layout> -->
     </appender>
 
     <!-- File에 로그 출력 세팅 -->

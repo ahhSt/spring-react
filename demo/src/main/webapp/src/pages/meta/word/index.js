@@ -9,7 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import InputForm from './InputForm';
 import { BasicTabs11 } from './TapPanel';
 import { click, reset } from './addBtnSlice';
-import addBtnStore from './addBtnStore';
+import addBtnStore from './addbtnStore';
 
 let totalElements = 0;
 let clickedId = 0;

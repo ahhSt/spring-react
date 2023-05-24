@@ -9,7 +9,10 @@
             "name": "DemoApplication",
             "request": "launch",
             "mainClass": "com.example.demo.DemoApplication",
-            "projectName": "demo"
+            "projectName": "demo",
+            "vmArgs": [
+                "-Dfile.encoding=UTF8"
+            ]
         },
         {
             "type": "chrome",

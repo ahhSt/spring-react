@@ -11,120 +11,59 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-let setIndex;
-let newItem;
+
+let term = {};
+let desc = '';
 
 const InputForm = (props) => {
 
-  const [customerInfo, setCustomerInfo] = useState({});
-  const selectedIndex = props.selectedIndex;
-  
-  console.log('InputFormInputForm');
-
-  const clearInfo = () => {
-    console.log('clear Info');
-    let newInfo = {id: null, name:"", email:"", date:""};
-    setCustomerInfo(newInfo);
-  }
-
-  const fetchCustomerInfo = async (idx) => {
-    console.log('fetch info : ' + idx);
-    // if (idx == "new"){
-    //   clearInfo();
-    // }
-    // else{
-      try {
-        const response = await axios.get(
-            '/api/customer/' + idx
-        );
-        console.log("############################response.data");
-        console.log(response.data);
-        setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
-      } catch (e) {
-        console.log("error"); 
-        clearInfo();
-      }
-    // }
-  };
-
-  // useEffect(() =>{
-  //   console.log('@@@@@@@@@@@@@@@@@@@@@@@@@useEffect');
-  //   if (selectedIndex){
-  //     console.log("@@@@@@@ selectedIndex : " + selectedIndex);
-  //     fetchCustomerInfo(selectedIndex);
-  //   }
-  // },[])
-
-  console.log("selectedIndex : "+ selectedIndex);
-  console.log("setIndex : "+ setIndex);
-
-  if (setIndex != selectedIndex) {
-    console.log('eeeeeeee');
-    fetchCustomerInfo(selectedIndex);
-    setIndex = selectedIndex;
-  }
+  const {words, concatWords, domain, selectDomain, saveCallback} = props;
 
   const onSave = () => {
   
-    const saveCustomerInfo = async () => {
-      try{
-        if (customerInfo.id == null){
-          await axios.post(
-            '/api/customer', customerInfo
-          )
-        }else{
-          await axios.put(
-            '/api/customer/'+customerInfo.id, customerInfo
-          ) 
-        }
-           
+    const saveInfo = async () => {
+      try{ 
+        term = {...term, words, domain, description: desc};
+        console.log(term);
         alert('Save');
-        props.fetchCustomers();
+        let data = { ...term };
+        const response = await axios.post(
+          '/api/term', 
+          data,
+          {headers: {"Content-Type": 'application/json; charset=UTF-8'}}
+        );
+
+        concatWords([]);
+        selectDomain([]);
+        saveCallback();
       }
       catch (e) {
         alert('Error');
       }
     }
 
-    console.log(customerInfo);
-
-    if(window.confirm("저장하시겠습니까?")) {
-      saveCustomerInfo();
-    }
+    saveInfo();
   }
 
   const onDelete = () => {
-    const deleteCustomerInfo = async () => {
-      try{
-        await axios.delete(
-          '/api/customer/'+customerInfo.id
-        ) 
-        alert('Delete');
-        props.fetchCustomers();
-      }
-      catch (e) {
-        alert('Error');
-      }
-    }
-
-    if(window.confirm("삭제제하시겠습니까?")) {
-      deleteCustomerInfo();
-    }
+    alert('delete');
   }
 
-  const onChange = (e, field) => {
-    let obj = {};
-    obj[field] = e.target.value;
-    console.log("customerInfo");
-    console.log(customerInfo);
+  const handleOnChange = (event) => {
+    desc = event.target.value;
+  }
 
-    setCustomerInfo({...customerInfo, ...obj});
+  const concatTxt = (words, domain, key) => {
+    let domainName = domain[key] ? '_' + domain[key] : '';
+    let termTxt = words.map(u => u[key]).join('_') + domainName;
+    term[key] = termTxt;
+    return termTxt;
   }
 
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        상세 정보
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -138,12 +77,9 @@ const InputForm = (props) => {
             }}
             // autoComplete="id"
             variant="filled"
-            onChange={ (e) => {
-              onChange(e, "id");
-            } }
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="korName"
             name="korName"
@@ -153,10 +89,11 @@ const InputForm = (props) => {
               readOnly: true,
             }}
             variant="filled"
+            value={ concatTxt(words, domain, 'korName') }
             // autoComplete="shipping address-line2"
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="engName"
             name="engName"
@@ -165,11 +102,11 @@ const InputForm = (props) => {
             InputProps={{
               readOnly: true,
             }}
-            // autoComplete="shipping address-line1"
             variant="filled"
+            value={ concatTxt(words, domain, 'engName') }
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="engInitName"
             name="engInitName"
@@ -180,9 +117,10 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
+            value={ concatTxt(words, domain, 'engInitName') }
           />
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <TextField
             id="dataType"
             name="dataType"
@@ -193,10 +131,26 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
+            value={ domain.dataTypeName || ''}
           />
         </Grid>
 
-        <Grid item xs={11}>
+        <Grid item xs={12}>
+          <TextField
+            id="length"
+            name="Length"
+            label="길이"
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+            // autoComplete="shipping address-line2"
+            variant="filled"
+            value={ domain.length || ''}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
           <TextField
             id="description"
             name="description"
@@ -204,6 +158,7 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping address-line2"
             variant="standard"
+            onChange={handleOnChange}
           />
         </Grid>
         
