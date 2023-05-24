@@ -101,5 +101,13 @@ export const thirdListItems = (
         <ListItemText primary="용어 관리" />
       </ListItemButton>
     </Link>
+    <Link to="/testJHv">
+      <ListItemButton>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="테스트용 JH" />
+      </ListItemButton>
+    </Link>
   </React.Fragment>
 );
