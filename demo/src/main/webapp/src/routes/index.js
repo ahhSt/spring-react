@@ -13,6 +13,7 @@ import ListInfoSampleJH from '../pages/sample/sampleJH';
 import Term from '../pages/meta/term';
 import DomainManagement from '../pages/meta/domain';
 import WordManagement from '../pages/meta/word';
+import CapitalLetter from '../pages/meta/testJH';
 
 export default function Router() {
   return (
@@ -28,6 +29,7 @@ export default function Router() {
         <Route path="/list-info-JH" element={<ListInfoSampleJH />} />
         <Route path="/word-management" element={<WordManagement />} />
         <Route path="/domain-management" element={<DomainManagement />} />
+        <Route path="/testJHv" element={<CapitalLetter />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
   )
