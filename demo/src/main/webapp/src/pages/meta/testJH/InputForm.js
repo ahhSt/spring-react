@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { MenuItem, FormControl, Select, InputLabel, Button, Stack, TextField, Typography, Grid } from '@mui/material'
+import { Button, Stack, TextField, Typography, Grid } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { reset } from './addBtnSlice';
@@ -14,9 +14,10 @@ const InputForm = (props) => {
   const [index, setIndex] = useState(props.id); // MEMO: 부모 컴포넌트 index.js의 selectedIndex 값이 id로 들어옴.
   const [isNew, setIsNew] = useState(props.isNew);
   const [customerInfo, setCustomerInfo] = useState({});
-  const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기.
+  // const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기.
   const isDataExist = props.isDataExist;
-  
+  const responseData = props.responseData;
+
   const addBtnDispatch = useDispatch();
   const isAddBtnClicked = useSelector(state => {
     return state.isAddBtnClicked.value;
@@ -26,11 +27,11 @@ const InputForm = (props) => {
     setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "" });
   }
 
-  // 20230525 MEMO :  여기로 ClickedDataId가 minId로 제대로 안 들어오는 듯...
+  // 20230525 MEMO :  여기로 ClickedDataId가 minId로 제대로 안 들어오는 것 해결
   const getClickedIndexData = (respData, clickedDataID) => {
-    let testObj = respData.data.content;
+    let testObj = respData.list;
     let isFindClickedId = false;
-    for (let arrObj of respData.data.content) {
+    for (let arrObj of respData.list) {
       if (arrObj.id == (Number(clickedDataID))) {
         console.log(" ↓↓↓↓↓↓↓↓↓↓↓↓↓  Filtering the only clicked index data from the getAll API response data ↓↓↓↓↓↓↓↓↓↓↓↓↓ ");
         console.log(arrObj);
@@ -42,9 +43,35 @@ const InputForm = (props) => {
     if (isFindClickedId)
       return testObj;
     else {
-      return respData.data.content[0];
+      return respData.list[0];
     }
   }
+
+  // const getClickedIndexData = (respData, clickedDataID) => {
+  //   let testObj = respData.data.content;
+  //   let isFindClickedId = false;
+  //   for (let arrObj of respData.data.content) {
+  //     if (arrObj.id == (Number(clickedDataID))) {
+  //       console.log(" ↓↓↓↓↓↓↓↓↓↓↓↓↓  Filtering the only clicked index data from the getAll API response data ↓↓↓↓↓↓↓↓↓↓↓↓↓ ");
+  //       console.log(arrObj);
+  //       console.log(" ↑↑↑↑↑↑↑↑↑↑↑↑↑  Filtering the only clicked index data from the getAll API response data ↑↑↑↑↑↑↑↑↑↑↑↑↑ ");
+  //       testObj = arrObj;
+  //       isFindClickedId = true;
+  //     }
+  //   }
+  //   if (isFindClickedId)
+  //     return testObj;
+  //   else {
+  //     return respData.data.content[0];
+  //   }
+  // }
+
+
+  useEffect(() => {
+    console.log(" ↓↓↓↓↓↓↓↓↓↓↓↓↓  responseData ↓↓↓↓↓↓↓↓↓↓↓↓↓ ");
+    console.log(responseData);
+    console.log(" ↑↑↑↑↑↑↑↑↑↑↑↑↑  responseData ↑↑↑↑↑↑↑↑↑↑↑↑↑ ");
+  },[])
 
   useEffect(() => {
     setIsNew(props.isNew);
@@ -53,75 +80,76 @@ const InputForm = (props) => {
     console.log("Clicked the Index!!! - " + index);
   });
 
+  // useEffect(() => {
+  //   const DetailInfo = (idx) => {
+  //     const fetchCustomerInfo = async (idx) => {
+  //       try {
+  //         const response = await axios.get(
+  //           'api/word/getAll', {
+  //             params: {
+  //               "page": 0,
+  //               "size": 16,
+  //               "sort": "string"
+  //             }
+  //         }
+  //         );
+  //         let testArr = getClickedIndexData(response, clickedId);
+  //         console.log("After getClickedIndexData ");
+  //         console.log(testArr);
+  //         setCustomerInfo(testArr);
+  //       } catch (e) {
+  //         console.log("error");
+  //       }
+  //     };
+  //     fetchCustomerInfo(idx);
+  //   }
+  //   if (isNew) {
+  //     clearInfo();
+  //     console.log("InputForm.js - clearInfo ");
+  //   }
+  //   else {
+  //     DetailInfo(index);
+  //   }
+  // }, [index]);
+
+
   useEffect(() => {
-    const DetailInfo = (idx) => {
-      const fetchCustomerInfo = async (idx) => {
-        try {
-          const response = await axios.get(
-            'api/word/getAll', {
-              params: {
-                "page": 0,
-                "size": 16,
-                "sort": "string"
-              }
-          }
-          );
-          let testArr = getClickedIndexData(response, clickedId);
-          console.log("After getClickedIndexData ");
-          console.log(testArr);
-          setCustomerInfo(testArr);
-        } catch (e) {
-          console.log("error");
-        }
-      };
-      fetchCustomerInfo(idx);
-    }
+    const fetchCustomerInfo = async () => {
+      try {
+        const response = responseData;  // MEMO 20230525: 처음 가져온 responseData가 유지가 안되는듯.. 
+        let testArr = getClickedIndexData(response, clickedId);
+        // console.log("After getClickedIndexData ");
+        // console.log(testArr);
+        setCustomerInfo(testArr);
+      } catch (e) {
+        console.log("error");
+      }
+    };
+
     if (isNew) {
       clearInfo();
       console.log("InputForm.js - clearInfo ");
     }
     else {
-      DetailInfo(index);
+      fetchCustomerInfo();
     }
   }, [index]);
+
+
 
   const saveCustomerInfo = async () => {
     try {
       if (isNew && isDataExist) {
-
-        // 아래는 domain 부분 잠시 갖다둔거. 다음 커밋에 삭제 예정.
-        // let obj = {};
-        // const response = await axios.get(
-        //   'api/domain/maxId' );
-        //   console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
-        //   console.log(response.data);
-
-        // // obj["id"] = (Number(totalElements) + 1).toString();
-        // obj["id"] = ((response.data+ 1).toString());
-
-        // tempReqeustBody = { ...customerInfo, ...obj };
-
-        // console.log("saveCustomerInfo");
-        // console.log(tempReqeustBody);
-        // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
-
         let obj = {};
         const response = await axios.get(
           'api/word/getMaxId');
-        console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
+        console.log("------------------ InputForm - saveCustomerInfo ------------------");
         console.log(response.data);
-
-        // obj["id"] = (Number(totalElements) + 1).toString();
         obj["id"] = ((response.data + 1).toString());
-
         tempReqeustBody = { ...customerInfo, ...obj };
-
         console.log(tempReqeustBody);
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
+        console.log("------------------ InputForm - saveCustomerInfo ------------------");
 
-
-        console.log("saveCustomerInfo");
-        console.log(customerInfo);
         const res = await axios.post(
           '/api/word', tempReqeustBody
         )
@@ -155,6 +183,8 @@ const InputForm = (props) => {
     }
   }
 
+
+
   const addNewId = () => {
     let obj = {};
     obj["id"] = (Number(totalElements) + 1).toString();
@@ -166,7 +196,7 @@ const InputForm = (props) => {
   }
 
   const onSave = () => {
-    console.log(customerInfo);
+    // console.log(customerInfo);
     addNewId();
 
     if (window.confirm("저장하시겠습니까?")) {
@@ -193,10 +223,6 @@ const InputForm = (props) => {
       deleteCustomerInfo();
     }
   }
-
-  // const handleSelectChange = (event) => {
-  //   setDataType(event.target.value);
-  // };
 
   const onChange = (e, field) => {
     let obj = {};
