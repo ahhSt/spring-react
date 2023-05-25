@@ -57,4 +57,10 @@ public class TermRepository {
         em.persist(term);
         return term;
     }
+
+    @Transactional
+    public void delete(Term term){
+        Term delItem = em.find(Term.class, term.getId());
+        em.remove(delItem);
+    }
 }
