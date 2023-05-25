@@ -73,6 +73,7 @@ export default function Main() {
   const [wordData, setWordData] = useState([]);
   const [domainData, setDomainData] = useState([]);
   const [reload, setReload] = useState([]);
+  const [selectTermIdx, setSelectTermIdx] = useState([]);
 
 
   const fetchDomains = async () => {
@@ -133,6 +134,10 @@ export default function Main() {
     setReload(toggle);
   }
 
+  const selectTerm = (idx) => {
+    setSelectTermIdx(idx);
+  }
+
   const theme = createTheme({
     components: {
       // Name of the component
@@ -174,7 +179,7 @@ export default function Main() {
               <Grid container spacing={1}>
                   <Grid xs={5}>
                       <p>용어 목록</p>
-                      <TermList header={wordHeader} items={wordData} height={'100%'} reload={reload}/>
+                      <TermList header={wordHeader} items={wordData} height={'100%'} reload={reload} selectTerm={selectTerm}/>
                   </Grid>
                   <Grid xs={4}>
                       <Container maxwidth="sm">
@@ -188,7 +193,7 @@ export default function Main() {
                       </Container>
                   </Grid>
                   <Grid xs={3}>
-                      <InputForm words={words} concatWords={concatWords} selectDomain={selectDomain} domain={domain} saveCallback={saveCallback}/>
+                      <InputForm words={words} concatWords={concatWords} selectDomain={selectDomain} domain={domain} saveCallback={saveCallback} selectTermIdx={selectTermIdx}/>
                   </Grid>
               </Grid>
           </Container>

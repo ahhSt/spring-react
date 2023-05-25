@@ -17,7 +17,7 @@ let desc = '';
 
 const InputForm = (props) => {
 
-  const {words, concatWords, domain, selectDomain, saveCallback} = props;
+  const {words, concatWords, domain, selectDomain, saveCallback, selectTermIdx} = props;
 
   const onSave = () => {
   
@@ -25,13 +25,15 @@ const InputForm = (props) => {
       try{ 
         term = {...term, words, domain, description: desc};
         console.log(term);
-        alert('Save');
+        
         let data = { ...term };
         const response = await axios.post(
           '/api/term', 
           data,
           {headers: {"Content-Type": 'application/json; charset=UTF-8'}}
         );
+
+        alert('Saved');
 
         concatWords([]);
         selectDomain([]);
@@ -42,11 +44,37 @@ const InputForm = (props) => {
       }
     }
 
-    saveInfo();
+    if (window.confirm("저장하시겠습니까?")) {
+      saveInfo();
+    }
+
   }
 
   const onDelete = () => {
-    alert('delete');
+
+    const deleteTerm = async () => {
+      try {
+        const response = await axios.delete(
+          '/api/term/'+ selectTermIdx, 
+          null,
+          {headers: {"Content-Type": 'application/json; charset=UTF-8'}}
+        );
+
+        alert('Deleted');
+
+        saveCallback();
+      }
+      catch (e) {
+        alert('Error');
+      }
+    }
+
+    console.log(selectTermIdx);
+
+    if (window.confirm("삭제하시겠습니까?")) {
+      deleteTerm();
+    }
+    
   }
 
   const handleOnChange = (event) => {

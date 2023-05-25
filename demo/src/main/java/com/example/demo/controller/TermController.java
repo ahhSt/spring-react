@@ -10,6 +10,9 @@ import com.example.demo.repository.DomainRepository;
 import com.example.demo.repository.TermRepository;
 import com.example.demo.repository.TermWordRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +68,20 @@ public class TermController {
             e.printStackTrace();
             throw new Exception("Insert Error");
         }
+    }
+
+    @Operation(summary = "용어 삭제", description = "용어를 삭제합니다.")
+    @DeleteMapping("/{id}")
+    public Page<TermDto> delete( @Parameter(description = "삭제하려는 Term ID 입니다.") @PathVariable Long id) throws Exception{
+
+        Term term = new Term();
+        TermWord termWord = new TermWord();
+        term.setId(id);
+        termWord.setTerms(term);
+
+        termWordRepository.delete(termWord);
+        termRepository.delete(term);
+        return null;
     }
 
 }
