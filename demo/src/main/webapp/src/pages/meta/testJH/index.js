@@ -10,7 +10,7 @@ import InputForm from './InputForm';
 import { BasicTabs11 } from './TapPanel';
 import { click, reset } from './addBtnSlice';
 import addBtnStore from './addBtnStore';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@mui/material'
+import ItemList from './ItemList';
 let totalElements = 0;
 let clickedId = 0;
 let isDataNotExistStatic = false;
@@ -26,7 +26,7 @@ const SearchItem = (props) => {
   return (
     <form className="d-flex" role="search">
       <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={userInput} onChange={e => setUserInput(e.target.value)} />
-      <button className="btn btn-outline-success" type="submit">Search</button>
+      {/* <button className="btn btn-outline-success" type="submit">Search</button> */}
     </form>
   )
 };
@@ -52,8 +52,8 @@ const SelectedListItem = (props) => {
     const handleListItemClick = (event, item) => {
       setSelectedIndex(item.id);
       console.log(" ------- handleListItemClick ----------");
-      console.log("selectedIndex - " + selectedIndex);
-      console.log("item.id - " + item.id);
+      console.log("Index previously clicked on - " + selectedIndex);
+      console.log("Index just clicked - " + item.id);
       clickedId = item.id;
     };
 
@@ -63,47 +63,16 @@ const SelectedListItem = (props) => {
     //     : (tabIndex == 1 ? (item.engName.toLowerCase().includes(userInput)) : (item.engInitName.toLowerCase().includes(userInput))));
     // })
 
-    const selectedList = customers.list.filter((item) => {
-      if (userInput === "") return true;
 
-      console.log(" ---------------1 : " + item.korName.toLowerCase().includes(userInput)); 
-      console.log(" ---------------2 : " + item.engName.toLowerCase().includes(userInput)); 
-      // console.log(" ---------------3 : " + item.engInitName.toLowerCase().includes(userInput)); 
-
-      // return ((item.korName.toLowerCase().includes(userInput)) || (item.engName.toLowerCase().includes(userInput)) || (item.engInitName.toLowerCase().includes(userInput)));
-      return ((item.korName.toLowerCase().includes(userInput)) || (item.engName.toLowerCase().includes(userInput)));
-
-    })
-
-    const listItem = selectedList.map((item, idx) =>
-      <ListItemButton key={item.id}
-        selected={selectedIndex === item.id}
-        onClick={(event) => handleListItemClick(event, item)}
-        disabled={isAddBtnClicked}
-      >
-        <ListItemText primary={tabIndex == 0 ? (item.korName) : (tabIndex == 1 ? (item.engName) : (item.engInitName))} />
-      </ListItemButton>
-    );
-
-    const tableItem = selectedList.map((item, idx) => (
-      <TableRow key={item.id}
-        selected={selectedIndex === item.id}
-        onClick={(event) => handleListItemClick(event, item)}
-        disabled={isAddBtnClicked}
-      >
-        <TableCell>
-          {item.korName}
-        </TableCell>
-        <TableCell>
-          {item.engName}
-        </TableCell>
-        <TableCell>
-          {item.engInitName}
-        </TableCell>
-        {/* <ListItemText primary={tabIndex == 0 ? (item.korName) : (tabIndex == 1 ? (item.engName) : (item.engInitName))} /> */}
-      </TableRow>
-    )
-    );
+    // const listItem = selectedList.map((item, idx) =>
+    //   <ListItemButton key={item.id}
+    //     selected={selectedIndex === item.id}
+    //     onClick={(event) => handleListItemClick(event, item)}
+    //     disabled={isAddBtnClicked}
+    //   >
+    //     <ListItemText primary={tabIndex == 0 ? (item.korName) : (tabIndex == 1 ? (item.engName) : (item.engInitName))} />
+    //   </ListItemButton>
+    // );
 
     // return <List component="nav" aria-label="secondary mailbox folder" sx={{
     //   width: '100%',
@@ -114,9 +83,14 @@ const SelectedListItem = (props) => {
     //   // '& ul': { padding: 0 },
     // }}>{listItem}</List>;
 
-    return (<TableContainer component={Paper}>
-      {tableItem}
-    </TableContainer>);
+    const selectedList = customers.list.filter((item) => {
+      if (userInput === "") return true;
+      return ((item.korName.toLowerCase().includes(userInput.toLowerCase())) || (item.engName.toLowerCase().includes(userInput.toLowerCase())) || (item.engInitName.toLowerCase().includes(userInput.toLowerCase())));
+    })
+
+    return (
+      <ItemList items={selectedList} handleListItemClick={handleListItemClick}/>
+    );
   };
 
   return (
@@ -256,7 +230,8 @@ export default function MAIN() {
         totalElements = response.data.totalElements;
         console.log("totalElements ?:" + totalElements);
 
-        let minId = response.data.content[0].id;
+        let minId = response.data.content[0].id;  /// ???????????
+        clickedId = response.data.content[0].id;  /// MEMO: 20230525 추가한 솔루션
         console.log(" After minId -  " + minId);
         setSelectedIndex(minId);
         console.log(" After setSelectedIndex ");
@@ -292,14 +267,17 @@ export default function MAIN() {
     <Container maxwidth="sm">
       <Grid container spacing={2}>
         <Provider store={addBtnStore}>
-          <Grid xs={4}>
-            <BasicTabs11 onChangeTab={onChangeTab} />
+          <Grid xs={5}>
+            {/* <BasicTabs11 onChangeTab={onChangeTab} /> */}
+            <p> </p>
             <SelectedListItem customers={customers} setCustomers={setCustomers} tabIndex={tabIndex} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+            <p> </p>
             <Stack direction="row" spacing={2}>
               <BoxComponent isNew={isNew} setIsNew={setIsNew} customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} fetchCustomers={fetchCustomers} />
             </Stack>
           </Grid>
-          <Grid xs={8}>
+          <Grid xs={7}>
+          <p> </p>
             <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId} isDataExist={!isDataNotExistStatic} />
           </Grid>
         </Provider>

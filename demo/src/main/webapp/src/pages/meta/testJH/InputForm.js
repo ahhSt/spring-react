@@ -26,16 +26,15 @@ const InputForm = (props) => {
     setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "" });
   }
 
+  // 20230525 MEMO :  여기로 ClickedDataId가 minId로 제대로 안 들어오는 듯...
   const getClickedIndexData = (respData, clickedDataID) => {
     let testObj = respData.data.content;
     let isFindClickedId = false;
     for (let arrObj of respData.data.content) {
       if (arrObj.id == (Number(clickedDataID))) {
-        console.log("//////////////////////////");
-        console.log("                          ");
+        console.log(" ↓↓↓↓↓↓↓↓↓↓↓↓↓  Filtering the only clicked index data from the getAll API response data ↓↓↓↓↓↓↓↓↓↓↓↓↓ ");
         console.log(arrObj);
-        console.log("                          ");
-        console.log("//////////////////////////");
+        console.log(" ↑↑↑↑↑↑↑↑↑↑↑↑↑  Filtering the only clicked index data from the getAll API response data ↑↑↑↑↑↑↑↑↑↑↑↑↑ ");
         testObj = arrObj;
         isFindClickedId = true;
       }
