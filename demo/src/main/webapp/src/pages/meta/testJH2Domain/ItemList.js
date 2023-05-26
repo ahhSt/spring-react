@@ -20,6 +20,14 @@ const CIconButton = styled(IconButton, { shouldForwardProp: (prop) => prop })(
 
 export default function DenseTable(props) {
 
+    // - Component refactoring -  
+    // TODO: props로 받을 공통적인 데이터 정해두기. -> selectedIndex는 redux나 createContext로 빼기... 
+    // 1. header 값. 
+    // 2. 현시해줄 데이터
+    // 3. 테이블 클릭시에 대한 이벤트
+    // 4. 테이블 row당 checkBox & button 
+
+
     // const classes = useStyles();
 
     // const header = [...props.header];

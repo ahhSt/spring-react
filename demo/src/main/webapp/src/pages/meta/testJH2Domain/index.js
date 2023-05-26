@@ -7,7 +7,6 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import CancelIcon from '@mui/icons-material/Cancel';
 import InputForm from './InputForm';
-import { BasicTabs11 } from './TapPanel';
 import { click, reset } from './addBtnSlice';
 import addBtnStore from './addBtnStore';
 import { FixedSizeList } from 'react-window';
@@ -73,86 +72,6 @@ const ListItems = (props) => {
     <ItemList items={selectedList} handleListItemClick={handleListItemClick} />
   );
 };
-
-
-
-
-// const SearchItem = (props) => {
-//   // MEMO: setUserInput에 상관 없이, SearchItem에서는 전체 화면 렌더링이 안되므로 포커스 유지가 가능한건가?
-//   const userInput = props.userInput;
-//   const setUserInput = props.setUserInput;
-
-//   console.log("userSearchInput - " + userInput);
-
-//   return (
-//     <form className="d-flex" role="search">
-//       <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={userInput} onChange={e => setUserInput(e.target.value)} />
-//       <button className="btn btn-outline-success" type="submit">Search</button>
-//     </form>
-//   )
-// };
-
-
-// const SelectedListItem = (props) => {
-//   const customers = props.customers;
-//   const setCustomers = props.setCustomers;
-//   const selectedIndex = props.selectedIndex;
-//   const setSelectedIndex = props.setSelectedIndex;
-//   const tabIndex = props.tabIndex;
-//   const [userInput, setUserInput] = useState("");
-
-//   const ListItems = () => {
-
-//     useEffect(() => {
-//       console.log(" ------- SelectedListItem rendering!!!!!!!!! ----------");
-//     }, []);
-
-//     const isAddBtnClicked = useSelector(state => {
-//       return state.isAddBtnClicked.value;
-//     });
-
-//     const handleListItemClick = (event, item) => {
-//       setSelectedIndex(item.id);
-//       console.log(" ------- handleListItemClick ----------");
-//       console.log("selectedIndex - " + selectedIndex);
-//       console.log("item.id - " + item.id);
-//       clickedId = item.id;
-//     };
-
-//     const selectedList = customers.list.filter((item) => {
-//       if (userInput === "") return true;
-//       return (tabIndex == 0 ? (item.korName.toLowerCase().includes(userInput))
-//         : (tabIndex == 1 ? (item.engName.toLowerCase().includes(userInput)) : (item.engInitName.toLowerCase().includes(userInput))));
-//     })
-
-//     const listItem = selectedList.map((item, idx) =>
-//       <ListItemButton key={item.id}
-//         selected={selectedIndex === item.id}
-//         onClick={(event) => handleListItemClick(event, item)}
-//         disabled={isAddBtnClicked}
-//       >
-//         <ListItemText primary={tabIndex == 0 ? (item.korName) : (tabIndex == 1 ? (item.engName) : (item.engInitName))} />
-//       </ListItemButton>
-//     );
-
-//     return <List component="nav" aria-label="secondary mailbox folder" sx={{
-//       width: '100%',
-//       bgcolor: 'background.paper',
-//       // position: 'unset',
-//       overflow: 'auto',
-//       maxHeight: 600,
-//       // '& ul': { padding: 0 },
-//     }}>{listItem}</List>;
-//   };
-
-//   return (
-//     <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
-//       <SearchItem userInput={userInput} setUserInput={setUserInput} />
-//       <ListItems />
-//     </Box>
-//   );
-// }
-
 
 const BoxComponent = (props) => {
   const isNew = props.isNew;
