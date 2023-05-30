@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import java.util.List;
 
+import com.example.demo.domain.DataType;
 import com.example.demo.domain.Domain;
 import com.example.demo.domain.Word;
 import com.querydsl.core.annotations.QueryProjection;
@@ -30,14 +31,20 @@ public class TermDto {
     private Domain domain;
     private List<Word> words;
 
+    private String length;
+    private String type;
+
     @QueryProjection
-    public TermDto(Long id, String korName, String engName, String engInitName, Long domainId, String description) {
+    public TermDto(Long id, String korName, String engName, String engInitName, Long domainId, String description, String length, String type) {
         this.id = id;
         this.korName = korName;
         this.engName = engName;
         this.engInitName = engInitName;
         this.domainId = domainId;
         this.description = description;
+        this.length = length;
+        this.type = type;
+
     }
 
     // public static TermDtoBuilder builder(TermDto termDto) {

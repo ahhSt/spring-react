@@ -36,7 +36,9 @@ public class TermRepository {
                         term.engName,
                         term.engInitName,
                         term.domains.id.as("domainId"),
-                        term.description
+                        term.description,
+                        term.domains.length,
+                        term.domains.dataTypes.type
                 ))
                 .from(term)
 
@@ -56,5 +58,11 @@ public class TermRepository {
     public Term insert(Term term){
         em.persist(term);
         return term;
+    }
+
+    @Transactional
+    public void delete(Term term){
+        Term delItem = em.find(Term.class, term.getId());
+        em.remove(delItem);
     }
 }
