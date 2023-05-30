@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import BorderClearIcon from '@mui/icons-material/BorderClear';
 
 import { TermContext } from './TermProvider';
 
@@ -98,7 +99,7 @@ const InputForm = (props) => {
     return termTxt;
   };
 
-  const onAdd = () => {
+  const onClear = () => {
     console.log("add");
     clearInfo();
   };
@@ -215,8 +216,8 @@ const InputForm = (props) => {
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" startIcon={<PersonAddAltIcon />} disabled={selectedTerm.id ? false : true} onClick={onAdd}>
-          Add
+        <Button variant="contained" startIcon={<BorderClearIcon />} onClick={onClear}>
+          Clear
         </Button>
         <Button variant="outlined" startIcon={<DeleteIcon />} disabled={selectedTerm.id ? false : true} onClick={onDelete}>
           Delete
