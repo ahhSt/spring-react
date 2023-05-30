@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, forwardRef, useImperativeHandle} from 'react';
+import React, {useContext, useState} from 'react';
 import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -7,17 +7,26 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
+import { TermContext } from './TermProvider';
 
 let term = {};
-let desc = '';
 
 const InputForm = (props) => {
 
-  const {words, concatWords, domain, selectDomain, saveCallback, selectTermIdx} = props;
+  const {words, concatWords, domain, selectDomain, saveCallback, selectedTerm, setSelectedTerm, selectTermIdx} = useContext(TermContext);
+
+  const [desc, setDesc] = useState("");
+
+  const clearInfo = () => {
+    setSelectedTerm({});
+    concatWords([]);
+    selectDomain([]);
+    setDesc("");
+  };
 
   const onSave = () => {
   
@@ -35,8 +44,7 @@ const InputForm = (props) => {
 
         alert('Saved');
 
-        concatWords([]);
-        selectDomain([]);
+        clearInfo();
         saveCallback();
       }
       catch (e) {
@@ -48,7 +56,7 @@ const InputForm = (props) => {
       saveInfo();
     }
 
-  }
+  };
 
   const onDelete = () => {
 
@@ -62,6 +70,7 @@ const InputForm = (props) => {
 
         alert('Deleted');
 
+        clearInfo();
         saveCallback();
       }
       catch (e) {
@@ -75,18 +84,24 @@ const InputForm = (props) => {
       deleteTerm();
     }
     
-  }
+  };
 
   const handleOnChange = (event) => {
-    desc = event.target.value;
-  }
+    // desc = event.target.value;
+    setDesc(event.target.value);
+  };
 
   const concatTxt = (words, domain, key) => {
     let domainName = domain[key] ? '_' + domain[key] : '';
     let termTxt = words.map(u => u[key]).join('_') + domainName;
     term[key] = termTxt;
     return termTxt;
-  }
+  };
+
+  const onAdd = () => {
+    console.log("add");
+    clearInfo();
+  };
 
   return (
     <React.Fragment>
@@ -105,6 +120,7 @@ const InputForm = (props) => {
             }}
             // autoComplete="id"
             variant="filled"
+            value={selectedTerm.id || ""}
           />
         </Grid>
         <Grid item xs={12}>
@@ -117,7 +133,7 @@ const InputForm = (props) => {
               readOnly: true,
             }}
             variant="filled"
-            value={ concatTxt(words, domain, 'korName') }
+            value={selectedTerm.korName || concatTxt(words, domain, 'korName') }
             // autoComplete="shipping address-line2"
           />
         </Grid>
@@ -131,7 +147,7 @@ const InputForm = (props) => {
               readOnly: true,
             }}
             variant="filled"
-            value={ concatTxt(words, domain, 'engName') }
+            value={selectedTerm.engName || concatTxt(words, domain, 'engName') }
           />
         </Grid>
         <Grid item xs={12}>
@@ -145,7 +161,7 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
-            value={ concatTxt(words, domain, 'engInitName') }
+            value={selectedTerm.engInitName || concatTxt(words, domain, 'engInitName') }
           />
         </Grid>
         <Grid item xs={12}>
@@ -159,7 +175,7 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
-            value={ domain.dataTypeName || ''}
+            value={selectedTerm.type || domain.dataTypeName || ''}
           />
         </Grid>
 
@@ -174,7 +190,7 @@ const InputForm = (props) => {
             }}
             // autoComplete="shipping address-line2"
             variant="filled"
-            value={ domain.length || ''}
+            value={selectedTerm.length || domain.length || ''}
           />
         </Grid>
 
@@ -187,6 +203,7 @@ const InputForm = (props) => {
             // autoComplete="shipping address-line2"
             variant="standard"
             onChange={handleOnChange}
+            value={selectedTerm.description || desc}
           />
         </Grid>
         
@@ -198,10 +215,13 @@ const InputForm = (props) => {
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
-        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={onDelete}>
+        <Button variant="contained" startIcon={<PersonAddAltIcon />} disabled={selectedTerm.id ? false : true} onClick={onAdd}>
+          Add
+        </Button>
+        <Button variant="outlined" startIcon={<DeleteIcon />} disabled={selectedTerm.id ? false : true} onClick={onDelete}>
           Delete
         </Button>
-        <Button variant="contained" endIcon={<SaveIcon />} onClick={onSave}>
+        <Button variant="contained" endIcon={<SaveIcon />} disabled={selectedTerm.id ? true : false} onClick={onSave}>
           Save
         </Button>
       </Stack>

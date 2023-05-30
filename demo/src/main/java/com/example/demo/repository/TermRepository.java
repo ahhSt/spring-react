@@ -36,7 +36,9 @@ public class TermRepository {
                         term.engName,
                         term.engInitName,
                         term.domains.id.as("domainId"),
-                        term.description
+                        term.description,
+                        term.domains.length,
+                        term.domains.dataTypes.type
                 ))
                 .from(term)
 

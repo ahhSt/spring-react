@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
 import Table from '@mui/material/Table';
@@ -9,13 +9,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 
 // import { makeStyles } from "@material-ui/core/styles";
 // import { IconButton, TextField } from "@material-ui/core";
 import IconButton from '@mui/material/IconButton';
-import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
+
+import { TermContext } from './TermProvider';
 
 const CIconButton = styled(IconButton, { shouldForwardProp: (prop) => prop })(
   () => ({
@@ -37,7 +36,8 @@ const SearchItem = (props) => {
 };
 
 export default function DenseTable(props) {
-  const {height, reload, selectTerm} = props;
+  const {reload, setSelectedTerm, setSelectTermIdx} = useContext(TermContext);
+  const {height} = props;
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [terms, setTerms] = useState([]);
@@ -64,9 +64,16 @@ export default function DenseTable(props) {
     fetchTerms();
   }, [reload]);
 
+  const selectTerm = (idx) => {
+    setSelectTermIdx(idx);
+  }
+
   const onClick = (event, idx) => {
     setSelectedIndex(idx);
-    selectTerm(idx);
+    let termId = termList[idx].id;
+    selectTerm(termId);
+    console.log(termList[idx]);
+    setSelectedTerm((obj) => termList[idx]);
   };
 
   const termList = terms.filter((item) => {
@@ -78,7 +85,7 @@ export default function DenseTable(props) {
     <>
       <SearchItem userInput={userInput} setUserInput={setUserInput}/>
       <TableContainer sx={{ minHeight: 300, height: height}} component={Paper}>
-        <Table sx={{ minWidth: 600 }} size="medium" stickyHeader aria-label="sticky table">
+        <Table sx={{ minWidth: 500 }} size="medium" stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell>ID.</TableCell>
@@ -93,10 +100,10 @@ export default function DenseTable(props) {
             {termList.map((item, idx) => (
             // {rows.map((row) => (
               <TableRow
-                key={item.id}
+                key={idx}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                selected={selectedIndex === item.id}
-                onClick={(event) => onClick(event, item.id)}
+                selected={selectedIndex === idx}
+                onClick={(event) => onClick(event, idx)}
               >
                 <TableCell align="left">{item.id}</TableCell>
                 <TableCell component="th" scope="row">
@@ -104,7 +111,7 @@ export default function DenseTable(props) {
                 </TableCell>
                 <TableCell align="left">{item.engName}</TableCell>
                 <TableCell align="left">{item.engInitName}</TableCell>
-                <TableCell align="left">{item.dataTypeName}</TableCell>
+                <TableCell align="left">{item.type}</TableCell>
                 <TableCell align="left">{item.length}</TableCell>
               </TableRow>
             ))}
