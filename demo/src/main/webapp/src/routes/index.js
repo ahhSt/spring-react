@@ -15,6 +15,7 @@ import DomainManagement from '../pages/meta/domain';
 import WordManagement from '../pages/meta/word';
 import CapitalLetter from '../pages/meta/testJH';
 import TestJH2Domain from '../pages/meta/testJH2Domain';
+import TestJH3 from '../pages/meta/testJH3';
 
 export default function Router() {
   return (
@@ -32,6 +33,7 @@ export default function Router() {
         <Route path="/domain-management" element={<DomainManagement />} />
         <Route path="/testJHv" element={<CapitalLetter />} />
         <Route path="/testJH_Domain" element={<TestJH2Domain />} />
+        <Route path="/testJH3" element={<TestJH3 />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
   )
