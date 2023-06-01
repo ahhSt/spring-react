@@ -10,8 +10,6 @@ export const TermProvider = (props) => {
     const [reload, setReload] = useState([]);
     const [selectedTerm, setSelectedTerm] = useState({});
     const [selectTermIdx, setSelectTermIdx] = useState([]);
-    
-    const arrowButton = true;
 
     const saveCallback = () => {
         let toggle = reload === 1 ? 0 : 1;
@@ -19,7 +17,6 @@ export const TermProvider = (props) => {
     }
     
     const contextValue = {
-        arrowButton, 
         words, concatWords, 
         domain, selectDomain, 
         saveCallback, 

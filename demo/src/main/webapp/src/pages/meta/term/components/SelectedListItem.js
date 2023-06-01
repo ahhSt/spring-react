@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import ItemList from './ItemList';
 
 const ListItems = (props) => {
-    const {header, items, userInput, type} = props;
+    const {header, items, userInput, type, arrowButton} = props;
 
     const selectedList = items.filter((item) => {
         if (userInput === "") return true;
@@ -15,7 +15,7 @@ const ListItems = (props) => {
     });
 
     return (
-        <ItemList header={header} items={selectedList} type={type}/>
+        <ItemList header={header} items={selectedList} type={type} arrowButton={arrowButton}/>
     );
 };
 
@@ -32,14 +32,14 @@ const SearchItem = (props) => {
 
 export const SelectedListItem = (props) => {
 
-    const {header, items, type} = props;
+    const {header, items, type, arrowButton} = props;
 
     const [userInput, setUserInput] = useState("");
 
     return (
         <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
             <SearchItem userInput={userInput} setUserInput={setUserInput} />
-            <ListItems header={header} items={items} userInput={userInput} type={type} />
+            <ListItems header={header} items={items} userInput={userInput} type={type} arrowButton={arrowButton}/>
         </Box>
     );
 }

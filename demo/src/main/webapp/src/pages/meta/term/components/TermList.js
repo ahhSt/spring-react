@@ -14,7 +14,7 @@ import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 // import { IconButton, TextField } from "@material-ui/core";
 import IconButton from '@mui/material/IconButton';
 
-import { TermContext } from './TermProvider';
+import { TermContext } from '../providers/TermProvider';
 
 const CIconButton = styled(IconButton, { shouldForwardProp: (prop) => prop })(
   () => ({
