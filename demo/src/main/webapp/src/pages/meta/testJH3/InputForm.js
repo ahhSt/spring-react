@@ -13,10 +13,10 @@ const InputForm = (props) => {
   const isDataExist = props.isDataExist;
   const [customerInfo, setCustomerInfo] = useState({});
   const addBtnDispatch = useDispatch();
-  
   const isAddBtnClicked = useSelector(state => {
     return state.isAddBtnClicked.value;
   });
+  console.log("inputForm rendering111111@@@@@@@@@");
 
   const clickedIndexNum = useSelector(state => {
     return state.clickedIndexNum.value;
@@ -121,6 +121,8 @@ const InputForm = (props) => {
     }
     catch (e) {
       alert('Error');
+    console.log("inputFomr rendering22222@@@@@@@@@");
+
       addBtnDispatch(click());
       
     }

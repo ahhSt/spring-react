@@ -10,20 +10,17 @@ import InputForm from './InputForm';
 import { click, reset, setIndex, resetIndex } from './domainSlice';
 import ItemList from './ItemList';
 
-let totalElements = 0;
-let clickedId = 0;
+// 아래 플래그는 props로 각 box/inputform 컴포넌트에 줘도 될 듯. 
 let isDataNotExistStatic = false;
 
 const SelectedListItem = (props) => {
-  const customers = props.customers;
-  const selectedIndex = props.selectedIndex;
-  const setSelectedIndex = props.setSelectedIndex;
+  const dataList = props.dataList;
   const [userInput, setUserInput] = useState("");
 
   return (
     <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
       <SearchItem userInput={userInput} setUserInput={setUserInput} />
-      <ListItems customers={customers} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} userInput={userInput} />
+      <ListItems dataList={dataList} userInput={userInput} />
     </Box>
   );
 }
@@ -43,32 +40,22 @@ const SearchItem = (props) => {
 };
 
 const ListItems = (props) => {
-  const customers = props.customers;
-  const selectedIndex = props.selectedIndex;
-  const setSelectedIndex = props.setSelectedIndex;
+  const dataList = props.dataList;
   const userInput = props.userInput;
   const addBtnDispatch = useDispatch();
-
-  const clickedIndexNum = useSelector(state => {
-    return state.clickedIndexNum.value;
-  });
 
   useEffect(() => {
     console.log(" ------- ListItems rendering!!!!!!!!! ----------");
   }, []);
 
   const handleListItemClick = (event, item) => {
-    setSelectedIndex(item.id);
     addBtnDispatch(setIndex(item.id));
 
     console.log(" ------- handleListItemClick ----------");
-    console.log("Index previously clicked on - " + selectedIndex);
     console.log("Index just clicked - " + item.id);
-    console.log("clickedIndexNum just clicked - " + clickedIndexNum);
-    clickedId = item.id;
   };
 
-  const selectedList = customers.list.filter((item) => {
+  const selectedList = dataList.list.filter((item) => {
     if (userInput === "") return true;
     return ((item.korName.toLowerCase().includes(userInput.toLowerCase())) || (item.engName.toLowerCase().includes(userInput.toLowerCase()))
       || (item.engInitName.toLowerCase().includes(userInput.toLowerCase())));
@@ -80,17 +67,12 @@ const ListItems = (props) => {
 };
 
 const BoxComponent = (props) => {
-  const customers = props.customers;
-  const setCustomers = props.setCustomers;
-  const setSelectedIndex = props.setSelectedIndex;
+  const dataList = props.dataList;
+  const setDataList = props.setDataList;
   const addBtnDispatch = useDispatch();
   
   const isAddBtnClicked = useSelector(state => {
     return state.isAddBtnClicked.value;
-  });
-
-  const clickedIndexNum = useSelector(state => {
-    return state.clickedIndexNum.value;
   });
 
   useEffect(() => {
@@ -106,8 +88,8 @@ const BoxComponent = (props) => {
 
   const onAdd = () => {
     if (isAddBtnClicked == false) {
-      setCustomers({
-        query: "new", list: [...customers.list, {
+      setDataList({
+        query: "new", list: [...dataList.list, {
           id: null,
           name: "New Data",
           korName: "새 데이터",
@@ -118,17 +100,15 @@ const BoxComponent = (props) => {
           description: "none",
         }]
       });
-      setSelectedIndex(null);
       addBtnDispatch(setIndex(null));
       addBtnDispatch(click());
     }
   }
 
   const onCancel = () => {
-    props.fetchCustomers();
+    props.fetchDataList();
     addBtnDispatch(reset());
     addBtnDispatch(resetIndex());
-    clickedId = 0;
   }
 
   return (
@@ -146,25 +126,21 @@ const BoxComponent = (props) => {
 }
 
 export default function TestPage() {
-  const [customers, setCustomers] = useState({ query: '', list: [] });
+  const [dataList, setDataList] = useState({ query: '', list: [] });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // const [isNew, setIsNew] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(null);
   const addBtnDispatch = useDispatch();
 
   const isAddBtnClicked = useSelector(state => {
     return state.isAddBtnClicked.value;
   });
+  let totalElements = 0;
 
-  const clickedIndexNum = useSelector(state => {
-    return state.clickedIndexNum.value;
-  });
 
-  const fetchCustomers = async () => {
+  const fetchDataList = async () => {
     try {
       setError(null);
-      setCustomers({ query: '', list: null });
+      setDataList({ query: '', list: null });
       // loading 상태를 true 로 바꿉니다.
       setLoading(true);
       const response = await axios.get(
@@ -186,7 +162,7 @@ export default function TestPage() {
         console.log("isDataNotExistStatic: " + isDataNotExistStatic);
 
         if (isAddBtnClicked == false) {
-          setCustomers({
+          setDataList({
             query: "new", list: [{
               id: null,
               name: "New Data",
@@ -206,18 +182,15 @@ export default function TestPage() {
       else {
         isDataNotExistStatic = false;
         console.log(response.data.content[0]);
-        setCustomers({ query: "", list: response.data.content }); // 데이터는 response.data 안에 들어있습니다.
+        setDataList({ query: "", list: response.data.content }); // 데이터는 response.data 안에 들어있습니다.
 
         totalElements = response.data.totalElements;
         console.log("totalElements ?:" + totalElements);
 
 
         let minId = response.data.content[0].id;
-        clickedId = response.data.content[0].id;
-
         console.log(" After minId -  " + minId);
-        setSelectedIndex(minId);
-        console.log(" After setSelectedIndex ");
+        addBtnDispatch(setIndex(minId));
       }
     } catch (e) {
       setError(e);
@@ -225,31 +198,30 @@ export default function TestPage() {
     setLoading(false);
   };
   console.log(" -----!!!!!------------ ");
-  console.log(customers); //??
+  console.log(dataList); //??
 
   useEffect(() => {
-    fetchCustomers();
+    fetchDataList();
   }, []);
 
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다</div>;
-  if (!customers.list) return null;
+  if (!dataList.list) return null;
 
   return (
     <Container maxwidth="sm">
       <Grid container spacing={2}>
           <Grid xs={6}>
             <p></p>
-            <SelectedListItem customers={customers} setCustomers={setCustomers}  selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
+            <SelectedListItem dataList={dataList} setDataList={setDataList} />            
             <p></p>
             <Stack direction="row" spacing={2}>
               <BoxComponent 
-              customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex} fetchCustomers={fetchCustomers} />
+              dataList={dataList} setDataList={setDataList}  fetchDataList={fetchDataList} />
             </Stack>
           </Grid>
           <Grid xs={6}>
-            <InputForm id={selectedIndex} totalElements={totalElements} fetchCustomers={fetchCustomers} responseData={customers}
-            clickedId={clickedId} isDataExist={!isDataNotExistStatic}/>
+            <InputForm totalElements={totalElements} fetchDataList={fetchDataList} responseData={dataList} isDataExist={!isDataNotExistStatic}/>
           </Grid>
       </Grid>
     </Container>
