@@ -4,30 +4,28 @@ import axios from 'axios';
 import { Button, Stack, TextField, Typography, Grid } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { reset } from './addBtnSlice';
+import { reset, click } from './wordSlice';
 
 const InputForm = (props) => {
   let tempReqeustBody;
   let totalElements = props.totalElements;
-  let clickedId = props.clickedId;
-
-  const [index, setIndex] = useState(props.id); // MEMO: 부모 컴포넌트 index.js의 selectedIndex 값이 id로 들어옴.
-  const [isNew, setIsNew] = useState(props.isNew);
-  const [customerInfo, setCustomerInfo] = useState({});
-  // const [dataType, setDataType] = useState(''); // TODO: 추후에 DB로 부터 불러온 Resp 값을 set 하는 것으로 수정하기.
-  const isDataExist = props.isDataExist;
   const responseData = props.responseData;
+  const isDataExist = props.isDataExist;
+  const [customerInfo, setCustomerInfo] = useState({});
 
   const addBtnDispatch = useDispatch();
   const isAddBtnClicked = useSelector(state => {
-    return state.isAddBtnClicked.value;
+    return state.isAddBtnClickedWord.value;
+  });
+
+  const clickedIndexNum = useSelector(state => {
+    return state.clickedIndexNumWord.value;
   });
 
   function clearInfo() {
-    setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "" });
+    setCustomerInfo({ id: null, korName: "", engName: "", engInitName: "", description: "" });
   }
 
-  // 20230525 MEMO :  여기로 ClickedDataId가 minId로 제대로 안 들어오는 것 해결
   const getClickedIndexData = (respData, clickedDataID) => {
     let testObj = respData.list;
     let isFindClickedId = false;
@@ -47,99 +45,39 @@ const InputForm = (props) => {
     }
   }
 
-  // const getClickedIndexData = (respData, clickedDataID) => {
-  //   let testObj = respData.data.content;
-  //   let isFindClickedId = false;
-  //   for (let arrObj of respData.data.content) {
-  //     if (arrObj.id == (Number(clickedDataID))) {
-  //       console.log(" ↓↓↓↓↓↓↓↓↓↓↓↓↓  Filtering the only clicked index data from the getAll API response data ↓↓↓↓↓↓↓↓↓↓↓↓↓ ");
-  //       console.log(arrObj);
-  //       console.log(" ↑↑↑↑↑↑↑↑↑↑↑↑↑  Filtering the only clicked index data from the getAll API response data ↑↑↑↑↑↑↑↑↑↑↑↑↑ ");
-  //       testObj = arrObj;
-  //       isFindClickedId = true;
-  //     }
-  //   }
-  //   if (isFindClickedId)
-  //     return testObj;
-  //   else {
-  //     return respData.data.content[0];
-  //   }
-  // }
-
-
   useEffect(() => {
-    console.log(" ↓↓↓↓↓↓↓↓↓↓↓↓↓  responseData ↓↓↓↓↓↓↓↓↓↓↓↓↓ ");
-    console.log(responseData);
-    console.log(" ↑↑↑↑↑↑↑↑↑↑↑↑↑  responseData ↑↑↑↑↑↑↑↑↑↑↑↑↑ ");
-  },[])
+    console.log(" ------- useEffect  in inputform----------");
+    console.log(" clickedIndexNum!!! - " + clickedIndexNum);
 
-  useEffect(() => {
-    setIsNew(props.isNew);
-    setIndex(props.id);
-    console.log(" ------- handleListItemClick  in inputform----------");
-    console.log("Clicked the Index!!! - " + index);
-  });
-
-  // useEffect(() => {
-  //   const DetailInfo = (idx) => {
-  //     const fetchCustomerInfo = async (idx) => {
-  //       try {
-  //         const response = await axios.get(
-  //           'api/word/getAll', {
-  //             params: {
-  //               "page": 0,
-  //               "size": 16,
-  //               "sort": "string"
-  //             }
-  //         }
-  //         );
-  //         let testArr = getClickedIndexData(response, clickedId);
-  //         console.log("After getClickedIndexData ");
-  //         console.log(testArr);
-  //         setCustomerInfo(testArr);
-  //       } catch (e) {
-  //         console.log("error");
-  //       }
-  //     };
-  //     fetchCustomerInfo(idx);
-  //   }
-  //   if (isNew) {
-  //     clearInfo();
-  //     console.log("InputForm.js - clearInfo ");
-  //   }
-  //   else {
-  //     DetailInfo(index);
-  //   }
-  // }, [index]);
-
+    if (isAddBtnClicked) {
+      clearInfo();
+      console.log("InputForm.js - clearInfo ");
+    }
+  }, [isAddBtnClicked]);
 
   useEffect(() => {
     const fetchCustomerInfo = async () => {
       try {
-        const response = responseData;  // MEMO 20230525: 처음 가져온 responseData가 유지가 안되는듯.. 
-        let testArr = getClickedIndexData(response, clickedId);
-        // console.log("After getClickedIndexData ");
-        // console.log(testArr);
+        let testArr = getClickedIndexData(responseData, clickedIndexNum);
         setCustomerInfo(testArr);
       } catch (e) {
         console.log("error");
       }
     };
-
-    if (isNew) {
+    if (isAddBtnClicked) {
       clearInfo();
       console.log("InputForm.js - clearInfo ");
     }
     else {
       fetchCustomerInfo();
     }
-  }, [index]);
-
+  }, [clickedIndexNum]);
 
 
   const saveCustomerInfo = async () => {
     try {
-      if (isNew && isDataExist) {
+      if (isAddBtnClicked && isDataExist) {
+
         let obj = {};
         const response = await axios.get(
           'api/word/getMaxId');
@@ -155,9 +93,8 @@ const InputForm = (props) => {
         )
         console.log("res");
         console.log(res);
-        props.clearIsNew();
       }
-      else if (isNew && !isDataExist){
+      else if (isAddBtnClicked && !isDataExist){
         let obj = {}; 
         obj["id"] = ('1');
     
@@ -166,7 +103,6 @@ const InputForm = (props) => {
           '/api/word', tempReqeustBody
         )
         console.log(res);
-        props.clearIsNew();
       }
       else {
         // console.log("putput ");
@@ -175,14 +111,14 @@ const InputForm = (props) => {
         // )
       }
       alert('Save');
-      props.fetchCustomers();
+      props.fetchDataList();
       addBtnDispatch(reset());
     }
     catch (e) {
       alert('Error');
+      addBtnDispatch(click());
     }
   }
-
 
 
   const addNewId = () => {
@@ -196,7 +132,6 @@ const InputForm = (props) => {
   }
 
   const onSave = () => {
-    // console.log(customerInfo);
     addNewId();
 
     if (window.confirm("저장하시겠습니까?")) {
@@ -211,8 +146,7 @@ const InputForm = (props) => {
           '/api/word/' + customerInfo.id
         )
         alert('Delete');
-//        props.clearIsNew();
-        props.fetchCustomers();
+        props.fetchDataList();
       }
       catch (e) {
         alert('Error');

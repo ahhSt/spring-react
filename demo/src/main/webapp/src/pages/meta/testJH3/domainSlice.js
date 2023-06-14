@@ -1,7 +1,7 @@
 import { createSlice} from '@reduxjs/toolkit';
 
-export const addBtnSlice = createSlice({
-  name: 'isAddBtnClicked',
+export const addBtnSliceDomain = createSlice({
+  name: 'isAddBtnClickedDomain',
   initialState: { value: false },
   reducers: {
     click: (state, action) => {
@@ -13,8 +13,8 @@ export const addBtnSlice = createSlice({
   }
 });
 
-export const clickedIndexSlice = createSlice({
-  name: 'clickedIndexNum',
+export const clickedIndexSliceDomain = createSlice({
+  name: 'clickedIndexNumDomain',
   initialState: { value: 0 },
   reducers: {
     resetIndex: (state) => {
@@ -27,5 +27,5 @@ export const clickedIndexSlice = createSlice({
 });
 
 // export default addBtnSlice;
-export const { click, reset } = addBtnSlice.actions;
-export const { resetIndex, setIndex } = clickedIndexSlice.actions;
+export const { click, reset } = addBtnSliceDomain.actions;
+export const { resetIndex, setIndex } = clickedIndexSliceDomain.actions;

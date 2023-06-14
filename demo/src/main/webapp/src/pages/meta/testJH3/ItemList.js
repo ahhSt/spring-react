@@ -32,10 +32,13 @@ export default function DenseTable(props) {
 
     // const header = [...props.header];
     // const items2 = [...props.items];
-    const { items, handleListItemClick } = props;
+    const { items, handleListItemClick, isDomain } = props;
 
     const [selectedIndex, setSelectedIndex] = useState(null);
-    const header = ['한글명', '영문명', '영문 약어명', 'Data Type', '데이터 길이'];
+    let header = ['한글명', '영문명', '영문 약어명'];
+    if (isDomain) {
+        header = [...header, '데이터 타입', '데이터 길이'];
+    }
 
     const onClick = (event, idx) => {
         setSelectedIndex(idx);

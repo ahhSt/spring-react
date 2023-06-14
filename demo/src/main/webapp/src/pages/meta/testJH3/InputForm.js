@@ -12,14 +12,16 @@ const InputForm = (props) => {
   const responseData = props.responseData;
   const isDataExist = props.isDataExist;
   const [customerInfo, setCustomerInfo] = useState({});
+
   const addBtnDispatch = useDispatch();
+  
   const isAddBtnClicked = useSelector(state => {
-    return state.isAddBtnClicked.value;
+    return state.isAddBtnClickedDomain.value;
   });
   console.log("inputForm rendering111111@@@@@@@@@");
 
   const clickedIndexNum = useSelector(state => {
-    return state.clickedIndexNum.value;
+    return state.clickedIndexNumDomain.value;
   });
 
   function clearInfo() {
@@ -116,7 +118,7 @@ const InputForm = (props) => {
         // )
       }
       alert('Save');
-      props.fetchCustomers();
+      props.fetchDataList();
       addBtnDispatch(reset());
     }
     catch (e) {
@@ -154,7 +156,7 @@ const InputForm = (props) => {
           '/api/domain/' + customerInfo.id
         )
         alert('Delete');
-        props.fetchCustomers();
+        props.fetchDataList();
       }
       catch (e) {
         alert('Error');

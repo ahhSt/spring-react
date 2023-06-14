@@ -20,31 +20,43 @@ const CIconButton = styled(IconButton, { shouldForwardProp: (prop) => prop })(
 
 export default function DenseTable(props) {
 
+    // - Component refactoring -  
+    // TODO: props로 받을 공통적인 데이터 정해두기. -> selectedIndex는 redux나 createContext로 빼기... 
+    // 1. header 값. 
+    // 2. 현시해줄 데이터
+    // 3. 테이블 클릭시에 대한 이벤트
+    // 4. 테이블 row당 checkBox & button 
+
+
     // const classes = useStyles();
 
     // const header = [...props.header];
-    // const items = [...props.items];
-    const { items, handleListItemClick } = props;
+    // const items2 = [...props.items];
+    const { items, handleListItemClick, isDomain } = props;
 
     const [selectedIndex, setSelectedIndex] = useState(null);
+    let header = ['한글명', '영문명', '영문 약어명'];
+    if (isDomain) {
+        header = [...header, '데이터 타입', '데이터 길이'];
+    }
 
     const onClick = (event, idx) => {
         setSelectedIndex(idx);
     };
+    console.log(" ------- 띠요옹 ----------");
 
     return (
         <>
             <TableContainer sx={{ minHeight: 300, maxHeight: 600 }} component={Paper}>
                 <Table sx={{ minWidth: 300 }} size="small" stickyHeader aria-label="sticky table">
                     <TableHead>
-                        <TableRow>
-                            <TableCell>{"한글명"}</TableCell>
-                            <TableCell align="left">{"영문명"}</TableCell>
-                            <TableCell align="left">{"영문 약어명"}</TableCell>
-                            {/* {"4번" && <TableCell align="left">{"4번"}</TableCell>} */}
-                            {/* {"5번" && <TableCell align="left">{"5번"}</TableCell>} */}
-                            {/* <TableCell align="center"></TableCell> */}
-                        </TableRow>
+                    <TableRow >
+                        {header.map((item, idx) => (
+                            <TableCell key={idx} align="left">{item}</TableCell>
+                        ))}
+                            
+                    </TableRow>
+                        
                     </TableHead>
                     <TableBody>
                         {items.map((item, idx) => (

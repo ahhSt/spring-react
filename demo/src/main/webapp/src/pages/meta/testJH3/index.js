@@ -62,7 +62,7 @@ const ListItems = (props) => {
   })
 
   return (
-    <ItemList items={selectedList} handleListItemClick={handleListItemClick} />
+    <ItemList items={selectedList} handleListItemClick={handleListItemClick} isDomain={true} />
   );
 };
 
@@ -72,7 +72,7 @@ const BoxComponent = (props) => {
   const addBtnDispatch = useDispatch();
   
   const isAddBtnClicked = useSelector(state => {
-    return state.isAddBtnClicked.value;
+    return state.isAddBtnClickedDomain.value;
   });
 
   useEffect(() => {
@@ -132,10 +132,9 @@ export default function TestPage() {
   const addBtnDispatch = useDispatch();
 
   const isAddBtnClicked = useSelector(state => {
-    return state.isAddBtnClicked.value;
+    return state.isAddBtnClickedDomain.value;
   });
   let totalElements = 0;
-
 
   const fetchDataList = async () => {
     try {
