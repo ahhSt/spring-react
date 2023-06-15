@@ -101,6 +101,14 @@ export const thirdListItems = (
         <ListItemText primary="용어 관리" />
       </ListItemButton>
     </Link>
+    <Link to="/analysis">
+      <ListItemButton>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="메타정보수집" />
+      </ListItemButton>
+    </Link>
     <Link to="/testJHv">
       <ListItemButton>
         <ListItemIcon>
