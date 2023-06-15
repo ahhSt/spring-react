@@ -101,13 +101,29 @@ export const thirdListItems = (
         <ListItemText primary="용어 관리" />
       </ListItemButton>
     </Link>
-    <Link to="/testJHv">
+    {/* <Link to="/testJHv">
       <ListItemButton>
         <ListItemIcon>
           <LayersIcon />
         </ListItemIcon>
-        <ListItemText primary="테스트용 JH" />
+        <ListItemText primary="테스트용 JH Word" />
       </ListItemButton>
     </Link>
+    <Link to="/testJH_Domain">
+      <ListItemButton>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="테스트용 JH Domain" />
+      </ListItemButton>
+    </Link>
+    <Link to="/testJH3">
+      <ListItemButton>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="Component refactoring 용 메뉴" />
+      </ListItemButton>
+    </Link> */}
   </React.Fragment>
 );

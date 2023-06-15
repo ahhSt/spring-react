@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Button, Stack, TextField, Typography, Grid } from '@mui/material'
+import { MenuItem, FormControl, Select, InputLabel, Stack, Button, TextField, Typography, Grid } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { reset, click } from './wordSlice';
+import { reset } from './addBtnSlice';
 
 const InputForm = (props) => {
   let tempReqeustBody;
   let totalElements = props.totalElements;
-  const responseData = props.responseData;
+  let clickedId = props.clickedId;
+
+  const [index, setIndex] = useState(props.id);   // MEMO: id : selected Index
+  const [isNew, setIsNew] = useState(props.isNew);
   const isDataExist = props.isDataExist;
   const [customerInfo, setCustomerInfo] = useState({});
 
   const addBtnDispatch = useDispatch();
   const isAddBtnClicked = useSelector(state => {
-    return state.isAddBtnClickedWord.value;
-  });
-
-  const clickedIndexNum = useSelector(state => {
-    return state.clickedIndexNumWord.value;
+    return state.isAddBtnClicked.value;
   });
 
   function clearInfo() {
-    setCustomerInfo({ id: null, korName: "", engName: "", engInitName: "", description: "" });
+    setCustomerInfo({ id: index, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "", dataTypeName: "", });
   }
 
   const getClickedIndexData = (respData, clickedDataID) => {
-    let testObj = respData.list;
+    let testObj = respData.data.content;
     let isFindClickedId = false;
-    for (let arrObj of respData.list) {
+    for (let arrObj of respData.data.content) {
       if (arrObj.id == (Number(clickedDataID))) {
-        console.log(" ↓↓↓↓↓↓↓↓↓↓↓↓↓  Filtering the only clicked index data from the getAll API response data ↓↓↓↓↓↓↓↓↓↓↓↓↓ ");
+        console.log("//////////////////////////");
+        console.log("                          ");
         console.log(arrObj);
-        console.log(" ↑↑↑↑↑↑↑↑↑↑↑↑↑  Filtering the only clicked index data from the getAll API response data ↑↑↑↑↑↑↑↑↑↑↑↑↑ ");
+        console.log("                          ");
+        console.log("//////////////////////////");
         testObj = arrObj;
         isFindClickedId = true;
       }
@@ -41,68 +42,87 @@ const InputForm = (props) => {
     if (isFindClickedId)
       return testObj;
     else {
-      return respData.list[0];
+      return respData.data.content[0];
     }
   }
 
   useEffect(() => {
+    setIsNew(props.isNew);
+    setIndex(props.id);
     console.log(" ------- useEffect  in inputform----------");
-    console.log(" clickedIndexNum!!! - " + clickedIndexNum);
-
-    if (isAddBtnClicked) {
-      clearInfo();
-      console.log("InputForm.js - clearInfo ");
-    }
-  }, [isAddBtnClicked]);
+    console.log(" the Index!!! - " + index);
+  });
 
   useEffect(() => {
-    const fetchCustomerInfo = async () => {
-      try {
-        let testArr = getClickedIndexData(responseData, clickedIndexNum);
-        setCustomerInfo(testArr);
-      } catch (e) {
-        console.log("error");
-      }
-    };
-    if (isAddBtnClicked) {
+    const DetailInfo = (idx) => {
+      const fetchCustomerInfo = async (idx) => {
+        try {
+          const response = await axios.get(
+            'api/domain/getAll', {
+            params: {
+              "page": 0,
+              "size": 16,
+              "sort": "string"
+            }
+          }
+          );
+          let testArr = getClickedIndexData(response, clickedId);
+          console.log("After getClickedIndexData ");
+          console.log(testArr);
+          setCustomerInfo(testArr);
+        } catch (e) {
+          console.log("error");
+        }
+      };
+      fetchCustomerInfo(idx);
+    }
+    if (isNew) {
       clearInfo();
       console.log("InputForm.js - clearInfo ");
     }
     else {
-      fetchCustomerInfo();
+      DetailInfo(index);
     }
-  }, [clickedIndexNum]);
-
+  }, [index]);
 
   const saveCustomerInfo = async () => {
     try {
-      if (isAddBtnClicked && isDataExist) {
+      if (isNew && isDataExist) {
 
         let obj = {};
         const response = await axios.get(
-          'api/word/getMaxId');
-        console.log("------------------ InputForm - saveCustomerInfo ------------------");
+          'api/domain/getMaxId');
+        console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
         console.log(response.data);
-        obj["id"] = ((response.data + 1).toString());
-        tempReqeustBody = { ...customerInfo, ...obj };
-        console.log(tempReqeustBody);
-        console.log("------------------ InputForm - saveCustomerInfo ------------------");
 
+        // obj["id"] = (Number(totalElements) + 1).toString();
+        obj["id"] = ((response.data + 1).toString());
+
+        tempReqeustBody = { ...customerInfo, ...obj };
+
+        console.log(tempReqeustBody);
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
+
+
+        console.log("saveCustomerInfo");
+        console.log(customerInfo);
         const res = await axios.post(
-          '/api/word', tempReqeustBody
+          '/api/domain', tempReqeustBody
         )
         console.log("res");
         console.log(res);
+        props.clearIsNew();
       }
-      else if (isAddBtnClicked && !isDataExist){
-        let obj = {}; 
+      else if (isNew && !isDataExist) {
+        let obj = {};
         obj["id"] = ('1');
-    
+
         tempReqeustBody = { ...customerInfo, ...obj };
         const res = await axios.post(
-          '/api/word', tempReqeustBody
+          '/api/domain', tempReqeustBody
         )
         console.log(res);
+        props.clearIsNew();
       }
       else {
         // console.log("putput ");
@@ -111,15 +131,13 @@ const InputForm = (props) => {
         // )
       }
       alert('Save');
-      props.fetchDataList();
+      props.fetchCustomers();
       addBtnDispatch(reset());
     }
     catch (e) {
       alert('Error');
-      addBtnDispatch(click());
     }
   }
-
 
   const addNewId = () => {
     let obj = {};
@@ -132,6 +150,7 @@ const InputForm = (props) => {
   }
 
   const onSave = () => {
+    console.log(customerInfo);
     addNewId();
 
     if (window.confirm("저장하시겠습니까?")) {
@@ -143,10 +162,10 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try {
         await axios.delete(
-          '/api/word/' + customerInfo.id
+          '/api/domain/' + customerInfo.id
         )
         alert('Delete');
-        props.fetchDataList();
+        props.fetchCustomers();
       }
       catch (e) {
         alert('Error');
@@ -158,16 +177,64 @@ const InputForm = (props) => {
     }
   }
 
+  const handleSelectChange = (event) => {
+    let obj = {};
+    // obj["dataTypeId"] = event.target.value;
+    switch (event.target.value) {
+      case "INTEGER":
+        obj["dataTypeName"] = "INTEGER";
+        obj["dataTypeId"] = "1";
+        break;
+      case "STRING":
+        obj["dataTypeName"] = "STRING";
+        obj["dataTypeId"] = "2";
+        break;
+
+      case "VARCHAR":
+        obj["dataTypeName"] = "VARCHAR";
+        obj["dataTypeId"] = "3";
+        break;
+
+      case "TIMESTAMP":
+        obj["dataTypeName"] = "TIMESTAMP";
+        obj["dataTypeId"] = "6";
+        break;
+
+      case "NULL":
+        obj["dataTypeName"] = "NULL";
+        obj["dataTypeId"] = "7";
+        break;
+
+      default:
+        obj["dataTypeName"] = "NULL";
+        obj["dataTypeId"] = "7";
+        break;
+    }
+    tempReqeustBody = { ...customerInfo, ...obj };
+    setCustomerInfo(() => {
+      return { ...customerInfo, ...obj }
+    });
+  };
+
   const onChange = (e, field) => {
     let obj = {};
     obj[field] = e.target.value;
     setCustomerInfo({ ...customerInfo, ...obj });
   }
 
+  const onChangeOnlyNumber = (e, field) => {
+    const regex = /^[0-9\b]+$/;
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      let obj = {};
+      obj[field] = e.target.value;
+      setCustomerInfo({ ...customerInfo, ...obj });
+    }
+  }
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        단어 관리 화면 - Word Management
+        도메인 관리 화면 - Domain Management
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -195,14 +262,13 @@ const InputForm = (props) => {
             name="engName"
             label="영문명"
             fullWidth
-            // autoComplete="name"
             variant="standard"
             value={customerInfo.engName || ""}
             onChange={(e) => {
               onChange(e, "engName");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 30}}
+            inputProps={{ maxLength: 30 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -218,7 +284,7 @@ const InputForm = (props) => {
               onChange(e, "engInitName");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 20}}
+            inputProps={{ maxLength: 20 }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -234,12 +300,52 @@ const InputForm = (props) => {
               onChange(e, "description");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 100}}
+            inputProps={{ maxLength: 100 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            // required
+            required
+            id="length"
+            name="length"
+            label="데이터 길이(숫자만 입력) "
+            fullWidth
+            autoComplete="standard"
+            variant="standard"
+            value={customerInfo.length || ""}
+            onChange={(e) => {
+              onChangeOnlyNumber(e, "length");
+            }}
+            disabled={!isAddBtnClicked}
+            inputProps={{ maxLength: 5 }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Data type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="dataTypeName"
+              name="dataTypeName"
+              value={customerInfo.dataTypeName || ""}
+              label="Data type"
+              onChange={handleSelectChange}
+              disabled={!isAddBtnClicked}
+            >
+              {/* <MenuItem value={"1"}>varchar</MenuItem>
+              <MenuItem value={"2"}>int</MenuItem>
+              <MenuItem value={"3"}>timestamp</MenuItem>
+              <MenuItem value={"4"}>null</MenuItem> */}
+              <MenuItem value={"INTEGER"}>INTEGER</MenuItem>
+              <MenuItem value={"STRING"}>STRING</MenuItem>
+              <MenuItem value={"VARCHAR"}>VARCHAR</MenuItem>
+              <MenuItem value={"TIMESTAMP"}>TIMESTAMP</MenuItem>
+              <MenuItem value={"NULL"}>NULL</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
             id="zip"
             name="zip"
             label="TBD"
@@ -250,7 +356,6 @@ const InputForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            // required
             id="country"
             name="country"
             label="TBD"
@@ -266,7 +371,7 @@ const InputForm = (props) => {
         <Button variant="outlined" startIcon={<DeleteIcon />} disabled={isAddBtnClicked} onClick={onDelete}>
           Delete
         </Button>
-        <Button variant="contained" endIcon={<SaveIcon />}  disabled={!isAddBtnClicked} onClick={onSave}>
+        <Button variant="contained" endIcon={<SaveIcon />} disabled={!isAddBtnClicked} onClick={onSave}>
           Save
         </Button>
       </Stack>
