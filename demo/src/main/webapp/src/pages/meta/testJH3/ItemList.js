@@ -43,7 +43,6 @@ export default function DenseTable(props) {
     const onClick = (event, idx) => {
         setSelectedIndex(idx);
     };
-    console.log(" ------- 띠요옹 ----------");
 
     return (
         <>

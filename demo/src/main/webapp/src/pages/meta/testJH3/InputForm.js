@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Button, Stack, TextField, Typography, Grid } from '@mui/material'
+import { MenuItem, FormControl, Select, InputLabel, Stack, Button, TextField, Typography, Grid } from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { reset, click } from './wordSlice';
+import { reset, click, resetIndex, setIndex } from './domainSlice';
 
 const InputForm = (props) => {
   let tempReqeustBody;
@@ -14,16 +14,18 @@ const InputForm = (props) => {
   const [customerInfo, setCustomerInfo] = useState({});
 
   const addBtnDispatch = useDispatch();
+  
   const isAddBtnClicked = useSelector(state => {
-    return state.isAddBtnClickedWord.value;
+    return state.isAddBtnClickedDomain.value;
   });
+  console.log("inputForm rendering111111@@@@@@@@@");
 
   const clickedIndexNum = useSelector(state => {
-    return state.clickedIndexNumWord.value;
+    return state.clickedIndexNumDomain.value;
   });
 
   function clearInfo() {
-    setCustomerInfo({ id: null, korName: "", engName: "", engInitName: "", description: "" });
+    setCustomerInfo({ id: null, korName: "", engName: "", engInitName: "", description: "", dataTypeId: "", length: "", dataTypeName: "", });
   }
 
   const getClickedIndexData = (respData, clickedDataID) => {
@@ -73,34 +75,39 @@ const InputForm = (props) => {
     }
   }, [clickedIndexNum]);
 
-
   const saveCustomerInfo = async () => {
     try {
       if (isAddBtnClicked && isDataExist) {
 
         let obj = {};
         const response = await axios.get(
-          'api/word/getMaxId');
-        console.log("------------------ InputForm - saveCustomerInfo ------------------");
+          'api/domain/getMaxId');
+        console.log("!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!");
         console.log(response.data);
-        obj["id"] = ((response.data + 1).toString());
-        tempReqeustBody = { ...customerInfo, ...obj };
-        console.log(tempReqeustBody);
-        console.log("------------------ InputForm - saveCustomerInfo ------------------");
 
+        obj["id"] = ((response.data + 1).toString());
+
+        tempReqeustBody = { ...customerInfo, ...obj };
+
+        console.log(tempReqeustBody);
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!");
+
+
+        console.log("saveCustomerInfo");
+        console.log(customerInfo);
         const res = await axios.post(
-          '/api/word', tempReqeustBody
+          '/api/domain', tempReqeustBody
         )
         console.log("res");
         console.log(res);
       }
-      else if (isAddBtnClicked && !isDataExist){
-        let obj = {}; 
+      else if (isAddBtnClicked && !isDataExist) {
+        let obj = {};
         obj["id"] = ('1');
-    
+
         tempReqeustBody = { ...customerInfo, ...obj };
         const res = await axios.post(
-          '/api/word', tempReqeustBody
+          '/api/domain', tempReqeustBody
         )
         console.log(res);
       }
@@ -116,10 +123,12 @@ const InputForm = (props) => {
     }
     catch (e) {
       alert('Error');
+    console.log("inputFomr rendering22222@@@@@@@@@");
+
       addBtnDispatch(click());
+      
     }
   }
-
 
   const addNewId = () => {
     let obj = {};
@@ -132,10 +141,11 @@ const InputForm = (props) => {
   }
 
   const onSave = () => {
+    console.log(customerInfo);
     addNewId();
 
     if (window.confirm("저장하시겠습니까?")) {
-      saveCustomerInfo();
+      saveCustomerInfo()
     }
   }
 
@@ -143,7 +153,7 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try {
         await axios.delete(
-          '/api/word/' + customerInfo.id
+          '/api/domain/' + customerInfo.id
         )
         alert('Delete');
         props.fetchDataList();
@@ -158,16 +168,64 @@ const InputForm = (props) => {
     }
   }
 
+  const handleSelectChange = (event) => {
+    let obj = {};
+    // obj["dataTypeId"] = event.target.value;
+    switch (event.target.value) {
+      case "INTEGER":
+        obj["dataTypeName"] = "INTEGER";
+        obj["dataTypeId"] = "1";
+        break;
+      case "STRING":
+        obj["dataTypeName"] = "STRING";
+        obj["dataTypeId"] = "2";
+        break;
+
+      case "VARCHAR":
+        obj["dataTypeName"] = "VARCHAR";
+        obj["dataTypeId"] = "3";
+        break;
+
+      case "TIMESTAMP":
+        obj["dataTypeName"] = "TIMESTAMP";
+        obj["dataTypeId"] = "6";
+        break;
+
+      case "NULL":
+        obj["dataTypeName"] = "NULL";
+        obj["dataTypeId"] = "7";
+        break;
+
+      default:
+        obj["dataTypeName"] = "NULL";
+        obj["dataTypeId"] = "7";
+        break;
+    }
+    tempReqeustBody = { ...customerInfo, ...obj };
+    setCustomerInfo(() => {
+      return { ...customerInfo, ...obj }
+    });
+  };
+
   const onChange = (e, field) => {
     let obj = {};
     obj[field] = e.target.value;
     setCustomerInfo({ ...customerInfo, ...obj });
   }
 
+  const onChangeOnlyNumber = (e, field) => {
+    const regex = /^[0-9\b]+$/;
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      let obj = {};
+      obj[field] = e.target.value;
+      setCustomerInfo({ ...customerInfo, ...obj });
+    }
+  }
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        단어 관리 화면 - Word Management
+        도메인 관리 화면 - Domain Management
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -195,14 +253,13 @@ const InputForm = (props) => {
             name="engName"
             label="영문명"
             fullWidth
-            // autoComplete="name"
             variant="standard"
             value={customerInfo.engName || ""}
             onChange={(e) => {
               onChange(e, "engName");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 30}}
+            inputProps={{ maxLength: 30 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -218,7 +275,7 @@ const InputForm = (props) => {
               onChange(e, "engInitName");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 20}}
+            inputProps={{ maxLength: 20 }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -234,12 +291,52 @@ const InputForm = (props) => {
               onChange(e, "description");
             }}
             disabled={!isAddBtnClicked}
-            inputProps={{maxLength: 100}}
+            inputProps={{ maxLength: 100 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            // required
+            required
+            id="length"
+            name="length"
+            label="데이터 길이(숫자만 입력) "
+            fullWidth
+            autoComplete="standard"
+            variant="standard"
+            value={customerInfo.length || ""}
+            onChange={(e) => {
+              onChangeOnlyNumber(e, "length");
+            }}
+            disabled={!isAddBtnClicked}
+            inputProps={{ maxLength: 5 }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Data type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="dataTypeName"
+              name="dataTypeName"
+              value={customerInfo.dataTypeName || ""}
+              label="Data type"
+              onChange={handleSelectChange}
+              disabled={!isAddBtnClicked}
+            >
+              {/* <MenuItem value={"1"}>varchar</MenuItem>
+              <MenuItem value={"2"}>int</MenuItem>
+              <MenuItem value={"3"}>timestamp</MenuItem>
+              <MenuItem value={"4"}>null</MenuItem> */}
+              <MenuItem value={"INTEGER"}>INTEGER</MenuItem>
+              <MenuItem value={"STRING"}>STRING</MenuItem>
+              <MenuItem value={"VARCHAR"}>VARCHAR</MenuItem>
+              <MenuItem value={"TIMESTAMP"}>TIMESTAMP</MenuItem>
+              <MenuItem value={"NULL"}>NULL</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
             id="zip"
             name="zip"
             label="TBD"
@@ -250,7 +347,6 @@ const InputForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            // required
             id="country"
             name="country"
             label="TBD"
@@ -266,7 +362,7 @@ const InputForm = (props) => {
         <Button variant="outlined" startIcon={<DeleteIcon />} disabled={isAddBtnClicked} onClick={onDelete}>
           Delete
         </Button>
-        <Button variant="contained" endIcon={<SaveIcon />}  disabled={!isAddBtnClicked} onClick={onSave}>
+        <Button variant="contained" endIcon={<SaveIcon />} disabled={!isAddBtnClicked} onClick={onSave}>
           Save
         </Button>
       </Stack>
