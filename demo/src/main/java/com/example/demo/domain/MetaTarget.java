@@ -36,6 +36,6 @@ public class MetaTarget {
     @Column(name="target_db_user")
     private String user;  
 
-    @OneToMany(mappedBy = "metaTarget", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "metaTarget", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private List<MetaData> columns;
 }

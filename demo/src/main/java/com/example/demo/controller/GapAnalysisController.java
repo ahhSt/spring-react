@@ -38,7 +38,7 @@ public class GapAnalysisController {
     private GapAnalysisService gapAnalysisService;
     
     @PostMapping("/metadata")
-    private void getMetaData(@RequestBody DbmsDto dbmsDto) throws Exception {
+    private void collectMetaData(@RequestBody DbmsDto dbmsDto) throws Exception {
 
         log.info(dbmsDto.toString());
         System.out.println("dbmsDto : " + dbmsDto.getHost());

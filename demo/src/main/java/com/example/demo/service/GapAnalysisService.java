@@ -127,17 +127,21 @@ public class GapAnalysisService {
 
         List<MetaTarget> result = metaTargetRepository.search(dbmsDto);
 
-        System.out.println(result.toString());
-
         if(!result.isEmpty()){
             String deleteSql = """
                       DELETE FROM meta_data WHERE meta_id = ?
                   """;
 
             int update = jdbcTemplate.update(deleteSql, result.get(0).getId());
-            System.out.println(update);
-            metaTarget.setId(result.get(0).getId());
-            metaTargetRepository.delete(metaTarget);
+
+            deleteSql = """
+                      DELETE FROM meta_target WHERE meta_id = ?
+                  """;
+
+            update = jdbcTemplate.update(deleteSql, result.get(0).getId());
+
+            // metaTarget.setId(result.get(0).getId());
+            // metaTargetRepository.delete(metaTarget);
         }  
 
         metaTarget.setDb_name(dbname);
@@ -145,8 +149,6 @@ public class GapAnalysisService {
         metaTarget.setUser(user);
 
         metaTarget = metaTargetRepository.insert(metaTarget);
-
-        System.out.println(metaTarget);
 
         String sql = """
             insert into meta_data(
