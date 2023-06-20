@@ -114,6 +114,7 @@ public class GapAnalysisService {
         return metaTargetData;
     }
   
+    @Transactional
     public void insertMetaData(List<MetaData> metaTargetData, DbmsDto dbmsDto) throws Exception{
 
         String dbname = dbmsDto.getDbname();

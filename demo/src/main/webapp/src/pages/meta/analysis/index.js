@@ -14,6 +14,7 @@ export default function page() {
 
   const [dbmsType, setDbmsType] = useState('');
   const [connInfo, setConnInfo] = useState({
+    "dbname" : "bart_db",
     "host" : "jdbc:postgresql://172.20.30.177:5432/bart_db",
     "schema": "afc_main",
     "user" : "afc_main",
