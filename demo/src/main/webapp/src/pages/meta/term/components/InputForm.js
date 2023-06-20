@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import BorderClearIcon from '@mui/icons-material/BorderClear';
 
-import { TermContext } from './TermProvider';
+import { TermContext } from '../providers/TermProvider';
 
 let term = {};
 

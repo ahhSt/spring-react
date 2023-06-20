@@ -48,6 +48,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+      # ddl-auto: none
       dialect: org.hibernate.dialect.PostgreSQL10Dialect
     #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:

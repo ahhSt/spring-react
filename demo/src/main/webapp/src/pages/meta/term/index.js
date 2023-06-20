@@ -1,16 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import axios from 'axios';
 
 import { Container } from 'react-bootstrap';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 
-import TermList from './TermList';
-import InputForm from './InputForm';
-import { TermProvider } from './TermProvider';
-import { theme } from './Theme';
+import TermList from './components/TermList';
+import InputForm from './components/InputForm';
+import { TermProvider } from './providers/TermProvider';
+import { theme } from './providers/Theme';
 
-import { SelectedListItem } from './SelectedListItem';
+import { SelectedListItem } from './components/SelectedListItem';
 
 
 export default function Main() {
@@ -81,13 +81,13 @@ export default function Main() {
                         <Container maxwidth="sm">
                             <p>단어</p>
                             {/* <ItemList header={wordHeader} items={wordData} height={300} handleClick={handleClick}/> */}
-                            <SelectedListItem header={wordHeader} items={wordData} type="words"/>
+                            <SelectedListItem header={wordHeader} items={wordData} type="words" arrowButton={true}/>
                         </Container>
 
                         <Container maxwidth="sm">
                             <p>도메인</p>
                             {/* <ItemList header={domainHeader} items={domainData} height={300} handleClick={domainSelect}/> */}
-                            <SelectedListItem header={domainHeader} items={domainData} type="domain" />
+                            <SelectedListItem header={domainHeader} items={domainData} type="domain" arrowButton={true}/>
                         </Container>
                     </Grid>
                     <Grid xs={3}>

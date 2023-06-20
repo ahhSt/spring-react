@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 
 import IconButton from '@mui/material/IconButton';
 import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
-import { TermContext } from './TermProvider';
+import { TermContext } from '../providers/TermProvider';
 
 const CIconButton = styled(IconButton, { shouldForwardProp: (prop) => prop })(
     () => ({
@@ -23,9 +23,9 @@ const CIconButton = styled(IconButton, { shouldForwardProp: (prop) => prop })(
 
 export default function DenseTable(props) {
 
-    const {arrowButton, words, concatWords, domain, selectDomain} = useContext( TermContext );
+    const {words, concatWords, selectDomain} = useContext( TermContext );
 
-    const {header, items, height, type} = props;
+    const {header, items, type, arrowButton} = props;
 
     const [selectedIndex, setSelectedIndex] = useState(null);
 
