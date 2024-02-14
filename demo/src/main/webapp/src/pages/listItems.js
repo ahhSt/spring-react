@@ -58,7 +58,7 @@ export const secondaryListItems = (
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText primary="(CRUD) Sample 1" />
+        <ListItemText primary="List Form" />
       </ListItemButton>
     </Link>
     <Link to="/list-info-JH">
@@ -66,64 +66,8 @@ export const secondaryListItems = (
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText primary="(샘플화면)_JH" />
+        <ListItemText primary="Detail View" />
       </ListItemButton>
     </Link>
-  </React.Fragment>
-);
-
-export const thirdListItems = (
-  <React.Fragment>
-    <ListSubheader component="div" inset>
-      Meta System
-    </ListSubheader>
-    <Link to="/word-management">
-      <ListItemButton>
-        <ListItemIcon>
-          <ApiRoundedIcon />
-        </ListItemIcon>
-        <ListItemText primary="단어관리" />
-      </ListItemButton>
-    </Link>
-    <Link to="/domain-management">
-      <ListItemButton>
-        <ListItemIcon>
-          <AndroidRoundedIcon />
-        </ListItemIcon>
-        <ListItemText primary="도메인 관리" />
-      </ListItemButton>
-    </Link>
-    <Link to="/term">
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="용어 관리" />
-      </ListItemButton>
-    </Link>
-    {/* <Link to="/testJHv">
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="테스트용 JH Word" />
-      </ListItemButton>
-    </Link>
-    <Link to="/testJH_Domain">
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="테스트용 JH Domain" />
-      </ListItemButton>
-    </Link>
-    <Link to="/testJH3">
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Component refactoring 용 메뉴" />
-      </ListItemButton>
-    </Link> */}
   </React.Fragment>
 );

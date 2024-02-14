@@ -93,7 +93,7 @@ function BoxComponent(props) {
   }
 
   return (
-    <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
+    <Box component="div" sx={{ p: 2, border: '1px grey' }}>
       <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
         Add
       </Button>
