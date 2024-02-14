@@ -237,7 +237,6 @@ export default function TestPage() {
   return (
     <Container maxwidth="sm">
       <Grid container spacing={2}>
-        <Provider store={addBtnStore}>
           <Grid xs={4}>
 
             <BasicTabs11 onChangeTab={onChangeTab} />
@@ -250,7 +249,6 @@ export default function TestPage() {
           <Grid xs={8}>
             <InputForm id={selectedIndex} totalElements={totalElements} isNew={isNew} fetchCustomers={fetchCustomers} clearIsNew={clearIsNew} clickedId={clickedId} />
           </Grid>
-        </Provider>
       </Grid>
     </Container>
   )
