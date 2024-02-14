@@ -31,7 +31,7 @@ spring:
     url: jdbc:postgresql://192.168.56.1:35432/OPS
     # url: jdbc:postgresql://172.20.30.177:stgres
     username: OPS
-    password: OPS_123
+    password: OPS123
     hikari:
       data-source-properties:
         useUnicode: true
