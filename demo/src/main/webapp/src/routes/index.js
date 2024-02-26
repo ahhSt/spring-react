@@ -10,6 +10,7 @@ import { NoMatch } from '../pages/NoMatch';
 import ListInfoSample from '../pages/sample/listInfoSample';
 import SearchSample from '../pages/sample/searchSample';
 import ListInfoSampleJH from '../pages/sample/sampleJH';
+import UploadFile from '../pages/sample/uploadFile';
 
 export default function Router() {
   return (
@@ -22,6 +23,7 @@ export default function Router() {
         <Route path="/list-info" element={<ListInfoSample />} />
         <Route path="/filter-sample" element={<SearchSample />} />
         <Route path="/list-info-JH" element={<ListInfoSampleJH />} />
+        <Route path="/upload-file" element={<UploadFile />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
   )

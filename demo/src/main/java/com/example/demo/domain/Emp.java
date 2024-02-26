@@ -24,5 +24,5 @@ public class Emp {
     private Long sal;
     private Long comm;
     @ManyToOne
-    private Long deptno;
+    private Dept deptno;
 }
