@@ -69,5 +69,13 @@ export const secondaryListItems = (
         <ListItemText primary="Detail View" />
       </ListItemButton>
     </Link>
+    <Link to="/upload-file">
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Upload File" />
+      </ListItemButton>
+    </Link>
   </React.Fragment>
 );
