@@ -1,0 +1,9 @@
+.ComponentBox {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+}
+
+.ComponentBox > button {
+    margin-left:auto;
+}
