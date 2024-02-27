@@ -28,13 +28,6 @@ public class CustomerService {
     private final EntityManager em;
 
     @Transactional(readOnly = true)
-    public List<Customer> listCusomter_mybatis() throws Exception{
-
-        List<Customer> list = (List<Customer>) customerMapper.listCustomer();
-        log.info(list.toString());
-        return list;
-    }
-    @Transactional(readOnly = true)
     public List<Customer> listCustomer() throws Exception {
 
         List<Customer> list = (List<Customer>) customerRepository.findAll();

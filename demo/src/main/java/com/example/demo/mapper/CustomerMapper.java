@@ -8,4 +8,8 @@ import java.util.List;
 @Mapper
 public interface CustomerMapper {
     public List<Customer> listCustomer();
+    public Customer getCustomer(Long id);
+    public int createCustomer(Customer customer);
+    public int updateCustomer(Customer customer);
+    public int deleteCustomer(Long id);
 }

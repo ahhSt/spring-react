@@ -33,30 +33,6 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @Operation(summary = "(샘플)고객 정보 목록 Mybatis", description = "이 api는 샘플용 API입니다. 회원 목록을 조회합니다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @GetMapping("/mybatis")
-    public ResponseEntity<List<Customer>> customer_mybatis() throws Exception {
-
-        try {
-            List<Customer> result = customerService.listCusomter_mybatis();
-            HttpHeaders header = new HttpHeaders();
-            header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-            ResponseEntity<List<Customer>> response =  new ResponseEntity<>(result, header, HttpStatus.OK);
-            return response;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     @Operation(summary = "(샘플)고객 정보 목록", description = "이 api는 샘플용 API입니다. 회원 목록을 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),

@@ -10,4 +10,39 @@
             CREATED_DATE
         FROM Customer
     </select>
+
+    <select id="getCustomer" parameterType="long" resultType="com.example.demo.domain.Customer">
+        SELECT id,
+        name,
+        email,
+        CREATED_DATE
+        FROM Customer
+        where id = #{id}
+    </select>
+
+    <insert id="createCustomer" parameterType="map">
+        Insert INTO CUSTOMER(id,
+            name,
+            email,
+            CREATED_DATE
+        )
+        values(
+            (select COALESCE(max(id),0) + 1 from customer),
+            #{name},
+            #{email},
+            #{date}
+        )
+    </insert>
+
+    <update id="updateCustomer" parameterType="map">
+        update CUSTOMER set
+            name=#{name},
+            email=#{email}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteCustomer" parameterType="long">
+        delete from CUSTOMER
+        where id=#{id}
+    </delete>
 </mapper>
