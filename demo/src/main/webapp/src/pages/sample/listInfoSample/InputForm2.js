@@ -47,6 +47,7 @@ const InputForm2 = ({onCloseClicked}) => {
             '/api/customer', customerInfo
           )
         alert('Save');
+        onCloseClicked();
       }
       catch (e) {
         alert('Error');

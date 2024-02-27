@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemText from '@mui/material/ListItemText';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
@@ -104,7 +105,7 @@ export default function TestPage(){
     
     function PopupBtn() {
       return (
-        <Box component="span" sx={{ p: 1, border: '1px dashed grey' }}>
+        <Box component="span" sx={{ p: 1, border: '1px grey' }}>
           <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={openModal}>
             Insert Modal
           </Button>
@@ -123,13 +124,42 @@ export default function TestPage(){
   
     function DetailPopupBtn () {
       return (
-        <Box component="span" sx={{ p: 1, border: '1px dashed grey' }}>
+        <Box component="span" sx={{ p: 1, border: '1px grey' }}>
           <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={openDetailModal} disabled={(customers.list.length) == 0 ? true : false} >
             Detail Modal
           </Button>
         </Box>
       );
     }
+
+    const onDelete = () => {
+      const deleteCustomerInfo = async () => {
+        try{
+          await axios.delete(
+            '/api/customer/'+ selectedIndex
+          ) 
+          alert('Delete');
+          fetchCustomers();
+        }
+        catch (e) {
+          alert('Error');
+        }
+      }
+    
+      if(window.confirm("삭제하시겠습니까?")) {
+        deleteCustomerInfo();
+      }
+    };
+
+    function DeleteBtn () {
+      return (      
+      <Box component="span" sx={{ p: 1, border: '1px grey' }}>
+        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={onDelete} disabled={(customers.list.length) == 0 ? true : false}>
+          Delete
+        </Button>
+      </Box>);
+    }
+
 
     const customStyles = {
       overlay :{
@@ -197,6 +227,7 @@ export default function TestPage(){
         <Container maxwidth="sm">
             <Grid container spacing={2}>
                   <SelectedListItem customers={customers} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} openDetailModal={openDetailModal}/>
+                  <DeleteBtn />
                   <DetailPopupBtn isDetailOpen={isDetailOpen} setIsDetailOpen={setIsDetailOpen}/>
                   <PopupBtn isOpen={isOpen} setIsOpen={setIsOpen}/>
                   <Modal ariaHideApp={false} isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
