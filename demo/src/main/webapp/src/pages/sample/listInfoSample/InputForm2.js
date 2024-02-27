@@ -36,7 +36,7 @@ const InputForm2 = ({onCloseClicked}) => {
 
 
   const sendCloseClicked = () => {
-    onCloseClicked();
+    onCloseClicked(true);
   };
 
   const onSave = () => {
@@ -47,7 +47,7 @@ const InputForm2 = ({onCloseClicked}) => {
             '/api/customer', customerInfo
           )
         alert('Save');
-        onCloseClicked();
+        onCloseClicked(false);
       }
       catch (e) {
         alert('Error');
@@ -79,6 +79,7 @@ const InputForm2 = ({onCloseClicked}) => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             id="id"
             name="id"
             label="ID"
@@ -96,7 +97,6 @@ const InputForm2 = ({onCloseClicked}) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="Name"
             name="Name"
             label="Name"
@@ -111,7 +111,6 @@ const InputForm2 = ({onCloseClicked}) => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            required
             id="email"
             name="email"
             label="E-Mail"
@@ -140,7 +139,6 @@ const InputForm2 = ({onCloseClicked}) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="city"
             name="city"
             label="City"
@@ -160,7 +158,6 @@ const InputForm2 = ({onCloseClicked}) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="zip"
             name="zip"
             label="Zip / Postal code"
@@ -171,7 +168,6 @@ const InputForm2 = ({onCloseClicked}) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="country"
             name="country"
             label="Country"

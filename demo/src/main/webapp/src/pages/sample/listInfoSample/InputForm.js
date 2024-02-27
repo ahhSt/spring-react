@@ -25,6 +25,9 @@ const InputForm = (props) => {
 
   const fetchCustomerInfo = async (idx) => {
       try {
+        if (idx == null)
+          return;
+
         const response = await axios.get(
             '/api/customer/' + idx
         );
@@ -46,7 +49,7 @@ const InputForm = (props) => {
         ) 
         alert('Delete');
         // props.fetchCustomers();
-        props.onCloseClicked();
+        props.onCloseClicked(false);
       }
       catch (e) {
         alert('Error');
@@ -54,6 +57,7 @@ const InputForm = (props) => {
     }
 
     if(window.confirm("삭제하시겠습니까?")) {
+      props.setSelectedIndex(null);
       deleteCustomerInfo();
     }
   }
@@ -65,7 +69,7 @@ const InputForm = (props) => {
   }
 
   const sendCloseClicked = () => {
-    props.onCloseClicked();
+    props.onCloseClicked(true);
   };
 
   return (
@@ -97,7 +101,6 @@ const InputForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="Name"
             name="Name"
             label="Name"
@@ -115,7 +118,6 @@ const InputForm = (props) => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            required
             id="email"
             name="email"
             label="E-Mail"
@@ -175,7 +177,6 @@ const InputForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="zip"
             name="zip"
             label="Zip / Postal code"
@@ -189,7 +190,6 @@ const InputForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="country"
             name="country"
             label="Country"

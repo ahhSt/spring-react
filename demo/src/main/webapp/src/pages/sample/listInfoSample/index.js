@@ -94,9 +94,12 @@ export default function TestPage(){
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     
     console.log("customers.length - " + customers.list.length );
-    const closeModal = () => {
+    const closeModal = (isCloseBtn) => {
       setIsOpen(false);
-      fetchCustomers();
+
+      if (!isCloseBtn){
+        fetchCustomers();
+      }
     }
 
     function openModal() {
@@ -113,12 +116,20 @@ export default function TestPage(){
       );
     }
 
-    const closeDetailModal = () => {
+    const closeDetailModal = (isCloseBtn) => {
       setIsDetailOpen(false);
-      fetchCustomers();
+      // fetchCustomers();
+
+      if (!isCloseBtn){
+        fetchCustomers();
+      }
     }
 
     function openDetailModal() {
+      if (selectedIndex == null){
+        alert("하나를 선택해주세용");
+        return;
+      }
       setIsDetailOpen(true);
     }
   
@@ -135,10 +146,16 @@ export default function TestPage(){
     const onDelete = () => {
       const deleteCustomerInfo = async () => {
         try{
+          if (selectedIndex == null){
+            alert('하나를 선택해주세용');
+            return;
+          }
+
           await axios.delete(
             '/api/customer/'+ selectedIndex
           ) 
           alert('Delete');
+          setSelectedIndex(null);
           fetchCustomers();
         }
         catch (e) {
@@ -202,7 +219,7 @@ export default function TestPage(){
           setLoading(false);
           return;
         }
-        console.log(response.data);
+        console.log("selectedIndex - " + selectedIndex);
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
         if (selectedIndex == null){
@@ -237,7 +254,7 @@ export default function TestPage(){
                   </Modal>
                   <Modal ariaHideApp={false} isOpen={isDetailOpen} onRequestClose={closeDetailModal} style={customStyles}>
                     <main>
-                      <InputForm selectedIndex={selectedIndex} fetchCustomers={fetchCustomers} onCloseClicked={closeDetailModal}></InputForm>
+                      <InputForm selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} fetchCustomers={fetchCustomers} onCloseClicked={closeDetailModal}></InputForm>
                     </main> 
                   </Modal>
             </Grid>
