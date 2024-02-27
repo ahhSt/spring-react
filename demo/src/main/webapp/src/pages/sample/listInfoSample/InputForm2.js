@@ -9,52 +9,54 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import SaveIcon from '@mui/icons-material/Save';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ComponentBox from './Sample.css';
 
-let setIndex;
-
-const InputForm = (props) => {
+const InputForm2 = ({onCloseClicked}) => {
 
   const [customerInfo, setCustomerInfo] = useState({});
-  const selectedIndex = props.selectedIndex;
+  // const selectedIndex = props.selectedIndex;
+  let maxIdResult = 0;
 
-  const clearInfo = () => {
-    let newInfo = {id: null, name:"", email:"", date:""};
-    setCustomerInfo(newInfo);
-  }
+  const getMaxId = async () => {
+    const response = await axios.get(
+      '/api/customer/getMaxId'
+    );
+    maxIdResult = response.data;
+    console.log("maxIdResult - " + maxIdResult);
+    let obj = {};
+    obj["id"] = ((response.data + 1).toString());
 
-  const fetchCustomerInfo = async (idx) => {
-      try {
-        const response = await axios.get(
-            '/api/customer/' + idx
-        );
-        setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
-      } catch (e) {
-        console.log("error"); 
-        clearInfo();
-      }
+    setCustomerInfo({ ...customerInfo, ...obj });
+  };
+  
+  useEffect(() => {
+    console.log(customerInfo);
+    getMaxId();
+  }, []);
+
+
+  const sendCloseClicked = () => {
+    onCloseClicked();
   };
 
-  fetchCustomerInfo(selectedIndex);
-  setIndex = selectedIndex;
-
-  const onDelete = () => {
-    const deleteCustomerInfo = async () => {
+  const onSave = () => {
+  
+    const saveCustomerInfo = async () => {
       try{
-        await axios.delete(
-          '/api/customer/'+customerInfo.id
-        ) 
-        alert('Delete');
-        // props.fetchCustomers();
-        props.onCloseClicked();
+        await axios.post(
+            '/api/customer', customerInfo
+          )
+        alert('Save');
       }
       catch (e) {
         alert('Error');
       }
     }
 
-    if(window.confirm("삭제하시겠습니까?")) {
-      deleteCustomerInfo();
+    console.log(customerInfo);
+
+    if(window.confirm("저장하시겠습니까?")) {
+      saveCustomerInfo();
     }
   }
 
@@ -64,10 +66,6 @@ const InputForm = (props) => {
     setCustomerInfo({...customerInfo, ...obj});
   }
 
-  const sendCloseClicked = () => {
-    props.onCloseClicked();
-  };
-
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -76,10 +74,10 @@ const InputForm = (props) => {
           <button className={`close`} onClick={sendCloseClicked}> &times;</button>
         </div>
       </Typography>
+      
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="id"
             name="id"
             label="ID"
@@ -88,7 +86,7 @@ const InputForm = (props) => {
               readOnly: true,
             }}
             // autoComplete="id"
-            variant="standard"
+            variant="filled"
             value={ customerInfo.id || ""}
             onChange={ (e) => {
               onChange(e, "id");
@@ -103,9 +101,6 @@ const InputForm = (props) => {
             label="Name"
             fullWidth
             // autoComplete="name"
-            InputProps={{
-              readOnly: true,
-            }}
             variant="standard"
             value={ customerInfo.name || ""}
             onChange={ (e) => {
@@ -121,9 +116,6 @@ const InputForm = (props) => {
             label="E-Mail"
             fullWidth
             // autoComplete="shipping address-line1"
-            InputProps={{
-              readOnly: true,
-            }}
             variant="standard"
             value={ customerInfo.email || ""}
             onChange={ (e) => {
@@ -138,9 +130,6 @@ const InputForm = (props) => {
             label="Address line"
             fullWidth
             // autoComplete="shipping address-line2"
-            InputProps={{
-              readOnly: true,
-            }}
             variant="standard"
             value={ customerInfo.address || ""}
             onChange={ (e) => {
@@ -150,14 +139,12 @@ const InputForm = (props) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             id="city"
             name="city"
             label="City"
             fullWidth
             autoComplete="shipping address-level2"
-            InputProps={{
-              readOnly: true,
-            }}
             variant="standard"
           />
         </Grid>
@@ -167,9 +154,6 @@ const InputForm = (props) => {
             name="state"
             label="State/Province/Region"
             fullWidth
-            InputProps={{
-              readOnly: true,
-            }}
             variant="standard"
           />
         </Grid>
@@ -181,9 +165,6 @@ const InputForm = (props) => {
             label="Zip / Postal code"
             fullWidth
             autoComplete="shipping postal-code"
-            InputProps={{
-              readOnly: true,
-            }}
             variant="standard"
           />
         </Grid>
@@ -195,9 +176,6 @@ const InputForm = (props) => {
             label="Country"
             fullWidth
             autoComplete="shipping country"
-            InputProps={{
-              readOnly: true,
-            }}
             variant="standard"
           />
         </Grid>
@@ -209,8 +187,8 @@ const InputForm = (props) => {
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
-        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={onDelete}>
-          Delete
+        <Button variant="contained" endIcon={<SaveIcon />} onClick={onSave}>
+          Save
         </Button>
       </Stack>
     </React.Fragment>
@@ -219,4 +197,4 @@ const InputForm = (props) => {
 
 // InputForm.displayName = "InputForm"
 
-export default InputForm;
+export default InputForm2;

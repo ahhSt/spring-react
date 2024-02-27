@@ -117,8 +117,10 @@ public class CustomerController {
     @PostMapping("")
     public void createCustomer(@RequestBody Customer request){
         Customer customer = new Customer();
+        customer.setId(request.getId());
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
+        customer.setAddress(request.getAddress());
 
         int rtn = customerService.create(customer);
         log.info(String.valueOf(rtn));
@@ -151,4 +153,11 @@ public class CustomerController {
         int rtn = customerService.delete(id);
         log.info(String.valueOf(rtn));
     }
+
+    @Operation(summary = "findMaxId", description = "Max ID")
+    @GetMapping("/getMaxId")
+    public long getWordMaxId() throws Exception{
+        return customerService.getMaxId();
+    }
+
 }

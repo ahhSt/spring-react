@@ -9,14 +9,12 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import Pagination from '@mui/material/Pagination';
-
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 import InputForm from './InputForm';
+import InputForm2 from './InputForm2';
+import Modal from 'react-modal';
+import ComponentBox from './Sample.css';
 
 const SearchBox = (props) => {
   const userInput = props.userInput;
@@ -40,26 +38,31 @@ const SelectedListItem = (props) => {
 
   const [userInput, setUserInput] = useState('');
   const customers = {...props.customers || {query:"", list:[]}};
-  // const userInput = props.userInput;
-  // const setUserInput = props.setUserInput;
   const selectedIndex = props.selectedIndex;
   const setSelectedIndex = props.setSelectedIndex;
 
   const selectedList = customers.list.filter((item) => {
     if (userInput === "") return true;
-    return item.name.toLowerCase().includes(userInput);
+    return (item.name == null ? "" : item.name).toLowerCase().includes(userInput);
   })
 
   const ListItems = () => {
 
     const handleListItemClick = (event, item) => {
       setSelectedIndex(item.id);
+      console.log(JSON.stringify(item));
+
+    };
+
+    const handleListItemDbClick = () => {
+      props.openDetailModal();
     };
 
     const listItem = selectedList.map((item, idx) => 
               <ListItemButton key={ item.id }
               selected={selectedIndex === item.id}
               onClick={(event) => handleListItemClick(event, item)}
+              onDoubleClick={(event) => handleListItemDbClick(event, item)}
               >
               <ListItemText primary={ item.name } />
               </ListItemButton>
@@ -79,27 +82,6 @@ const SelectedListItem = (props) => {
 
 SelectedListItem.displayName = "SelectedListItem";
 
-function BoxComponent(props) {
-
-  const setSelectedIndex = props.setSelectedIndex;
-  const customers = props.customers;
-  const setCustomers = props.setCustomers;
-
-  function onAdd() {
-    // const lastCust = customers.reduce( (prev, current) => prev.id > current.id ? prev : current);
-    // const newId = lastCust.id + 1;
-    setCustomers({query: "new", list: [...customers.list, {id: "new", name:"New Data", isNew:true}]});
-    setSelectedIndex("new");
-  }
-
-  return (
-    <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-      <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={onAdd}>
-        Add
-      </Button>
-    </Box>
-  );
-}
 
 export default function TestPage(){
 
@@ -107,8 +89,74 @@ export default function TestPage(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    
+    console.log("customers.length - " + customers.list.length );
+    const closeModal = () => {
+      setIsOpen(false);
+      fetchCustomers();
+    }
 
-    console.log('first');
+    function openModal() {
+      setIsOpen(true);
+    }
+    
+    function PopupBtn() {
+      return (
+        <Box component="span" sx={{ p: 1, border: '1px dashed grey' }}>
+          <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={openModal}>
+            Insert Modal
+          </Button>
+        </Box>
+      );
+    }
+
+    const closeDetailModal = () => {
+      setIsDetailOpen(false);
+      fetchCustomers();
+    }
+
+    function openDetailModal() {
+      setIsDetailOpen(true);
+    }
+  
+    function DetailPopupBtn () {
+      return (
+        <Box component="span" sx={{ p: 1, border: '1px dashed grey' }}>
+          <Button variant="contained" startIcon={<PersonAddAltIcon />} onClick={openDetailModal} disabled={(customers.list.length) == 0 ? true : false} >
+            Detail Modal
+          </Button>
+        </Box>
+      );
+    }
+
+    const customStyles = {
+      overlay :{
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor : "rgba(0,0,0,0.5)",
+      },
+      content: {
+        width:'50%',
+        height:'70%',
+        position: 'absolute',
+        top: '20%',
+        left: '30%',
+        // right: '40px',
+        // bottom: '40px',
+        border: '1px solid #ccc',
+        background: '#fff',
+        overflow: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        borderRadius: '4px',
+        outline: 'none',
+        padding: '20px'
+      }
+
+    }
 
     const fetchCustomers = async () => {
       try {
@@ -119,12 +167,18 @@ export default function TestPage(){
         const response = await axios.get(
             '/api/customer'
         );
-        console.log("!!!!!!!!!!!!!!!!!Before main search");
+
+        if (response.data.length == 0 ){
+          setLoading(false);
+          return;
+        }
+        console.log(response.data);
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
-        console.log("!!!!!!!!!!!!!!!!!main search");
-        let minId = response.data[0].id;
-        setSelectedIndex(minId);
+        if (selectedIndex == null){
+          setSelectedIndex(response.data[0].id);
+        }
+
       } catch (e) {
         setError(e);
       }
@@ -133,32 +187,28 @@ export default function TestPage(){
 
     useEffect(() => {
         fetchCustomers();
-        console.log("~~~~~~~~~~~~~~~~fetchCustomers");
       }, []);
 
     if (loading) return <div>로딩중..</div>;
     if (error) return <div>에러가 발생했습니다</div>;
     if (!customers.list) return null;
 
-    // const onChange = (e) => {
-    //   setUserInput(e.target.value.toLowerCase());
-    // }
-
     return (
         <Container maxwidth="sm">
             <Grid container spacing={2}>
-                <Grid xs={4}>
-                  <SelectedListItem customers={customers} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
-                  {/* <SelectedListItem userInput={userInput} setUserInput={setUserInput} customers={customers} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} /> */}
-                  {/* <SearchBox /> */}
-                  {/* <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange= {onChange} /> */}
-                  {/* <ListItems items={ searched }/> */}
-                  <Pagination count={10} color="primary" />
-                  <BoxComponent customers={customers} setCustomers={setCustomers} setSelectedIndex={setSelectedIndex}/>
-                </Grid>
-                <Grid xs={8}>
-                  <InputForm selectedIndex={selectedIndex} fetchCustomers={fetchCustomers}/>
-                </Grid>
+                  <SelectedListItem customers={customers} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} openDetailModal={openDetailModal}/>
+                  <DetailPopupBtn isDetailOpen={isDetailOpen} setIsDetailOpen={setIsDetailOpen}/>
+                  <PopupBtn isOpen={isOpen} setIsOpen={setIsOpen}/>
+                  <Modal ariaHideApp={false} isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
+                    <main>
+                      <InputForm2 onCloseClicked={closeModal}></InputForm2>
+                    </main> 
+                  </Modal>
+                  <Modal ariaHideApp={false} isOpen={isDetailOpen} onRequestClose={closeDetailModal} style={customStyles}>
+                    <main>
+                      <InputForm selectedIndex={selectedIndex} fetchCustomers={fetchCustomers} onCloseClicked={closeDetailModal}></InputForm>
+                    </main> 
+                  </Modal>
             </Grid>
         </Container>
     )

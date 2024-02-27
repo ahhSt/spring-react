@@ -14,9 +14,9 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 @Entity
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ")
     @SequenceGenerator(sequenceName = "customer_seq", allocationSize = 1, name = "CUST_SEQ")
-    @Schema(description = "Customer ID",  example = "0", accessMode = READ_ONLY)
+    @Schema(description = "Customer ID",  example = "0")
 //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     Long id;
 
@@ -25,6 +25,9 @@ public class Customer {
 
     @Schema(description = "Customer Email",  example = "test@starffic.co.kr")
     String email;
+
+    @Schema(description = "Customer Address",  example = "test Address")
+    String address;
 
     @Column(name = "CREATED_DATE")
     @Schema(description = "Reg Date",  example = "2023-02-24")
