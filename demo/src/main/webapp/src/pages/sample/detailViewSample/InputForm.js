@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 
 let setIndex;
 
@@ -77,7 +78,7 @@ const InputForm = (props) => {
       <Typography variant="h6" gutterBottom>
         <div className="ComponentBox">
           Shipping address
-          <button className={`close`} onClick={sendCloseClicked}> &times;</button>
+          <Button className={`close`} endIcon={<CloseIcon/>} color={'inherit'} onClick={sendCloseClicked}/>
         </div>
       </Typography>
       <Grid container spacing={3}>
