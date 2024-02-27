@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
+import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -114,47 +115,52 @@ export default function Main() {
 
     return(
         <>
-            <h1>Sample Upload files!</h1>
-            <Box>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 2 }}>
-                    <Grid item xs={12}>
-                        <Item>
-                            <Typography variant="h4" gutterBottom>
-                                Upload File
-                            </Typography>
-                            <form>
-                                <input
-                                    className='file-input'
-                                    type="file"
-                                    multiple
-                                    onChange={handleFilesChange}
-                                />
-                                <button onClick={uploadFiles}>upload</button>
-                            </form>
-                        </Item>
+            <Container maxwidth="sm">
+                <h1>Sample Upload files!</h1>
+                <Box display="flex"
+                     alignItems="center"
+                     gap={4}
+                >
+                    <Grid container spacing={2} rowSpacing={1} columnSpacing={{ xs: 4, sm: 1, md: 6 }}>
+                        <Grid item xs={6}>
+                            <Item>
+                                <Typography variant="h4" gutterBottom>
+                                    Upload File
+                                </Typography>
+                                <form>
+                                    <input
+                                        className='file-input'
+                                        type="file"
+                                        multiple
+                                        onChange={handleFilesChange}
+                                    />
+                                    <button onClick={uploadFiles}>upload</button>
+                                </form>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Item>
+                                <Typography variant="h4" gutterBottom>
+                                    File List
+                                </Typography>
+                                <List dense={dense}>
+                                  {generate(
+                                    <ListItem>
+                                      <ListItemIcon>
+                                        <FolderIcon />
+                                      </ListItemIcon>
+                                      <ListItemText
+                                        primary="Single-line item"
+                                        secondary={secondary ? "secondary" : null}
+                                      />
+                                    </ListItem>, listFiles
+                                  )}
+                                </List>
+                            </Item>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Item>
-                            <Typography variant="h4" gutterBottom>
-                                File List
-                            </Typography>
-                            <List dense={dense}>
-                              {generate(
-                                <ListItem>
-                                  <ListItemIcon>
-                                    <FolderIcon />
-                                  </ListItemIcon>
-                                  <ListItemText
-                                    primary="Single-line item"
-                                    secondary={secondary ? "secondary" : null}
-                                  />
-                                </ListItem>, listFiles
-                              )}
-                            </List>
-                        </Item>
-                    </Grid>
-                </Grid>
-            </Box>
+                </Box>
+            </Container>
         </>
     )
 }

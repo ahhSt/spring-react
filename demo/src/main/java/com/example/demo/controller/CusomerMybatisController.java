@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.Customer;
+import com.example.demo.service.CustomerMybatisService;
 import com.example.demo.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,23 +18,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Optional;
 
-@Tag(name = "(SAMPLE) Customer Controller")
+@Tag(name = "(SAMPLE) Customer Mybatis Controller")
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/api/customer")
+@RequestMapping("/mybatis/customer")
 @Slf4j
-public class CustomerController {
-
-//    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//    @Autowired
-//    DataSource dataSource;
+public class CusomerMybatisController {
 
     @Autowired
     CustomerService customerService;
 
-    @Operation(summary = "(샘플)고객 정보 목록", description = "이 api는 샘플용 API입니다. 회원 목록을 조회합니다.")
+    @Autowired
+    CustomerMybatisService customerMybatisService;
+
+    @Operation(summary = "(샘플)고객 정보 목록 Mybatis", description = "이 api는 샘플용 API입니다. 회원 목록을 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -41,10 +40,10 @@ public class CustomerController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @GetMapping("")
-    public ResponseEntity<List<Customer>> customer() throws Exception {
+    public ResponseEntity<List<Customer>> customer_mybatis() throws Exception {
 
         try {
-            List<Customer> result = customerService.listCustomer();
+            List<Customer> result = customerMybatisService.listCusomter_mybatis();
             HttpHeaders header = new HttpHeaders();
             header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
             ResponseEntity<List<Customer>> response =  new ResponseEntity<>(result, header, HttpStatus.OK);
@@ -59,50 +58,38 @@ public class CustomerController {
 
     @Operation(summary = "(샘플)고객 정보 상세", description = "이 api는 샘플용 API입니다. 회원 상세정보를 조회합니다. path 값과 추가 파라미터에 대한 표현입니다.")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Customer>> customer(@Parameter(description = "검색하려는 Customer ID 입니다.") @PathVariable Long id,
-                                                       @Parameter(description = "검색하려는 Customer Name 입니다.", example = "bde") @RequestParam(required = false) String name
-                                                       ) throws Exception {
+    public ResponseEntity<Customer> getCustomer_mybatis(@Parameter(description = "검색하려는 Customer ID 입니다.") @PathVariable Long id)
+            throws Exception {
 
-        log.info("Default Value : " + name);
-        Optional<Customer> result = customerService.getCustomer(id);
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        ResponseEntity<Optional<Customer>> response =  new ResponseEntity<>(result, header, HttpStatus.OK);
-        return response;
-    }
+        try {
+            Customer result = customerMybatisService.getCustomer_mybatis(id);
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            ResponseEntity<Customer> response =  new ResponseEntity<>(result, header, HttpStatus.OK);
+            return response;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
-    @Operation(summary = "(샘플)example vs defaultValue", description = "defaultValue 와 example 의 차이를 보여주는 함수")
-    @GetMapping("/sample/{id}")
-    public ResponseEntity<Optional<Customer>> customer2(@Parameter(description = "검색하려는 Customer ID 입니다.")
-                                                        @PathVariable
-                                                        Long id,
-                                                        @Parameter(description = "검색하려는 Customer Name 입니다.", example = "bde")
-                                                        @RequestParam(defaultValue = "afc", required = false)
-                                                        String name
-    ) throws Exception {
-
-        log.info("Default Value : " + name);
-        Optional<Customer> result = customerService.getCustomer(id);
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        ResponseEntity<Optional<Customer>> response =  new ResponseEntity<>(result, header, HttpStatus.OK);
-        return response;
+        return null;
     }
 
     @Operation(summary = "(샘플)고객 정보 입력", description = "고객 정보를 입력합니다.")
     @PostMapping("")
-    public void createCustomer(@RequestBody Customer request){
+    public void createCustomer_mybatis(@RequestBody Customer request){
         Customer customer = new Customer();
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
+        customer.setDate(request.getDate());
 
-        int rtn = customerService.create(customer);
+        int rtn = customerMybatisService.create_mybatis(customer);
         log.info(String.valueOf(rtn));
     }
 
     @Operation(summary = "(샘플)고객 정보 수정", description = "고객 정보를 수정합니다.")
     @PutMapping("/{id}")
-    public void updateCustomer(
+    public void updateCustomer_mybatis(
             @Parameter(description = "수정하려는 Customer ID 입니다.")
             @PathVariable
             Long id,
@@ -113,18 +100,18 @@ public class CustomerController {
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
 
-        int rtn = customerService.update(customer);
+        int rtn = customerMybatisService.update_mybatis(customer);
         log.info(String.valueOf(rtn));
     }
 
     @Operation(summary = "(샘플)고객 정보 삭제", description = "고객 정보를 삭제합니다.")
     @DeleteMapping("/{id}")
-    public void updateCustomer(
+    public void deleteCustomer_mybatis(
             @Parameter(description = "삭제하려는 Customer ID 입니다.")
             @PathVariable
             Long id){
 
-        int rtn = customerService.delete(id);
+        int rtn = customerMybatisService.delete_mybatis(id);
         log.info(String.valueOf(rtn));
     }
 }

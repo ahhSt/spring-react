@@ -61,6 +61,14 @@ export const secondaryListItems = (
         <ListItemText primary="List Form" />
       </ListItemButton>
     </Link>
+    <Link to="/list-info-mybatis">
+      <ListItemButton>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="List Form(Mybatis)" />
+      </ListItemButton>
+    </Link>
     <Link to="/list-info-JH">
       <ListItemButton>
         <ListItemIcon>

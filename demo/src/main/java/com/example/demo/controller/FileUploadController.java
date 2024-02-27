@@ -32,7 +32,7 @@ public class FileUploadController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity listUploadedFiles(Model model) throws IOException {
+	public ResponseEntity listUploadedFiles(@PathVariable Model model) throws IOException {
 
 		HttpHeaders headers = new HttpHeaders();
 		model.addAttribute("files", storageService.loadAll().map(
