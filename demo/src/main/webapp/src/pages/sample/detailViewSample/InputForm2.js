@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 
 import SaveIcon from '@mui/icons-material/Save';
 import ComponentBox from './Sample.css';
+import CloseIcon from '@mui/icons-material/Close';
 
 const InputForm2 = ({onCloseClicked}) => {
 
@@ -72,7 +73,7 @@ const InputForm2 = ({onCloseClicked}) => {
       <Typography variant="h6" gutterBottom>
         <div className="ComponentBox">
           Shipping address
-          <button className={`close`} onClick={sendCloseClicked}> &times;</button>
+          <Button className={`close`} endIcon={<CloseIcon/>} color={'inherit'} onClick={sendCloseClicked}/>
         </div>
       </Typography>
       
