@@ -114,6 +114,7 @@ public class CustomerController {
         customer.setId(id);
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
+        customer.setAddress(request.getAddress());
 
         int rtn = customerService.update(customer);
         log.info(String.valueOf(rtn));

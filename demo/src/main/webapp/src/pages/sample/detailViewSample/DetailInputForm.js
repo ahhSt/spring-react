@@ -9,56 +9,83 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import SaveIcon from '@mui/icons-material/Save';
-import ComponentBox from './Sample.css';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import UpdateIcon from '@mui/icons-material/Update';
 
-const InputForm2 = ({onCloseClicked}) => {
 
+const DetailInputForm = (props) => {
   const [customerInfo, setCustomerInfo] = useState({});
-  // const selectedIndex = props.selectedIndex;
-  let maxIdResult = 0;
+  const selectedIndex = props.selectedIndex;
+  let isOpened = props.isDetailOpen;
+  let setIndex;
 
-  const getMaxId = async () => {
-    const response = await axios.get(
-      '/api/customer/getMaxId'
-    );
-    maxIdResult = response.data;
-    console.log("maxIdResult - " + maxIdResult);
-    let obj = {};
-    obj["id"] = ((response.data + 1).toString());
-
-    setCustomerInfo({ ...customerInfo, ...obj });
-  };
-  
   useEffect(() => {
-    console.log(customerInfo);
-    getMaxId();
-  }, []);
+    if (isOpened){
+      fetchCustomerInfo(selectedIndex);
+      setIndex = selectedIndex;
+    }
+  }, [isOpened]);
 
+  const fetchCustomerInfo = async (idx) => {
+      try {
+        if (idx == null)
+          return;
 
-  const sendCloseClicked = () => {
-    onCloseClicked(true);
+        const response = await axios.get(
+            '/api/customer/' + idx
+        );
+        setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
+      } catch (e) {
+        console.log("error"); 
+        clearInfo();
+      }
   };
-
-  const onSave = () => {
   
-    const saveCustomerInfo = async () => {
+  const clearInfo = () => {
+    let newInfo = {id: null, name:"", email:"", date:"", address:""};
+    setCustomerInfo(newInfo);
+  }
+
+  const onDelete = () => {
+    const deleteCustomerInfo = async () => {
       try{
-        await axios.post(
-            '/api/customer', customerInfo
-          )
-        alert('Save');
-        onCloseClicked(false);
+        await axios.delete(
+          '/api/customer/'+customerInfo.id
+        ) 
+        alert('Delete');
+        // props.fetchCustomers();
+        props.onCloseClicked(false);
       }
       catch (e) {
         alert('Error');
       }
     }
 
-    console.log(customerInfo);
+    if(window.confirm("삭제하시겠습니까?")) {
+      props.setSelectedIndex(null);
+      deleteCustomerInfo();
+    }
+  }
 
-    if(window.confirm("저장하시겠습니까?")) {
-      saveCustomerInfo();
+  const onUpdate = () => {
+    const updateCustomerInfo = async () => {
+      try{
+        await axios.put(
+          '/api/customer/'+customerInfo.id, customerInfo
+        ) 
+        alert('Update');
+        props.fetchCustomers();
+        props.onCloseClicked(false);
+      }
+      catch (e) {
+        alert('Error');
+      }
+    }
+
+    if(window.confirm("수정하시겠습니까?")) {
+      props.setSelectedIndex(null);
+      updateCustomerInfo();
     }
   }
 
@@ -68,6 +95,11 @@ const InputForm2 = ({onCloseClicked}) => {
     setCustomerInfo({...customerInfo, ...obj});
   }
 
+  const sendCloseClicked = () => {
+    props.onCloseClicked(true);
+    setIndex = null;
+  };
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -76,7 +108,6 @@ const InputForm2 = ({onCloseClicked}) => {
           <Button className={`close`} endIcon={<CloseIcon/>} color={'inherit'} onClick={sendCloseClicked}/>
         </div>
       </Typography>
-      
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -89,7 +120,7 @@ const InputForm2 = ({onCloseClicked}) => {
               readOnly: true,
             }}
             // autoComplete="id"
-            variant="filled"
+            variant="standard"
             value={ customerInfo.id || ""}
             onChange={ (e) => {
               onChange(e, "id");
@@ -103,6 +134,9 @@ const InputForm2 = ({onCloseClicked}) => {
             label="Name"
             fullWidth
             // autoComplete="name"
+            // InputProps={{
+            //   // readOnly: true,
+            // }}
             variant="standard"
             value={ customerInfo.name || ""}
             onChange={ (e) => {
@@ -117,6 +151,9 @@ const InputForm2 = ({onCloseClicked}) => {
             label="E-Mail"
             fullWidth
             // autoComplete="shipping address-line1"
+            InputProps={{
+              // readOnly: true,
+            }}
             variant="standard"
             value={ customerInfo.email || ""}
             onChange={ (e) => {
@@ -131,6 +168,9 @@ const InputForm2 = ({onCloseClicked}) => {
             label="Address line"
             fullWidth
             // autoComplete="shipping address-line2"
+            // InputProps={{
+            //   // readOnly: true,
+            // }}
             variant="standard"
             value={ customerInfo.address || ""}
             onChange={ (e) => {
@@ -140,53 +180,72 @@ const InputForm2 = ({onCloseClicked}) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            disabled
             id="city"
             name="city"
             label="City"
             fullWidth
             autoComplete="shipping address-level2"
+            InputProps={{
+              // readOnly: true,
+            }}
             variant="standard"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            disabled
             id="state"
             name="state"
             label="State/Province/Region"
             fullWidth
+            InputProps={{
+              // readOnly: true,
+            }}
             variant="standard"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            disabled
             id="zip"
             name="zip"
             label="Zip / Postal code"
             fullWidth
             autoComplete="shipping postal-code"
+            InputProps={{
+              // readOnly: true,
+            }}
             variant="standard"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            disabled
             id="country"
             name="country"
             label="Country"
             fullWidth
             autoComplete="shipping country"
+            InputProps={{
+              // readOnly: true,
+            }}
             variant="standard"
           />
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Use this address for payment details"
+            label="Use this address for payment details(Sample)"
           />
         </Grid>
       </Grid>
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" endIcon={<SaveIcon />} onClick={onSave}>
-          Save
+        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={onDelete}>
+          Delete
+        </Button>
+        <Button variant="contained" startIcon={<UpdateIcon />} onClick={onUpdate}>
+          Update
         </Button>
       </Stack>
     </React.Fragment>
@@ -195,4 +254,4 @@ const InputForm2 = ({onCloseClicked}) => {
 
 // InputForm.displayName = "InputForm"
 
-export default InputForm2;
+export default DetailInputForm;
