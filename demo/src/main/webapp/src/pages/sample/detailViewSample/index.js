@@ -12,8 +12,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemText from '@mui/material/ListItemText';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
-import InputForm from './InputForm';
-import InputForm2 from './InputForm2';
+import DetailInputForm from './DetailInputForm';
+import InsertInputForm from './InsertInputForm';
 import Modal from 'react-modal';
 import ComponentBox from './Sample.css';
 
@@ -51,8 +51,6 @@ const SelectedListItem = (props) => {
 
     const handleListItemClick = (event, item) => {
       setSelectedIndex(item.id);
-      console.log(JSON.stringify(item));
-
     };
 
     const handleListItemDbClick = () => {
@@ -91,8 +89,6 @@ export default function TestPage(){
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
-    
-    console.log("customers.length - " + customers.list.length );
     const closeModal = (isCloseBtn) => {
       setIsOpen(false);
 
@@ -218,7 +214,6 @@ export default function TestPage(){
           setLoading(false);
           return;
         }
-        console.log("selectedIndex - " + selectedIndex);
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
         if (selectedIndex == null){
@@ -245,15 +240,15 @@ export default function TestPage(){
                   <SelectedListItem customers={customers} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} openDetailModal={openDetailModal}/>
                   <DeleteBtn />
                   <DetailPopupBtn isDetailOpen={isDetailOpen} setIsDetailOpen={setIsDetailOpen}/>
+                  <Modal ariaHideApp={false} isOpen={isDetailOpen} onRequestClose={closeDetailModal} style={customStyles}>
+                    <main>
+                      <DetailInputForm isDetailOpen={isDetailOpen} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} fetchCustomers={fetchCustomers} onCloseClicked={closeDetailModal} ></DetailInputForm>
+                    </main> 
+                  </Modal>
                   <PopupBtn isOpen={isOpen} setIsOpen={setIsOpen}/>
                   <Modal ariaHideApp={false} isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
                     <main>
-                      <InputForm2 onCloseClicked={closeModal}></InputForm2>
-                    </main> 
-                  </Modal>
-                  <Modal ariaHideApp={false} isOpen={isDetailOpen} onRequestClose={closeDetailModal} style={customStyles}>
-                    <main>
-                      <InputForm selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} fetchCustomers={fetchCustomers} onCloseClicked={closeDetailModal}></InputForm>
+                      <InsertInputForm onCloseClicked={closeModal}></InsertInputForm>
                     </main> 
                   </Modal>
             </Grid>
