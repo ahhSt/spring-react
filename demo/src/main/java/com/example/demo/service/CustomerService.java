@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.Customer;
-import com.example.demo.mapper.CustomerMapper;
 import com.example.demo.repository.CustomerRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +20,6 @@ public class CustomerService {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     @Autowired
     CustomerRepository customerRepository;
-
-    @Autowired
-    CustomerMapper customerMapper;
 
     private final EntityManager em;
 

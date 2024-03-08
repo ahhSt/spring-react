@@ -17,7 +17,6 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/test" element={<TestPage />} />
         <Route path="/dashboard" element={<TestPage />} />
         <Route path="/orders" element={<About />} />
         <Route path="/list-info" element={<ListInfoSample />} />

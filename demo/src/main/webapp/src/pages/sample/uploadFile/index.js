@@ -80,6 +80,7 @@ export default function Main() {
 
         console.log(Array.from(formData));
 
+//        axios.post('/api/file/upload?${_csrf.parameterName}=${_csrf.token}', formData, {
         axios.post('/api/file/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
