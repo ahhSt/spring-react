@@ -127,6 +127,12 @@
 
 		<!-- End Database jdbc Driver -->
 
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- End Spring Security -->
 
 	</dependencies>
 
