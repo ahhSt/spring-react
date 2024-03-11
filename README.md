@@ -5,14 +5,19 @@ React - Spring Web 개발 표준 플랫폼
 현재 기초 틀 작성 중입니다.
 
 ## 1.  Web 개발표준(w1.0)
+ 
+    Framework
+        Front-end: React(Design MUI)
+        Back-end: Spring Boot (jdk 19)
 
-    Front-end : React(Design MUI)
+    DBMS: Postgresql
 
-    Back-end : Spring Boot (jdk 19)
+    표준 개발 툴
+        형상관리: Git(local), Gitlab
+        IDE: IntelliJ
+        Database query: DBeaver
+        API 문서화: Swagger
 
-    DBMS : Postgresql
-
-    표준 개발 툴 : IntelliJ
 
 ## 2.  설치 방법
 
