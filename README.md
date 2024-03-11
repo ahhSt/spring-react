@@ -8,13 +8,13 @@ React - Spring Web 개발 표준 플랫폼
  
     Framework
         Front-end: React(Design MUI)
-        Back-end: Spring Boot (jdk 19)
+        Back-end: Spring Boot (jdk 19) 
 
     DBMS: Postgresql
 
     표준 개발 툴
         형상관리: Git(local), Gitlab
-        IDE: IntelliJ
+        IDE: IntelliJ(+Git 연동) (로컬에서 실행: 'git config --global http.sslVerify false')
         Database query: DBeaver
         API 문서화: Swagger
 
