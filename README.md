@@ -8,8 +8,10 @@ React - Spring Web 개발 표준 플랫폼
  
     Framework
         Front-end: React(Design MUI)
-            Optional: Node.js, vue.js, vue cli 설치 후 >> IntelliJ 연동  
+            Optional: Node.js, vue.js, vue cli 설치 후 >> IntelliJ 연동   
         Back-end: Spring Boot (jdk 19) 
+            Lombok
+            SLF4J(Simple Logging Facade for Java)
 
     DBMS: Postgresql
 
@@ -22,7 +24,7 @@ React - Spring Web 개발 표준 플랫폼
         API 문서화: Swagger
 
 
-## 2.  설치 방법
+## 2. 소스 위치
 
     Source 다운로드 : https://172.20.30.20:20443/common/common-spring-react.git
 
