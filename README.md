@@ -8,13 +8,16 @@ React - Spring Web 개발 표준 플랫폼
  
     Framework
         Front-end: React(Design MUI)
+            Optional: Node.js, vue.js, vue cli 설치 후 >> IntelliJ 연동  
         Back-end: Spring Boot (jdk 19) 
 
     DBMS: Postgresql
 
     표준 개발 툴
         형상관리: Git(local), Gitlab
-        IDE: IntelliJ(+Git 연동) (로컬에서 실행: 'git config --global http.sslVerify false')
+        IDE: IntelliJ
+            Lombok 설치: 자바클래스에서 반복적으로 작성되는 getter, setter, toString, 생성자 코드 등의 소스들을, Annotation을 사용하여 생략할 수 있도록 컴파일 시점에 자동으로 생성해주는 라이브러리
+            Git 연동(로컬에서 실행: 'git config --global http.sslVerify false') 
         Database query: DBeaver
         API 문서화: Swagger
 
