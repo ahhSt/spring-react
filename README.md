@@ -28,7 +28,7 @@ React - Spring Web 개발 표준 플랫폼
    - application 빌드, 실행을 위한 디렉토리 설정
    ![Run Configuration](demo/guide/run_configuration.jpg)
 
-
+\ 
 ### 1.3 IDE와 Git 연동
 1) SSL 확인 false 설정: 윈도우 CMD에서 다음 명령어 실행
    > git config --global http.sslVerify false
@@ -37,8 +37,8 @@ React - Spring Web 개발 표준 플랫폼
    > git clone https://172.20.30.20:20443/common/common-spring-react.git
 3) 프로젝트 생성: "Get from VCS"를 클릭해서, Github에 있는 프로젝트를 생성
    - Repository URL에 복사해둔 저장소 URL을 입력
-
-### 1.3 Database 및 query Tool
+   
+### 1.4 Database 및 query Tool
 1) PostgreSQL
    - 참고: Windows Home Edition에서는 docker설치가 안되므로, 직접 설치해야 함.
 2) IDE에서 DB 연결 설정
