@@ -4,7 +4,34 @@ React - Spring Web 개발 표준 플랫폼
 
 현재 기초 틀 작성 중입니다.
 
-## 1.  Web 개발표준(w1.0)
+## 1.  개발환경 설치
+### 1.1 형상관리 툴: Github, Git
+
+### 1.2 IDE 설치
+    1) JDK 19: OpenJDK 19
+    2) IntelliJ Community Edition 설치
+    3) Plug-in 설치: 'Settings' > 'Plugins'
+      - Github 설치
+      - ERD Editor 설치        
+    4) Swagger(설치 불필요) : REST API 문서화
+
+### 1.3 IDE와 Git 연동
+    1) SSL 확인 false 설정: 윈도우 CMD에서 다음 명령어 실행
+       'git config --global http.sslVerify false'
+    2)  
+
+### 1.3 Database 및 Tool
+    1) PostgreSQL
+    2) DBeaver
+
+### 1.4 Front-end 도구
+    1) Node.js 설치
+
+### 1.5 Swagger 설정
+    1) Node.js 설치
+
+
+## 2.  Web 개발표준(w1.0)
  
     Framework
         Front-end: React(Design MUI)
@@ -13,16 +40,7 @@ React - Spring Web 개발 표준 플랫폼
             Lombok
             SLF4J(Simple Logging Facade for Java)
 
-    DBMS: Postgresql
-
-    표준 개발 툴
-        형상관리: Git(local), Gitlab
-        IDE: IntelliJ
-            Lombok 설치: 자바클래스에서 반복적으로 작성되는 getter, setter, toString, 생성자 코드 등의 소스들을, Annotation을 사용하여 생략할 수 있도록 컴파일 시점에 자동으로 생성해주는 라이브러리
-            Git 연동(로컬에서 실행: 'git config --global http.sslVerify false') 
-        Database query: DBeaver
-        API 문서화: Swagger
-
+    DBMS: Postgresql    
 
 ## 2. 소스 위치
 
