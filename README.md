@@ -3,7 +3,7 @@
 React - Spring Web 개발 표준 플랫폼
 
 ## 1.  표준개발플랫폼 설치
-### 1.1 형상관리: Git(로컬에 설치)
+### 1.1 형상관리: Git
 
 ### 1.2 IDE
 
@@ -39,35 +39,30 @@ React - Spring Web 개발 표준 플랫폼
 1) Node.js란
    - 자바스크립트로 서버 애플리케이션을 구현할 수 있게 해주는 서버 플랫폼
    - Chrome V8 Javascript 엔진으로부터 빌드된 Javascript 런타임 
-
 2) 공식사이트 [https://nodejs.org/en] (https://nodejs.org) 에서 다운받아, default로 설치 
    - 설치 확인: cmd를 열어서 "node -v"를 입력하여 설치 버전 확인
-
 3) Node.js 설치 방법2: 윈도우의 파워쉘에서 Chocolatey의 명령어 복사/실행
    - 참고: Chocolatey, 윈도우용 패키지설치관리자
-   
 4) NPM (Node Package Manager)
    - 자바스크립트 패키지 사이트에서 필요한 패키지를 내려받아 설치할 수 있는 프로그램.
    - "npm install 패키지이름"
-   
 5) 관련 패키지 설치
    - axios: Axios는 리액트와 서버의 통신이 가능하게 해주는 브라우저, 
-                    Node.js를 위한 Promise API를 활용하는 HTTP 비동기 통신 라이브러리. 
-                    "npm install axios"
+   - Node.js를 위한 Promise API를 활용하는 HTTP 비동기 통신 라이브러리.
+   - "npm install axios"
 6) 설치 후, 확인 방법
    - 하단 탭의 "Terminal"에서 설치한 버전 확인: "node -V", "vue -V"
-
 7) "webapp > package.json" 설정
    - Back-end 서버의 IP와 port 등록
 
 ### 1.5 설치 확인
-    1) Back-end 실행
-        - DemoApplication을 Run
-        - 브라우저에서 REST Api 명세를 확인 (port는 각자 설정대로)
-            http://localhost:82/swagger-ui/index.html
-    2) Front-end 실행
-        - IntelliJ의 하단 Terminal에서 JS 엔진 start
-        - 브라우저에서 화면이 뜬다: http://localhost:3000/list-info
+1) Back-end 실행
+   - DemoApplication을 Run
+   - 브라우저에서 REST Api 명세를 확인 (port는 각자 설정대로)
+   - http://localhost:82/swagger-ui/index.html
+2) Front-end 실행
+   - IntelliJ의 하단 Terminal에서 JS 엔진 start
+   - 브라우저에서 화면이 뜬다: http://localhost:3000/list-info
 
 
 ## 2.  Web 개발표준(w1.0)
