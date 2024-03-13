@@ -6,48 +6,59 @@ React - Spring Web 개발 표준 플랫폼
 ### 1.1 형상관리: Git(로컬에 설치)
 
 ### 1.2 IDE
-    1) JDK 19: OpenJDK 19
-    2) IntelliJ Community Edition 설치
-    3) Plug-in 설치: 'Settings' > 'Plugins'
-        - Github 설치
-        - Lombok 설치
-        - ERD Editor 설치
-        - Node.js: IntelliJ Ultimate버전에서만 가능
-    4) Swagger(설치 불필요) : REST API 문서화
+
+1) Java 17버전 이상 설치: OpenJDK 등
+   - OpenJDK 등
+   - 환경변수 등록
+2) IntelliJ 설치
+   - IntelliJ java compiler 확인. 
+      ![Java Compiler](demo/guide/javacompiler.jpg)
+   - IntelliJ Project SDK 확인.
+      ![Project SDK](demo/guide/project_sdk.jpg)
+   - Plug-in 설치: 'Settings' > 'Plugins'\
+      Github 설치\
+      Lombok 설치\
+      ERD Editor 설치\
+      Node.js: IntelliJ Ultimate버전에서만 가능
+3) Swagger(설치 불필요) : REST API 문서화
 
 ### 1.3 IDE와 Git 연동
-    1) SSL 확인 false 설정: 윈도우 CMD에서 다음 명령어 실행
-       'git config --global http.sslVerify false'
-    2) Github의 프로젝트에서 "Clone with https"를 클릭하여 URL 복사
-    3) 프로젝트 생성: "Get from VCS"를 클릭해서, Github에 있는 프로젝트를 생성
-        - Repository URL에 복사해둔 저장소 URL을 입력
+1) SSL 확인 false 설정: 윈도우 CMD에서 다음 명령어 실행
+   - 'git config --global http.sslVerify false'
+2) Github의 프로젝트에서 "Clone with https"를 클릭하여 URL 복사
+3) 프로젝트 생성: "Get from VCS"를 클릭해서, Github에 있는 프로젝트를 생성
+   - Repository URL에 복사해둔 저장소 URL을 입력
 
-### 1.3 Database 및 Tool
+### 1.3 Database 및 query Tool
     1) PostgreSQL
         - 
         ※참고: Windows Home Edition에서는 docker설치가 안되므로, 직접 설치해야 함.
     2) DBeaver
 
-### 1.4 Front-end 도구
-    1) Node.js 설치 방법1
-        - Node.js란
-            . 자바스크립트로 서버 애플리케이션을 구현할 수 있게 해주는 서버 플랫폼
-            . Chrome V8 Javascript 엔진으로부터 빌드된 Javascript 런타임
-        - 공식사이트(https://nodejs.org)에서 다운받아, default로 설치
-        - 설치 확인: cmd를 열어서 "node -v"를 입력하여 설치 버전 확인
-    2) Node.js 설치 방법2: 윈도우의 파워쉘에서 Chocolatey의 명령어 복사/실행
-        ※참고: Chocolatey, 윈도우용 패키지설치관리자
-    3) NPM(Node Package Manager)
-        - 자바스크립트 패키지 사이트에서 필요한 패키지를 내려받아 설치할 수 있는 프로그램.
-            : "npm install 패키지 이름"
-    4) 관련 패키지 설치
-        - axios: Axios는 리액트와 서버의 통신이 가능하게 해주는 브라우저, 
-                 Node.js를 위한 Promise API를 활용하는 HTTP 비동기 통신 라이브러리. 
-                 "npm install axios"
-    5) 설치 후, 확인 방법
-        - 하단 탭의 "Terminal"에서 설치한 버전 확인: "node -V", "vue -V"
-    6) "webapp > package.json"
-        - 스프링 서버의 IP와 port를 등록
+### 1.4 Front-end: Node.js 설치 방법
+1) Node.js란
+   - 자바스크립트로 서버 애플리케이션을 구현할 수 있게 해주는 서버 플랫폼
+   - Chrome V8 Javascript 엔진으로부터 빌드된 Javascript 런타임 
+
+2) 공식사이트 [https://nodejs.org/en] (https://nodejs.org) 에서 다운받아, default로 설치 
+   - 설치 확인: cmd를 열어서 "node -v"를 입력하여 설치 버전 확인
+
+3) Node.js 설치 방법2: 윈도우의 파워쉘에서 Chocolatey의 명령어 복사/실행
+   - 참고: Chocolatey, 윈도우용 패키지설치관리자
+   
+4) NPM (Node Package Manager)
+   - 자바스크립트 패키지 사이트에서 필요한 패키지를 내려받아 설치할 수 있는 프로그램.
+   - "npm install 패키지이름"
+   
+5) 관련 패키지 설치
+   - axios: Axios는 리액트와 서버의 통신이 가능하게 해주는 브라우저, 
+                    Node.js를 위한 Promise API를 활용하는 HTTP 비동기 통신 라이브러리. 
+                    "npm install axios"
+6) 설치 후, 확인 방법
+   - 하단 탭의 "Terminal"에서 설치한 버전 확인: "node -V", "vue -V"
+
+7) "webapp > package.json" 설정
+   - Back-end 서버의 IP와 port 등록
 
 ### 1.5 설치 확인
     1) Back-end 실행
@@ -74,22 +85,6 @@ React - Spring Web 개발 표준 플랫폼
 ## 2. 개발 환경 설정
 
 1. Source 다운로드 : git clone https://172.20.30.20:20443/common/common-spring-react.git
-
-2. java 17 버젼 이상 설치.
-
-3. 환경 변수 등록
-
-4. IntelliJ java compiler 확인.
-
-![Java Compiler](demo/guide/javacompiler.jpg)
-
-5. IntelliJ Project SDK 확인.
-
-![Project SDK](demo/guide/project_sdk.jpg)
-
-6. NodeJS 설치
-
-    [https://nodejs.org/en](https://nodejs.org/en)
 
 
 7. React 패키지 설치.
