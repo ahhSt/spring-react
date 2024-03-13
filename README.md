@@ -22,7 +22,7 @@ React - Spring Web 개발 표준 플랫폼
       Node.js: IntelliJ Ultimate버전에서만 가능
 3) Swagger(설치 불필요) : REST API 문서화
 4) Maven clean, install
-   - 프로젝트 Maven 관련 패키지를 설치 합니다.
+   - 프로젝트 Maven 관련 패키지를 설치 합니다.\
       ![Run Configuration](demo/guide/maven_clean.jpg)
 5) Run(실행 환경) Configuration
       ![Run Configuration](demo/guide/run_configuration.jpg)
