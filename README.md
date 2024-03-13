@@ -98,7 +98,9 @@ React - Spring Web 개발 표준 플랫폼
    >  $ cd {source root}/demo/src/main/webapp
    >
    >  $ npm install
- 
+   
+<br/><br/>
+
 ### 1.6 설치 확인
 1) Back-end 실행
    - DemoApplication을 Run
