@@ -30,7 +30,6 @@ React - Spring Web 개발 표준 플랫폼
 ### 1.5 Swagger 설정
     1) Node.js 설치
 
-
 ## 2.  Web 개발표준(w1.0)
  
     Framework
@@ -42,13 +41,45 @@ React - Spring Web 개발 표준 플랫폼
 
     DBMS: Postgresql    
 
-## 2. 소스 위치
+## 2. 개발 환경 설정
 
-    Source 다운로드 : https://172.20.30.20:20443/common/common-spring-react.git
+1. Source 다운로드 : git clone https://172.20.30.20:20443/common/common-spring-react.git
 
-    추가 중...
+2. java 17 버젼 이상 설치.
 
-### DB 연결 설정
+3. 환경 변수 등록
+
+4. IntelliJ java compiler 확인.
+
+![Java Compiler](demo/guide/javacompiler.jpg)
+
+5. IntelliJ Project SDK 확인.
+
+![Project SDK](demo/guide/project_sdk.jpg)
+
+6. NodeJS 설치
+
+    [https://nodejs.org/en](https://nodejs.org/en)
+
+
+7. React 패키지 설치.
+
+>    $ cd {source root}/demo/src/main/wepapp
+> 
+>    $ npm install
+
+8. Maven clean, install
+
+    프로젝트 Maven 관련 패키지를 설치 합니다.
+
+![Run Configuration](demo/guide/maven_clean.jpg)
+
+9. Run Configuration
+
+![Run Configuration](demo/guide/run_configuration.jpg)
+
+10. DB 연결 설정
+
 
     파일 경로 : demo > src > main > resources > application.yml
 
@@ -85,3 +116,5 @@ spring:
 ## 업데이트 내역
     2024/03/08 : 1. 샘플 프로젝트 불필요 파일 삭제.
                  2. spring security 기본 설정 추가(기본 disable로 처리)
+
+    2024/03/13 : 1. 개발환경 설정 추가.
