@@ -67,7 +67,7 @@ React - Spring Web 개발 표준 플랫폼
 
 <br/><br/>
 
-### 1.4 Front-end: Node.js 설치 방법
+### 1.5 Front-end: Node.js 설치 방법
 1) Node.js란
    - 자바스크립트로 서버 애플리케이션을 구현할 수 있게 해주는 서버 플랫폼
    - Chrome V8 Javascript 엔진으로부터 빌드된 Javascript 런타임 
@@ -93,7 +93,7 @@ React - Spring Web 개발 표준 플랫폼
 
 <br/><br/>
 
-### 1.5 Front-end: React 패키지 설치.
+### 1.6 Front-end: React 패키지 설치.
 1) webapp 폴더(package.json이 있는)에서 설치 __[확인 필요]__
    >  $ cd {source root}/demo/src/main/webapp
    >
@@ -101,7 +101,7 @@ React - Spring Web 개발 표준 플랫폼
    
 <br/><br/>
 
-### 1.6 설치 확인
+### 1.7 설치 확인
 1) Back-end 실행
    - DemoApplication을 Run
    - 브라우저에서 REST Api 명세를 확인 (port는 각자 설정대로)
