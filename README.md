@@ -21,41 +21,76 @@ React - Spring Web 개발 표준 플랫폼
       ERD Editor 설치\
       Node.js: IntelliJ Ultimate버전에서만 가능
 3) Swagger(설치 불필요) : REST API 문서화
+4) Maven clean, install
+   - 프로젝트 Maven 관련 패키지를 설치 합니다.
+      ![Run Configuration](demo/guide/maven_clean.jpg)
+5) Run(실행 환경) Configuration
+      ![Run Configuration](demo/guide/run_configuration.jpg)
+
 
 ### 1.3 IDE와 Git 연동
 1) SSL 확인 false 설정: 윈도우 CMD에서 다음 명령어 실행
-   - 'git config --global http.sslVerify false'
+   > git config --global http.sslVerify false
 2) Github의 프로젝트에서 "Clone with https"를 클릭하여 URL 복사
+   - CLI로 소스를 clone할 수도 있으나, 가급적 IntelliJ에서 연동하여 사용
+   > git clone https://172.20.30.20:20443/common/common-spring-react.git
 3) 프로젝트 생성: "Get from VCS"를 클릭해서, Github에 있는 프로젝트를 생성
    - Repository URL에 복사해둔 저장소 URL을 입력
 
 ### 1.3 Database 및 query Tool
-    1) PostgreSQL
-        - 
-        ※참고: Windows Home Edition에서는 docker설치가 안되므로, 직접 설치해야 함.
-    2) DBeaver
+1) PostgreSQL
+   - 참고: Windows Home Edition에서는 docker설치가 안되므로, 직접 설치해야 함.
+2) IDE에서 DB 연결 설정
+   - 파일 경로 : demo > src > main > resources > application.yml
+   ```
+   spring:
+     web:
+       resources:
+         static-locations: classpath:/static, classpath:/webapp
+     datasource:
+       # Postgresql setting
+       url: jdbc:postgresql://192.168.56.1:35432/OPS
+       username: OPS
+       password: OPS123
+       hikari:
+         data-source-properties:
+           useUnicode: true
+           characterEncoding: UTF-8
+    
+3) DBeaver
 
 ### 1.4 Front-end: Node.js 설치 방법
 1) Node.js란
    - 자바스크립트로 서버 애플리케이션을 구현할 수 있게 해주는 서버 플랫폼
    - Chrome V8 Javascript 엔진으로부터 빌드된 Javascript 런타임 
 2) 공식사이트 [https://nodejs.org/en] (https://nodejs.org) 에서 다운받아, default로 설치 
-   - 설치 확인: cmd를 열어서 "node -v"를 입력하여 설치 버전 확인
+   - 설치 확인: cmd를 열어서 
+   > node -v
 3) Node.js 설치 방법2: 윈도우의 파워쉘에서 Chocolatey의 명령어 복사/실행
    - 참고: Chocolatey, 윈도우용 패키지설치관리자
 4) NPM (Node Package Manager)
    - 자바스크립트 패키지 사이트에서 필요한 패키지를 내려받아 설치할 수 있는 프로그램.
-   - "npm install 패키지이름"
+   > npm install 패키지이름
 5) 관련 패키지 설치
    - axios: Axios는 리액트와 서버의 통신이 가능하게 해주는 브라우저, 
    - Node.js를 위한 Promise API를 활용하는 HTTP 비동기 통신 라이브러리.
-   - "npm install axios"
+   >  $ npm install axios
 6) 설치 후, 확인 방법
-   - 하단 탭의 "Terminal"에서 설치한 버전 확인: "node -V", "vue -V"
+   - 하단 탭의 "Terminal"에서 설치한 버전 확인
+   > node -V
+   > 
+   > vue -V
 7) "webapp > package.json" 설정
    - Back-end 서버의 IP와 port 등록
 
-### 1.5 설치 확인
+### 1.5 Front-end: React 패키지 설치.
+1) webapp 폴더(package.json이 있는)에서 설치 __[확인 필요]__
+   >  $ cd {source root}/demo/src/main/webapp
+   >
+   >  $ npm install
+
+
+### 1.6 설치 확인
 1) Back-end 실행
    - DemoApplication을 Run
    - 브라우저에서 REST Api 명세를 확인 (port는 각자 설정대로)
@@ -68,56 +103,15 @@ React - Spring Web 개발 표준 플랫폼
 ## 2.  Web 개발표준(w1.0)
 
 ### 2.1 Framework 적용
-    1) Back-end: Spring Boot (jdk 19) 
-            Lombok
+1) Back-end: Spring Boot (jdk 19) 
+       Lombok
             SLF4J(Simple Logging Facade for Java)
 
-        Front-end: React(Design MUI)
-            Optional: Node.js, vue.js, vue cli 설치 후 >> IntelliJ 연동   
+2) Front-end: React(Design MUI)
+      Optional: Node.js, vue.js, vue cli 설치 후 >> IntelliJ 연동   
 
-    DBMS: Postgresql    
+3) DBMS: Postgresql
 
-## 2. 개발 환경 설정
-
-1. Source 다운로드 : git clone https://172.20.30.20:20443/common/common-spring-react.git
-
-
-7. React 패키지 설치.
-
->    $ cd {source root}/demo/src/main/wepapp
-> 
->    $ npm install
-
-8. Maven clean, install
-
-    프로젝트 Maven 관련 패키지를 설치 합니다.
-
-![Run Configuration](demo/guide/maven_clean.jpg)
-
-9. Run Configuration
-
-![Run Configuration](demo/guide/run_configuration.jpg)
-
-10. DB 연결 설정
-
-
-    파일 경로 : demo > src > main > resources > application.yml
-
-```
-spring:
-  web:
-    resources:
-      static-locations: classpath:/static, classpath:/webapp
-  datasource:
-    # Postgresql setting
-    url: jdbc:postgresql://192.168.56.1:35432/OPS
-    username: OPS
-    password: OPS123
-    hikari:
-      data-source-properties:
-        useUnicode: true
-        characterEncoding: UTF-8
-```
 
 ## 3.  resources
 
