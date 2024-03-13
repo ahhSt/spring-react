@@ -5,8 +5,10 @@ React - Spring Web 개발 표준 플랫폼
 ## 1.  표준개발플랫폼 설치
 ### 1.1 형상관리: Git
 
-### 1.2 IDE
 
+<br/><br/>
+
+### 1.2 IDE
 1) Java 17버전 이상 설치: OpenJDK 등
    - OpenJDK 등
    - 환경변수 등록
@@ -28,7 +30,8 @@ React - Spring Web 개발 표준 플랫폼
    - application 빌드, 실행을 위한 디렉토리 설정
    ![Run Configuration](demo/guide/run_configuration.jpg)
 
-\ 
+<br/><br/>
+
 ### 1.3 IDE와 Git 연동
 1) SSL 확인 false 설정: 윈도우 CMD에서 다음 명령어 실행
    > git config --global http.sslVerify false
@@ -37,7 +40,9 @@ React - Spring Web 개발 표준 플랫폼
    > git clone https://172.20.30.20:20443/common/common-spring-react.git
 3) 프로젝트 생성: "Get from VCS"를 클릭해서, Github에 있는 프로젝트를 생성
    - Repository URL에 복사해둔 저장소 URL을 입력
-   
+
+<br/><br/>
+
 ### 1.4 Database 및 query Tool
 1) PostgreSQL
    - 참고: Windows Home Edition에서는 docker설치가 안되므로, 직접 설치해야 함.
@@ -59,6 +64,8 @@ React - Spring Web 개발 표준 플랫폼
            characterEncoding: UTF-8
     
 3) DBeaver
+
+<br/><br/>
 
 ### 1.4 Front-end: Node.js 설치 방법
 1) Node.js란
@@ -84,13 +91,14 @@ React - Spring Web 개발 표준 플랫폼
 7) "webapp > package.json" 설정
    - Back-end 서버의 IP와 port 등록
 
+<br/><br/>
+
 ### 1.5 Front-end: React 패키지 설치.
 1) webapp 폴더(package.json이 있는)에서 설치 __[확인 필요]__
    >  $ cd {source root}/demo/src/main/webapp
    >
    >  $ npm install
-
-
+ 
 ### 1.6 설치 확인
 1) Back-end 실행
    - DemoApplication을 Run
@@ -99,6 +107,9 @@ React - Spring Web 개발 표준 플랫폼
 2) Front-end 실행
    - IntelliJ의 하단 Terminal에서 JS 엔진 start
    - 브라우저에서 화면이 뜬다: http://localhost:3000/list-info
+
+
+<br/><br/><br/><br/>
 
 
 ## 2.  Web 개발표준(w1.0)
