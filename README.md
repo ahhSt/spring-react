@@ -1,13 +1,11 @@
-# STraffic 표준화 플랫폼
+# STraffic 표준개발플랫폼 및 개발 표준 (작성 중)
 
 React - Spring Web 개발 표준 플랫폼
 
-현재 기초 틀 작성 중입니다.
+## 1.  표준개발플랫폼 설치
+### 1.1 형상관리: Git(로컬에 설치)
 
-## 1.  개발환경 설치
-### 1.1 형상관리 툴: Github, Git
-
-### 1.2 IDE 설치
+### 1.2 IDE
     1) JDK 19: OpenJDK 19
     2) IntelliJ Community Edition 설치
     3) Plug-in 설치: 'Settings' > 'Plugins'
@@ -18,7 +16,9 @@ React - Spring Web 개발 표준 플랫폼
 ### 1.3 IDE와 Git 연동
     1) SSL 확인 false 설정: 윈도우 CMD에서 다음 명령어 실행
        'git config --global http.sslVerify false'
-    2)  
+    2) Github의 프로젝트에서 "Clone with https"를 클릭하여 URL 복사
+    3) 프로젝트 생성: "Get from VCS"를 클릭해서, Github에 있는 프로젝트를 생성
+        - Repository URL에 복사해둔 저장소 URL을 입력
 
 ### 1.3 Database 및 Tool
     1) PostgreSQL
