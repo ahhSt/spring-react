@@ -25,7 +25,8 @@ React - Spring Web 개발 표준 플랫폼
    - 프로젝트 Maven 관련 패키지를 설치 합니다.\
       ![Run Configuration](demo/guide/maven_clean.jpg)
 5) Run(실행 환경) Configuration
-      ![Run Configuration](demo/guide/run_configuration.jpg)
+   - application 빌드, 실행을 위한 디렉토리 설정
+   ![Run Configuration](demo/guide/run_configuration.jpg)
 
 
 ### 1.3 IDE와 Git 연동
