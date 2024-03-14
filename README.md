@@ -130,6 +130,9 @@ React - Spring Web 개발 표준 플랫폼
 3) DBMS: Postgresql
 
 
+<br/><br/><br/><br/>
+
+
 ## 3.  resources
 
 #### application.yml
@@ -149,7 +152,9 @@ React - Spring Web 개발 표준 플랫폼
       >          hibernate:
       >             format_sql: true
       >             show_sql: true
-      
+
+   
+<br/><br/>
 
 #### import.sql
 1) 서버 시작 시 실행 할 SQL입니다. 주로 기초 데이터를 생성합니다.
