@@ -64,6 +64,9 @@ React - Spring Web 개발 표준 플랫폼
            characterEncoding: UTF-8
     
 3) DBeaver
+4) Spring Database 초기화 방식
+   - JPA 방식: @Entity가 붙은 클래스들을 스캔해서 자동으로 스키마 생성
+   - SQL script 방식: schema.sql, data.sql을 통해 초기화 가능. 이 파일을 classpath의 루트 경로에 두면 datasource가 생성될 때 자동으로 읽고 초기화
 
 <br/><br/>
 
@@ -130,16 +133,32 @@ React - Spring Web 개발 표준 플랫폼
 ## 3.  resources
 
 #### application.yml
-        Spring 기본 설정 파일입니다. application.properties 파일과 동일한 역할을 합니다.  
+1) Spring 기본 설정 파일입니다. application.properties 파일과 동일한 역할을 합니다.  
+      >
+      > spring:
+      >    datasource:
+      >       driver-class-name: org.h2.Driver
+      >       url: jdbc:h2:mem:db
+      >       username: sa
+      >       password:
+      >
+      >   jpa:
+      >       hibernate:
+      >          ddl-auto: none
+      >       properties:
+      >          hibernate:
+      >             format_sql: true
+      >             show_sql: true
+      
 
 #### import.sql
-        서버 시작 시 실행 할 SQL입니다. 주로 기초 데이터를 생성합니다.
-        'ddl-auto' 옵션에 따라 실행 여부가 결정됩니다.
+1) 서버 시작 시 실행 할 SQL입니다. 주로 기초 데이터를 생성합니다.
+   - 'ddl-auto' 옵션에 따라 실행 여부가 결정됩니다.
 
 #### logback.xml
-        Slf4j 로거에 대한 설정입니다. 
-        사용법은 java 소스 내에 log.debug("메시지") 으로 사용가능합니다.
-        log level은 debug > info > warn > error > trace 가 있습니다.
+1) Slf4j 로거에 대한 설정입니다. 
+   - 사용법은 java 소스 내에 log.debug("메시지") 으로 사용가능합니다.
+   - log level은 debug > info > warn > error > trace 가 있습니다.
 
 ## 업데이트 내역
     2024/03/08 : 1. 샘플 프로젝트 불필요 파일 삭제.
