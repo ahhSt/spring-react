@@ -147,7 +147,7 @@ export default function TestPage(){
           }
 
           await axios.delete(
-            '/api/customer/'+ selectedIndex
+            process.env.REACT_APP_API_URL + '/api/customer/'+ selectedIndex
           ) 
           alert('Delete');
           setSelectedIndex(null);
@@ -207,7 +207,7 @@ export default function TestPage(){
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
         const response = await axios.get(
-            '/api/customer'
+            process.env.REACT_APP_API_URL + '/api/customer'
         );
 
         if (response.data.length == 0 ){

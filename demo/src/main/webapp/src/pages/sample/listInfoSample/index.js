@@ -116,8 +116,11 @@ export default function TestPage(){
         setCustomers({query: "", list: []});
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
+
+        const url = process.env.REACT_BACK_END;
+        console.log(url);
         const response = await axios.get(
-            '/api/customer'
+            process.env.REACT_APP_API_URL + '/api/customer'
         );
         console.log("!!!!!!!!!!!!!!!!!Before main search");
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.

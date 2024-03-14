@@ -113,8 +113,78 @@ spring:
         사용법은 java 소스 내에 log.debug("메시지") 으로 사용가능합니다.
         log level은 debug > info > warn > error > trace 가 있습니다.
 
+## 배포
+
+React 빌드와 Spring-boot 빌드를 진행해야 합니다.
+    
+    React : build/
+    Spring-boot : .jar, .war
+
+1. React build
+    >.env.production 파일 내 변수값 확인.
+    > 
+    >$ npm run build
+    
+    > build/ 폴더 생성 확인. 
+   
+2. Spring-boot build
+   > maven build
+   >  
+   ![Maven Build](demo/guide/maven-build.jpg)
+
+   > demo > target > {실행파일}.jar 생성 확인.
+   
+3. Deploy
+   1. 서버로 파일 copy
+      > [root@localhost react-spring]# ll
+      ```
+      total 64609 
+      -rwxrwxrwx 1 root root     1650 Mar 13 18:34 application.yml 
+      drwxrwxrwx 1 root root        0 Mar 13 01:52 build 
+      -rw-rw-rw- 1 root root 65916697 Mar 12 22:58 demo-0.0.1-SNAPSHOT.jar
+      ```
+      운영서버에 맞는 application.yml 파일을 jar파일과 같은 경로에 생성.
+      
+         ```
+          # 운영서버는 ddl를 매번 재실행시키지 않는 none옵션으로 적용.
+          jpa:
+            hibernate:
+              # ddl-auto: create
+              ddl-auto: none
+         ``` 
+   2. Nginx 설치
+      
+      nginx.conf 파일 확인
+      
+      port : 8080
+      
+      web root : /root/react-spring/build
+      
+      /api/** 로 호출되는 request는 모두 spring에서 처리하게 forwarding 해줍니다.
+      
+         ```
+         server {
+               listen       8080 default_server;
+               listen       [::]:8080 default_server;
+               server_name  _;
+               root         /root/react-spring/build;
+                    
+               location / {
+               }
+
+               location /api {
+                     proxy_pass http://192.168.56.1:82/api;
+               }
+         }
+         ```
+   3. Java 설치
+   4. run.sh 만들기
+   5. 실행 확인
+
+
 ## 업데이트 내역
     2024/03/08 : 1. 샘플 프로젝트 불필요 파일 삭제.
                  2. spring security 기본 설정 추가(기본 disable로 처리)
 
     2024/03/13 : 1. 개발환경 설정 추가.
+    2024/03/14 : 1. 배포 챕터 추가.

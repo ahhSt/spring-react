@@ -19,7 +19,7 @@ const InsertInputForm = ({onCloseClicked}) => {
 
   const getMaxId = async () => {
     const response = await axios.get(
-      '/api/customer/getMaxId'
+      process.env.REACT_APP_API_URL + '/api/customer/getMaxId'
     );
     maxIdResult = response.data;
     let obj = {};
@@ -42,7 +42,7 @@ const InsertInputForm = ({onCloseClicked}) => {
     const saveCustomerInfo = async () => {
       try{
         await axios.post(
-            '/api/customer', customerInfo
+            process.env.REACT_APP_API_URL + '/api/customer', customerInfo
           )
         alert('Save');
         onCloseClicked(false);

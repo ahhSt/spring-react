@@ -33,7 +33,7 @@ const DetailInputForm = (props) => {
           return;
 
         const response = await axios.get(
-            '/api/customer/' + idx
+            process.env.REACT_APP_API_URL + '/api/customer/' + idx
         );
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
       } catch (e) {
@@ -51,7 +51,7 @@ const DetailInputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try{
         await axios.delete(
-          '/api/customer/'+customerInfo.id
+          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id
         ) 
         alert('Delete');
         // props.fetchCustomers();
@@ -72,7 +72,7 @@ const DetailInputForm = (props) => {
     const updateCustomerInfo = async () => {
       try{
         await axios.put(
-          '/api/customer/'+customerInfo.id, customerInfo
+          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id, customerInfo
         ) 
         alert('Update');
         props.fetchCustomers();

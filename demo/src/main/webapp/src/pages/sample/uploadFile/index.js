@@ -81,7 +81,7 @@ export default function Main() {
         console.log(Array.from(formData));
 
 //        axios.post('/api/file/upload?${_csrf.parameterName}=${_csrf.token}', formData, {
-        axios.post('/api/file/upload', formData, {
+        axios.post(process.env.REACT_APP_API_URL + '/api/file/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -97,7 +97,7 @@ export default function Main() {
     const loadAllFiles = async () => {
         try {
             const response = await axios.get(
-                'api/file/all'
+                process.env.REACT_APP_API_URL + 'api/file/all'
             );
 
             console.log(response.data);
