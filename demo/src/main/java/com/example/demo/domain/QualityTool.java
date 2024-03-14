@@ -13,6 +13,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+/* 모니터링 측정 툴
+ */
 public class QualityTool {
     @Id
     @SequenceGenerator(sequenceName = "qualitytool_seq", allocationSize = 1, name = "QUALITYTOOL_SEQ")
