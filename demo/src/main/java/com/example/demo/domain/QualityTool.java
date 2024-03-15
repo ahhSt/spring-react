@@ -10,11 +10,11 @@ import lombok.Setter;
 
 import java.util.Date;
 
+import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
+
 @Getter
 @Setter
 @Entity
-/* 모니터링 측정 툴
- */
 public class QualityTool {
     @Id
     @SequenceGenerator(sequenceName = "qualitytool_seq", allocationSize = 1, name = "QUALITYTOOL_SEQ")
@@ -53,6 +53,6 @@ public class QualityTool {
     String first_register;
 
     @Column(name = "REGISTER_DATE")
-    @Schema(description = "툴 도입일자",  example = "2023-12-24")
-    Date register_date;
+    @Schema(description = "툴 도입일자", example = "2023-12-24")
+    Date date;
 }

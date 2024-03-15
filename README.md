@@ -136,7 +136,9 @@ React - Spring Web 개발 표준 플랫폼
 ## 3.  resources
 
 #### application.yml
-1) Spring 기본 설정 파일입니다. application.properties 파일과 동일한 역할을 합니다.  
+1) Spring 기본 설정 파일입니다. application.properties 파일과 동일한 역할을 합니다.
+2) demo > src > main > resources
+3) 설정해야 하는 것: server, spring datasource(driver class, url, username, password), spring servlet(multipart) 
       >
       > spring:
       >    datasource:
