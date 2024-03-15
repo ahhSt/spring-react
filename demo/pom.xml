@@ -138,6 +138,8 @@
 	</dependencies>
 
 	<build>
+		<directory>${basedir}/target</directory>
+		<outputDirectory>target/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>com.github.eirslett</groupId>

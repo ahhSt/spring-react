@@ -35,7 +35,7 @@ const InputForm = (props) => {
     // else{
       try {
         const response = await axios.get(
-            '/mybatis/customer/' + idx
+            process.env.REACT_APP_API_URL + '/mybatis/customer/' + idx
         );
         console.log("############################response.data");
         console.log(response.data);
@@ -70,11 +70,11 @@ const InputForm = (props) => {
       try{
         if (customerInfo.id == null){
           await axios.post(
-            '/mybatis/customer', customerInfo
+            process.env.REACT_APP_API_URL + '/mybatis/customer', customerInfo
           )
         }else{
           await axios.put(
-            '/mybatis/customer/'+customerInfo.id, customerInfo
+            process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id, customerInfo
           ) 
         }
            
@@ -97,7 +97,7 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try{
         await axios.delete(
-          '/mybatis/customer/'+customerInfo.id
+          process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id
         ) 
         alert('Delete');
         props.fetchCustomers();

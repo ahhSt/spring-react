@@ -35,7 +35,7 @@ const InputForm = (props) => {
     // else{
       try {
         const response = await axios.get(
-            '/api/customer/' + idx
+            process.env.REACT_APP_API_URL + '/api/customer/' + idx
         );
         console.log("############################response.data");
         console.log(response.data);
@@ -47,19 +47,10 @@ const InputForm = (props) => {
     // }
   };
 
-  // useEffect(() =>{
-  //   console.log('@@@@@@@@@@@@@@@@@@@@@@@@@useEffect');
-  //   if (selectedIndex){
-  //     console.log("@@@@@@@ selectedIndex : " + selectedIndex);
-  //     fetchCustomerInfo(selectedIndex);
-  //   }
-  // },[])
-
   console.log("selectedIndex : "+ selectedIndex);
   console.log("setIndex : "+ setIndex);
 
   if (setIndex != selectedIndex) {
-    console.log('eeeeeeee');
     fetchCustomerInfo(selectedIndex);
     setIndex = selectedIndex;
   }
@@ -70,11 +61,11 @@ const InputForm = (props) => {
       try{
         if (customerInfo.id == null){
           await axios.post(
-            '/api/customer', customerInfo
+            process.env.REACT_APP_API_URL + '/api/customer', customerInfo
           )
         }else{
           await axios.put(
-            '/api/customer/'+customerInfo.id, customerInfo
+            process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id, customerInfo
           ) 
         }
            
@@ -97,7 +88,7 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try{
         await axios.delete(
-          '/mybatis/customer/'+customerInfo.id
+          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id
         ) 
         alert('Delete');
         props.fetchCustomers();
