@@ -97,7 +97,7 @@ export default function Main() {
     const loadAllFiles = async () => {
         try {
             const response = await axios.get(
-                process.env.REACT_APP_API_URL + 'api/file/all'
+                process.env.REACT_APP_API_URL + '/api/file/all'
             );
 
             console.log(response.data);

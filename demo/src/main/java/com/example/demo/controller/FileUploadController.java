@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/file")
 public class FileUploadController {
 
