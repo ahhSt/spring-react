@@ -116,13 +116,14 @@ export default function TestPage(){
         setCustomers({query: "", list: []});
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
+
+        const url = process.env.REACT_BACK_END;
+        console.log(url);
         const response = await axios.get(
             process.env.REACT_APP_API_URL + '/mybatis/customer'
         );
-        console.log("!!!!!!!!!!!!!!!!!Before main search");
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
-        console.log("!!!!!!!!!!!!!!!!!main search");
         let minId = response.data[0].id;
         setSelectedIndex(minId);
       } catch (e) {
@@ -133,8 +134,7 @@ export default function TestPage(){
 
     useEffect(() => {
         fetchCustomers();
-        console.log("~~~~~~~~~~~~~~~~fetchCustomers");
-      }, []);
+    }, []);
 
     if (loading) return <div>로딩중..</div>;
     if (error) return <div>에러가 발생했습니다</div>;

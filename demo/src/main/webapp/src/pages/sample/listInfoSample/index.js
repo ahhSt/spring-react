@@ -122,10 +122,8 @@ export default function TestPage(){
         const response = await axios.get(
             process.env.REACT_APP_API_URL + '/api/customer'
         );
-        console.log("!!!!!!!!!!!!!!!!!Before main search");
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
-        console.log("!!!!!!!!!!!!!!!!!main search");
         let minId = response.data[0].id;
         setSelectedIndex(minId);
       } catch (e) {
@@ -136,8 +134,7 @@ export default function TestPage(){
 
     useEffect(() => {
         fetchCustomers();
-        console.log("~~~~~~~~~~~~~~~~fetchCustomers");
-      }, []);
+    }, []);
 
     if (loading) return <div>로딩중..</div>;
     if (error) return <div>에러가 발생했습니다</div>;
