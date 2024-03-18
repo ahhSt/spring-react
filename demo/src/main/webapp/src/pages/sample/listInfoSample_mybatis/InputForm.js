@@ -11,14 +11,13 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-let setIndex;
 let newItem;
 
 const InputForm = (props) => {
 
   const [customerInfo, setCustomerInfo] = useState({});
   const selectedIndex = props.selectedIndex;
-  
+
   console.log('InputFormInputForm');
 
   const clearInfo = () => {
@@ -29,43 +28,28 @@ const InputForm = (props) => {
 
   const fetchCustomerInfo = async (idx) => {
     console.log('fetch info : ' + idx);
-    // if (idx == "new"){
-    //   clearInfo();
-    // }
-    // else{
       try {
         const response = await axios.get(
             process.env.REACT_APP_API_URL + '/mybatis/customer/' + idx
         );
-        console.log("############################response.data");
         console.log(response.data);
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
       } catch (e) {
-        console.log("error"); 
+        console.log("error");
         clearInfo();
       }
     // }
   };
 
-  // useEffect(() =>{
-  //   console.log('@@@@@@@@@@@@@@@@@@@@@@@@@useEffect');
-  //   if (selectedIndex){
-  //     console.log("@@@@@@@ selectedIndex : " + selectedIndex);
-  //     fetchCustomerInfo(selectedIndex);
-  //   }
-  // },[])
-
-  console.log("selectedIndex : "+ selectedIndex);
-  console.log("setIndex : "+ setIndex);
-
-  if (setIndex != selectedIndex) {
-    console.log('eeeeeeee');
-    fetchCustomerInfo(selectedIndex);
-    setIndex = selectedIndex;
-  }
+  useEffect(() => {
+    console.log("selectedIndex : "+ selectedIndex);
+    if (selectedIndex) {
+      fetchCustomerInfo(selectedIndex);
+    }
+  }, [selectedIndex]);
 
   const onSave = () => {
-  
+
     const saveCustomerInfo = async () => {
       try{
         if (customerInfo.id == null){
@@ -75,9 +59,9 @@ const InputForm = (props) => {
         }else{
           await axios.put(
             process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id, customerInfo
-          ) 
+          )
         }
-           
+
         alert('Save');
         props.fetchCustomers();
       }

@@ -11,7 +11,6 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-let setIndex;
 let newItem;
 
 const InputForm = (props) => {
@@ -29,15 +28,10 @@ const InputForm = (props) => {
 
   const fetchCustomerInfo = async (idx) => {
     console.log('fetch info : ' + idx);
-    // if (idx == "new"){
-    //   clearInfo();
-    // }
-    // else{
       try {
         const response = await axios.get(
             process.env.REACT_APP_API_URL + '/api/customer/' + idx
         );
-        console.log("############################response.data");
         console.log(response.data);
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
       } catch (e) {
@@ -47,13 +41,12 @@ const InputForm = (props) => {
     // }
   };
 
-  console.log("selectedIndex : "+ selectedIndex);
-  console.log("setIndex : "+ setIndex);
-
-  if (setIndex != selectedIndex) {
-    fetchCustomerInfo(selectedIndex);
-    setIndex = selectedIndex;
-  }
+  useEffect(() => {
+    console.log("selectedIndex : "+ selectedIndex);
+    if (selectedIndex) {
+      fetchCustomerInfo(selectedIndex);
+    }
+  }, [selectedIndex]);
 
   const onSave = () => {
   
