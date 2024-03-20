@@ -12,7 +12,15 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.cors().and().csrf().disable().authorizeHttpRequests((auth) -> auth.anyRequest().permitAll()).build();
+        http.csrf().disable();
+        http.authorizeHttpRequests()
+                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/mybatis/**").permitAll()
+                .anyRequest().authenticated();
+
+        return http.build();
+
+//        return http.cors().and().csrf().disable().authorizeHttpRequests((auth) -> auth.anyRequest().permitAll()).build();
     }
 
 //    @Override
