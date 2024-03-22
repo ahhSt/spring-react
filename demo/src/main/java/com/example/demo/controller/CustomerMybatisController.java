@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.List;
 
 @Tag(name = "(SAMPLE) Customer Mybatis Controller")
@@ -79,9 +80,15 @@ public class CustomerMybatisController {
     @PostMapping("")
     public void createCustomer_mybatis(@RequestBody Customer request){
         Customer customer = new Customer();
+
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
-        customer.setDate(request.getDate());
+        customer.setAddress(request.getAddress());
+        customer.setCity(request.getCity());
+        customer.setState(request.getState());
+        customer.setZipcode(request.getZipcode());
+        customer.setCountry(request.getCountry());
+        customer.setDate(new Date());
 
         int rtn = customerMybatisService.create_mybatis(customer);
         log.info(String.valueOf(rtn));
@@ -99,6 +106,12 @@ public class CustomerMybatisController {
         customer.setId(id);
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
+        customer.setAddress(request.getAddress());
+        customer.setCity(request.getCity());
+        customer.setState(request.getState());
+        customer.setZipcode(request.getZipcode());
+        customer.setCountry(request.getCountry());
+        customer.setDate(new Date());
 
         int rtn = customerMybatisService.update_mybatis(customer);
         log.info(String.valueOf(rtn));

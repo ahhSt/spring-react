@@ -7,37 +7,63 @@
         SELECT id,
             name,
             email,
-            CREATED_DATE
+            created_date,
+            address,
+            state,
+            city,
+            zipcode,
+            country
         FROM Customer
     </select>
 
     <select id="getCustomer" parameterType="long" resultType="com.example.demo.domain.Customer">
         SELECT id,
-        name,
-        email,
-        CREATED_DATE
+            name,
+            email,
+            created_date,
+            address,
+            state,
+            city,
+            zipcode,
+            country
         FROM Customer
         where id = #{id}
     </select>
 
     <insert id="createCustomer" parameterType="map">
-        Insert INTO CUSTOMER(id,
+        Insert into customer(
+            id,
             name,
             email,
-            CREATED_DATE
+            created_date,
+            address,
+            state,
+            city,
+            zipcode,
+            country
         )
         values(
-            (select COALESCE(max(id),0) + 1 from customer),
+            nextval('customer_seq'),
             #{name},
             #{email},
-            #{date}
+            #{date},
+            #{address},
+            #{state},
+            #{city},
+            #{zipcode},
+            #{country}
         )
     </insert>
 
     <update id="updateCustomer" parameterType="map">
-        update CUSTOMER set
+        update customer set
             name=#{name},
-            email=#{email}
+            email=#{email},
+            address=#{address},
+            state=#{state},
+            city=#{city},
+            zipcode=#{zipcode},
+            country=#{country}
         where id=#{id}
     </update>
 
