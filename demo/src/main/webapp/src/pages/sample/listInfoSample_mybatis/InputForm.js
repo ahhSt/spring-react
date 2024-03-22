@@ -23,7 +23,7 @@ const InputForm = (props) => {
 
   const clearInfo = () => {
     console.log('clear Info');
-    let newInfo = {id: null, name:"", email:"", date:""};
+    let newInfo = {id: null, name:"", email:"", date:"", address:"", city:"", state:"", zipcode:"", country:""};
     setCustomerInfo(newInfo);
   }
 
@@ -32,9 +32,9 @@ const InputForm = (props) => {
       try {
         const response = await axios.get(
             process.env.REACT_APP_API_URL + '/mybatis/customer/' + idx, {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
         );
         console.log(response.data);
@@ -104,7 +104,7 @@ const InputForm = (props) => {
                   Authorization: `Bearer ${token}`
               }
           }
-        ) 
+        )
         alert('Delete');
         props.fetchCustomers();
       }
@@ -188,7 +188,11 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping address-line2"
             variant="standard"
-            defaultValue="2222"
+            value={ customerInfo.address || ""}
+            defaultValue="1714 Franklin St."
+            onChange={ (e) => {
+                onChange(e, "address");
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -200,6 +204,8 @@ const InputForm = (props) => {
             fullWidth
             autoComplete="shipping address-level2"
             variant="standard"
+            value={ customerInfo.city || ""}
+            onChange={e => onChange(e, "city")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -209,6 +215,8 @@ const InputForm = (props) => {
             label="State/Province/Region"
             fullWidth
             variant="standard"
+            value={ customerInfo.state || ""}
+            onChange={e => onChange(e, "state")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -220,6 +228,8 @@ const InputForm = (props) => {
             fullWidth
             autoComplete="shipping postal-code"
             variant="standard"
+            value={ customerInfo.zipcode || ""}
+            onChange={e => onChange(e, "zipcode")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -231,6 +241,8 @@ const InputForm = (props) => {
             fullWidth
             autoComplete="shipping country"
             variant="standard"
+            value={ customerInfo.country || ""}
+            onChange={e => onChange(e, "country")}
           />
         </Grid>
         <Grid item xs={12}>
