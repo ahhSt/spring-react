@@ -14,22 +14,32 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 @Entity
 public class Customer {
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ")
-    @SequenceGenerator(sequenceName = "customer_seq", allocationSize = 1, name = "CUST_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
+    @SequenceGenerator(sequenceName = "customer_seq", allocationSize = 1, name = "customer_seq")
     @Schema(description = "Customer ID",  example = "0")
 //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    Long id;
+    private Long id;
 
     @Schema(description = "Customer Name",  example = "Test User")
-    String name;
+    private String name;
 
     @Schema(description = "Customer Email",  example = "test@starffic.co.kr")
-    String email;
+    private String email;
 
     @Schema(description = "Customer Address",  example = "test Address")
-    String address;
+    private String address;
 
     @Column(name = "CREATED_DATE")
     @Schema(description = "Reg Date",  example = "2023-02-24")
-    Date date;
+    private Date date;
+
+    @Column
+    private String city;
+    @Column
+    private String state;
+    @Column
+    private String zipcode;
+    @Column
+    private String country;
+
 }

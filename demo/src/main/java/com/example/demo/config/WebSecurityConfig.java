@@ -31,7 +31,8 @@ public class WebSecurityConfig {
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
         http.authorizeHttpRequests()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/**").authenticated()
 //                .requestMatchers("/api/**").permitAll()
 //                .requestMatchers("/mybatis/**").permitAll()
 //                .requestMatchers("/images/**", "/js/**", "/css/**").permitAll()

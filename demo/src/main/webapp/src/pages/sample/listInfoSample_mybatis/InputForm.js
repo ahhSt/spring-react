@@ -19,6 +19,7 @@ const InputForm = (props) => {
   const selectedIndex = props.selectedIndex;
 
   console.log('InputFormInputForm');
+  const token = localStorage.getItem("accessToken");
 
   const clearInfo = () => {
     console.log('clear Info');
@@ -30,7 +31,11 @@ const InputForm = (props) => {
     console.log('fetch info : ' + idx);
       try {
         const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/mybatis/customer/' + idx
+            process.env.REACT_APP_API_URL + '/mybatis/customer/' + idx, {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+            }
         );
         console.log(response.data);
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
@@ -54,11 +59,23 @@ const InputForm = (props) => {
       try{
         if (customerInfo.id == null){
           await axios.post(
-            process.env.REACT_APP_API_URL + '/mybatis/customer', customerInfo
+            process.env.REACT_APP_API_URL + '/mybatis/customer',
+            customerInfo,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
           )
         }else{
           await axios.put(
-            process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id, customerInfo
+            process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id,
+            customerInfo,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
           )
         }
 
@@ -81,7 +98,12 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try{
         await axios.delete(
-          process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id
+          process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          }
         ) 
         alert('Delete');
         props.fetchCustomers();

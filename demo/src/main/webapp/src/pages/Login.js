@@ -25,7 +25,7 @@ function Login() {
         formData.append('username', inputId);
         formData.append('password', inputPw);
 
-        axios.post(process.env.REACT_APP_API_URL + '/api/v1/auth/authenticate', formData,
+        axios.post(process.env.REACT_APP_API_URL + '/auth/authenticate', formData,
                 )
                 .then(
                     res => {

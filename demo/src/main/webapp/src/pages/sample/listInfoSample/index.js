@@ -117,10 +117,15 @@ export default function TestPage(){
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
 
+        const token = localStorage.getItem("accessToken");
         const url = process.env.REACT_BACK_END;
         console.log(url);
         const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/api/customer'
+            process.env.REACT_APP_API_URL + '/api/customer',{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
         );
         setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
 
