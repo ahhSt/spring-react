@@ -24,7 +24,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/mybatis/customer")
 @Slf4j
-public class CusomerMybatisController {
+public class CustomerMybatisController {
 
     @Autowired
     CustomerService customerService;

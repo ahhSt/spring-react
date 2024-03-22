@@ -15,14 +15,14 @@ import UploadFile from '../pages/sample/uploadFile';
 export default function Router() {
   return (
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/dashboard" element={<TestPage />} />
-        <Route path="/orders" element={<About />} />
-        <Route path="/list-info" element={<ListInfoSample />} />
-        <Route path="/list-info-mybatis" element={<ListInfoSampleMybatis />} />
-        <Route path="/detail-view" element={<DetailViewSample />} />
-        <Route path="/upload-file" element={<UploadFile />} />
+        <Route path="" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="dashboard" element={<TestPage />} />
+        <Route path="orders" element={<About />} />
+        <Route path="list-info" element={<ListInfoSample />} />
+        <Route path="list-info-mybatis" element={<ListInfoSampleMybatis />} />
+        <Route path="detail-view" element={<DetailViewSample />} />
+        <Route path="upload-file" element={<UploadFile />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
   )

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,10 +94,16 @@ public class CustomerController {
     @PostMapping("")
     public void createCustomer(@RequestBody Customer request){
         Customer customer = new Customer();
-        customer.setId(request.getId());
+        // Auto generating ID
+//        customer.setId(request.getId());
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
         customer.setAddress(request.getAddress());
+        customer.setCity(request.getCity());
+        customer.setState(request.getState());
+        customer.setZipcode(request.getZipcode());
+        customer.setCountry(request.getCountry());
+        customer.setDate(new Date());
 
         int rtn = customerService.create(customer);
         log.info(String.valueOf(rtn));
@@ -115,6 +122,10 @@ public class CustomerController {
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
         customer.setAddress(request.getAddress());
+        customer.setCity(request.getCity());
+        customer.setState(request.getState());
+        customer.setZipcode(request.getZipcode());
+        customer.setCountry(request.getCountry());
 
         int rtn = customerService.update(customer);
         log.info(String.valueOf(rtn));

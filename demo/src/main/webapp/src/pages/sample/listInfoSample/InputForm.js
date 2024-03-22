@@ -19,10 +19,11 @@ const InputForm = (props) => {
   const selectedIndex = props.selectedIndex;
   
   console.log('InputFormInputForm');
+  const token = localStorage.getItem("accessToken");
 
   const clearInfo = () => {
     console.log('clear Info');
-    let newInfo = {id: null, name:"", email:"", date:""};
+    let newInfo = {id: null, name:"", email:"", date:"", address:"", city:"", state:"", zipcode:"", country:""};
     setCustomerInfo(newInfo);
   }
 
@@ -30,7 +31,11 @@ const InputForm = (props) => {
     console.log('fetch info : ' + idx);
       try {
         const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/api/customer/' + idx
+            process.env.REACT_APP_API_URL + '/api/customer/' + idx, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
         );
         console.log(response.data);
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
@@ -54,11 +59,23 @@ const InputForm = (props) => {
       try{
         if (customerInfo.id == null){
           await axios.post(
-            process.env.REACT_APP_API_URL + '/api/customer', customerInfo
+            process.env.REACT_APP_API_URL + '/api/customer',
+            customerInfo,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
           )
         }else{
           await axios.put(
-            process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id, customerInfo
+            process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id,
+            customerInfo,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
           ) 
         }
            
@@ -81,7 +98,12 @@ const InputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try{
         await axios.delete(
-          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id
+          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          }
         ) 
         alert('Delete');
         props.fetchCustomers();
@@ -166,7 +188,11 @@ const InputForm = (props) => {
             fullWidth
             // autoComplete="shipping address-line2"
             variant="standard"
-            defaultValue="2222"
+            value={ customerInfo.address || ""}
+            defaultValue="1714 Franklin St."
+            onChange={ (e) => {
+                onChange(e, "address");
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -178,6 +204,8 @@ const InputForm = (props) => {
             fullWidth
             autoComplete="shipping address-level2"
             variant="standard"
+            value={ customerInfo.city || ""}
+            onChange={e => onChange(e, "city")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -187,6 +215,8 @@ const InputForm = (props) => {
             label="State/Province/Region"
             fullWidth
             variant="standard"
+            value={ customerInfo.state || ""}
+            onChange={e => onChange(e, "state")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -198,6 +228,8 @@ const InputForm = (props) => {
             fullWidth
             autoComplete="shipping postal-code"
             variant="standard"
+            value={ customerInfo.zipcode || ""}
+            onChange={e => onChange(e, "zipcode")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -209,6 +241,8 @@ const InputForm = (props) => {
             fullWidth
             autoComplete="shipping country"
             variant="standard"
+            value={ customerInfo.country || ""}
+            onChange={e => onChange(e, "country")}
           />
         </Grid>
         <Grid item xs={12}>
