@@ -61,6 +61,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Main() {
+    const token = localStorage.getItem("accessToken");
     const [files, setFiles] = useState([]);
     const [listFiles, setListFiles] = useState([]);
     const [dense, setDense] = React.useState(false);
@@ -83,7 +84,8 @@ export default function Main() {
 //        axios.post('/api/file/upload?${_csrf.parameterName}=${_csrf.token}', formData, {
         axios.post(process.env.REACT_APP_API_URL + '/api/file/upload', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
           }
         })
         .then((res) => {
@@ -97,7 +99,12 @@ export default function Main() {
     const loadAllFiles = async () => {
         try {
             const response = await axios.get(
-                process.env.REACT_APP_API_URL + '/api/file/all'
+                process.env.REACT_APP_API_URL + '/api/file/all',
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             );
 
             console.log(response.data);

@@ -14,12 +14,18 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const InsertInputForm = ({onCloseClicked}) => {
 
+  const token = localStorage.getItem("accessToken");
   const [customerInfo, setCustomerInfo] = useState({});
   let maxIdResult = 0;
 
   const getMaxId = async () => {
     const response = await axios.get(
-      process.env.REACT_APP_API_URL + '/api/customer/getMaxId'
+      process.env.REACT_APP_API_URL + '/api/customer/getMaxId',
+      {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      }
     );
     maxIdResult = response.data;
     let obj = {};
@@ -42,7 +48,12 @@ const InsertInputForm = ({onCloseClicked}) => {
     const saveCustomerInfo = async () => {
       try{
         await axios.post(
-            process.env.REACT_APP_API_URL + '/api/customer', customerInfo
+            process.env.REACT_APP_API_URL + '/api/customer', customerInfo,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
           )
         alert('Save');
         onCloseClicked(false);

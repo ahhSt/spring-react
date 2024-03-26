@@ -83,6 +83,7 @@ SelectedListItem.displayName = "SelectedListItem";
 
 export default function TestPage(){
 
+    const token = localStorage.getItem("accessToken");
     const [customers, setCustomers] = useState({query:'', list: []});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -147,7 +148,12 @@ export default function TestPage(){
           }
 
           await axios.delete(
-            process.env.REACT_APP_API_URL + '/api/customer/'+ selectedIndex
+            process.env.REACT_APP_API_URL + '/api/customer/'+ selectedIndex,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
           ) 
           alert('Delete');
           setSelectedIndex(null);
@@ -207,7 +213,12 @@ export default function TestPage(){
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
         const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/api/customer'
+            process.env.REACT_APP_API_URL + '/api/customer',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
         );
 
         if (response.data.length == 0 ){
