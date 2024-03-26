@@ -1,0 +1,23 @@
+.login__content__btn {
+  margin-top: 20px;
+}
+
+.login__content__pw {
+  margin-top: 10px;
+}
+
+.common-input {
+  padding: 10px 15px;
+  border: 1px solid #e1e3ea;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.common-btn {
+  background-color: #0099d8;
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 4px;
+  color: #fff;
+}

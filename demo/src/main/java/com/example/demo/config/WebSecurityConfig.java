@@ -45,16 +45,6 @@ public class WebSecurityConfig {
                 // 인증 전 처리 해야할 필터 추가
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-
-//        http.formLogin()
-//                .loginPage("/security-login/login")
-//                .loginProcessingUrl("/login-proc")
-//                .defaultSuccessUrl("/home")
-//                .and()
-//                .logout()
-//                .logoutUrl("/security-login/logout")
-//                .invalidateHttpSession(true).deleteCookies("JSESSIONID");
-
         return http.build();
     }
 
@@ -72,46 +62,5 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(
-//            UserDetailsService userDetailsService,
-//            PasswordEncoder passwordEncoder) {
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//        authenticationProvider.setUserDetailsService(userDetailsService);
-//        authenticationProvider.setPasswordEncoder(passwordEncoder);
-//
-//        ProviderManager providerManager = new ProviderManager(authenticationProvider);
-//        providerManager.setEraseCredentialsAfterAuthentication(false);
-//
-//        return providerManager;
-//    }
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails userDetails = User.withDefaultPasswordEncoder()
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("password")
-//                .roles("USER", "ADMIN")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(userDetails, admin);
-//    }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
-
-//    @Autowired
-//    public void configure(AuthenticationManagerBuilder builder) {
-//        builder.eraseCredentials(false);
-//    }
 
 }

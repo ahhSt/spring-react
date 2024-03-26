@@ -1,6 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styled from "styled-components";
+import '../asset/css/Login.css';
+import BartLogo from '../asset/images/bart-logo.png';
+
+const StyledMain = styled.main`
+  background-image: url(../../asset/images/login-bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-attachment: fixed;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 300px;
+  height:100vh;
+`;
+
+function Main({children}) {
+    return <StyledMain>{children}</StyledMain>
+}
+
+const StyledSection = styled.section`
+  background-color: #fff;
+  padding: calc(100vw * (50 / 1920)) calc(100vw * (100 / 1920))
+    calc(100vw * (40 / 1920));
+//  position: absolute;
+  transform: translateX(60%);
+  border-radius: 10px;
+  text-align: center;
+  width: calc(100vw * (600 / 1920));
+  max-width: 600px;
+  min-width: 200px;
+`;
+
+function Section({children}) {
+    return <StyledSection>{children}</StyledSection>
+}
 
 function Login() {
     const navigate = useNavigate();
@@ -48,23 +86,28 @@ function Login() {
     []);
 
     return(
-        <div>
-            <h2>Login</h2>
-            <div>
-                <label htmlFor='input_id'>ID : </label>
-                <input type='text' name='username' value={inputId} onChange={handleInputId} />
-            </div>
-            <div>
-                <label htmlFor='input_pw'>PW : </label>
-                <input type='password' name='password' value={inputPw} onChange={handleInputPw} />
-            </div>
-            <div>
-                <button type='button' onClick={onClickLogin}>Login</button>
-            </div>
-            <div>
-                <h2>{message}</h2>
-            </div>
-        </div>
+        <Main>
+            <Section className="login__content">
+                <img src={BartLogo} />
+                <p className="login__content__desc">BART AFC Log-on page</p>
+                  <input type="text"
+                      className="common-input"
+                      name='username'
+                      placeholder="ID"
+                      value={inputId}
+                      onChange={handleInputId}
+                  />
+                  <input
+                      type="password"
+                      className="common-input login__content__pw"
+                      name='password'
+                      placeholder="Password"
+                      value={inputPw}
+                      onChange={handleInputPw}
+                  />
+                <button className="common-btn login__content__btn" type='button' onClick={onClickLogin}>Login</button>
+            </Section>
+        </Main>
     )
 }
 

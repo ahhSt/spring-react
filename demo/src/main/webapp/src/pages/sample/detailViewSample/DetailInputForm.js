@@ -15,6 +15,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 
 
 const DetailInputForm = (props) => {
+  const token = localStorage.getItem("accessToken");
   const [customerInfo, setCustomerInfo] = useState({});
   const selectedIndex = props.selectedIndex;
   let isOpened = props.isDetailOpen;
@@ -33,7 +34,12 @@ const DetailInputForm = (props) => {
           return;
 
         const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/api/customer/' + idx
+            process.env.REACT_APP_API_URL + '/api/customer/' + idx,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
         );
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
       } catch (e) {
@@ -51,7 +57,12 @@ const DetailInputForm = (props) => {
     const deleteCustomerInfo = async () => {
       try{
         await axios.delete(
-          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id
+          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          }
         ) 
         alert('Delete');
         // props.fetchCustomers();
@@ -72,7 +83,12 @@ const DetailInputForm = (props) => {
     const updateCustomerInfo = async () => {
       try{
         await axios.put(
-          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id, customerInfo
+          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id, customerInfo,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          }
         ) 
         alert('Update');
         props.fetchCustomers();
