@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from "styled-components";
 import '../asset/css/Login.css';
-import BartLogo from '../asset/images/bart-logo.png';
+import STrafficLogo from '../asset/images/straffic-logo.jpg';
 
 const StyledMain = styled.main`
   background-image: url(../../asset/images/login-bg.png);
@@ -88,8 +88,8 @@ function Login() {
     return(
         <Main>
             <Section className="login__content">
-                <img src={BartLogo} />
-                <p className="login__content__desc">BART AFC Log-on page</p>
+                <img src={STrafficLogo} />
+                <p className="login__content__desc">Log-on page</p>
                   <input type="text"
                       className="common-input"
                       name='username'

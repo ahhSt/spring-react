@@ -74,6 +74,6 @@ security:
 #    key: vodZHjPmI9sWupUDFvNrzlmal60L7I1vdc4MpNC4S0hFdgtXBkndMpbkCBUURaWcL2kvfdKXUkKeSW87qUYwbnOoFqf63MC6w264OKstT0GzS1oUZS6Uk1ify57FX5VW8yLSsX5nqxeRwR2UAVfRYH1M6SgfIjvpVI+5gNRxrt75iQ1pwlVaRCJ0Gu2/Fs1OAWWGsKH8fHK7l4Lj2YOZmY40gEtIH+o+FIzF3Gs07KxTmZR8oT0oaXN4REgQ9oLGDuwFlRjIQoGYyqxka+kmDd0yAw2AOHX2/bGE2iRfZd8+51W2CDM/cIWR/i3LRyhaR+DL8Q/uPZHMvv4ArZWOEH/R+DWiHK0ci7JykoYgzVQ=
     key: GAbkaRQKyFl8wBV80jtc6JCNeN8Xz55Lv5viUSse7jkts4fTGCc+ybtyoCo852ziLDilS02yhq+Dw6bg3I7dWmxF72WEZ9F7LICkMfW48cBEMvOx/wECOZQuKzIx4wx1YCK3DtGtHoS9pdN5q3+0rW22ARm22RmFRZIJht1TLxdqGHBxW3kU4dt8X7SqZqYFt/vHDCAS+SlIIhzHyON5Jsj2rUb2TzQTZt9MempJZ3o2LhmnC6nL54alXQh98xiCO7gUGdLpeSPSxZ48Qrz7lV/6yJRBRoyPswNe/d5P9PqXxX2TKuJZXd5NxWaLRal5pELm1/I0j75YXrwjgyezOA==
   jwt:
-#    expired_after_ms: 86400000 # 24 hours
-    expired_after_ms: 10000 # 24 hours
+    expired_after_ms: 86400000 # 24 hours
+#    expired_after_ms: 10000 # 24 hours
 

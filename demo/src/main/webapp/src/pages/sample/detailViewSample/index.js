@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '../../common/ApiFunction';
 import { Container } from 'react-bootstrap';
 import Button from '@mui/material/Button/Button';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
@@ -83,7 +84,6 @@ SelectedListItem.displayName = "SelectedListItem";
 
 export default function TestPage(){
 
-    const token = localStorage.getItem("accessToken");
     const [customers, setCustomers] = useState({query:'', list: []});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -147,14 +147,7 @@ export default function TestPage(){
             return;
           }
 
-          await axios.delete(
-            process.env.REACT_APP_API_URL + '/api/customer/'+ selectedIndex,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-          ) 
+          await axios.delete('/api/customer/'+ selectedIndex);
           alert('Delete');
           setSelectedIndex(null);
           fetchCustomers();
@@ -212,14 +205,7 @@ export default function TestPage(){
         setCustomers({query: "", list: []});
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
-        const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/api/customer',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
+        const response = await axios.get('/api/customer');
 
         if (response.data.length == 0 ){
           setLoading(false);
