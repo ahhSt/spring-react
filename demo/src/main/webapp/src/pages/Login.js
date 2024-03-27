@@ -33,7 +33,7 @@ const StyledSection = styled.section`
   text-align: center;
   width: calc(100vw * (600 / 1920));
   max-width: 600px;
-  min-width: 200px;
+  min-width: 350px;
 `;
 
 function Section({children}) {
