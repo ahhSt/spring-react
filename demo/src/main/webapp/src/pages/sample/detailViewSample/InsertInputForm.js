@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef, forwardRef, useImperativeHandle} from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '../../common/ApiFunction';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -14,19 +15,11 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const InsertInputForm = ({onCloseClicked}) => {
 
-  const token = localStorage.getItem("accessToken");
   const [customerInfo, setCustomerInfo] = useState({});
   let maxIdResult = 0;
 
   const getMaxId = async () => {
-    const response = await axios.get(
-      process.env.REACT_APP_API_URL + '/api/customer/getMaxId',
-      {
-          headers: {
-              Authorization: `Bearer ${token}`
-          }
-      }
-    );
+    const response = await axios.get('/api/customer/getMaxId');
     maxIdResult = response.data;
     let obj = {};
     obj["id"] = ((response.data + 1).toString());
@@ -47,14 +40,7 @@ const InsertInputForm = ({onCloseClicked}) => {
   
     const saveCustomerInfo = async () => {
       try{
-        await axios.post(
-            process.env.REACT_APP_API_URL + '/api/customer', customerInfo,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-          )
+        await axios.post('/api/customer', customerInfo);
         alert('Save');
         onCloseClicked(false);
       }

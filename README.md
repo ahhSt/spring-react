@@ -243,3 +243,7 @@ React 빌드와 Spring-boot 빌드를 진행해야 합니다.
     2024/03/22 : 1. JWT 방식 로그인 시큐리티 추가.
                  2. 리퀘스트 JWT 인증 추가.
                  3. list form 샘플 수정.
+    2024/03/26 : 1. spring Jwt 토큰 만료시 에러 응답 추가.
+                 2. react 토큰 만료시 login 페이지로 redirect 샘플 추가.
+    2024/03/27 : 1. axios api 모듈로 변경하여 공통 헤더처리.
+                 2. STraffic 로고.

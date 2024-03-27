@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Button from '@mui/material/Button/Button';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
@@ -17,6 +17,8 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 import InputForm from './InputForm';
+
+import axios from '../../common/ApiFunction';
 
 const SearchBox = (props) => {
   const userInput = props.userInput;
@@ -56,7 +58,7 @@ const SelectedListItem = (props) => {
       setSelectedIndex(item.id);
     };
 
-    const listItem = selectedList.map((item, idx) => 
+    const listItem = selectedList.map((item, idx) =>
               <ListItemButton key={ item.id }
               selected={selectedIndex === item.id}
               onClick={(event) => handleListItemClick(event, item)}
@@ -67,7 +69,7 @@ const SelectedListItem = (props) => {
 
     return <List component="nav" aria-label="secondary mailbox folder">{ listItem }</List>;
   };
-  
+
   return (
     <Box sx={{ width: '100%', maxwidth: 360, bgcolor: 'background.paper' }}>
       <SearchBox userInput={userInput} setUserInput={setUserInput} />
@@ -103,6 +105,7 @@ function BoxComponent(props) {
 
 export default function TestPage(){
 
+    const navigate = useNavigate();
     const [customers, setCustomers] = useState({query:'', list: []});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -117,20 +120,23 @@ export default function TestPage(){
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
 
-        const token = localStorage.getItem("accessToken");
-        const url = process.env.REACT_BACK_END;
-        console.log(url);
-        const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/mybatis/customer',{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-        setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
+        try {
+            const response = await axios.get('/mybatis/customer');
 
-        let minId = response.data[0].id;
-        setSelectedIndex(minId);
+            setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
+            let minId = response.data[0].id;
+            setSelectedIndex(minId);
+        } catch(err){
+            console.log(err.response);
+            const statusCode = err.response.status; // 400
+            const statusText = err.response.statusText; // Bad Request
+            const message = err.response.data.detailMessageCode; // id should not be empty
+            console.log(`${statusCode} - ${statusText} - ${message}`);
+            if (statusCode === 401){
+                alert("Expire Session");
+                navigate("/login")
+            }
+        }
       } catch (e) {
         setError(e);
       }

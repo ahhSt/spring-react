@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef, forwardRef, useImperativeHandle} from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '../../common/ApiFunction';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -15,7 +16,6 @@ import UpdateIcon from '@mui/icons-material/Update';
 
 
 const DetailInputForm = (props) => {
-  const token = localStorage.getItem("accessToken");
   const [customerInfo, setCustomerInfo] = useState({});
   const selectedIndex = props.selectedIndex;
   let isOpened = props.isDetailOpen;
@@ -33,14 +33,7 @@ const DetailInputForm = (props) => {
         if (idx == null)
           return;
 
-        const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/api/customer/' + idx,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
+        const response = await axios.get('/api/customer/' + idx);
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
       } catch (e) {
         console.log("error"); 
@@ -56,14 +49,7 @@ const DetailInputForm = (props) => {
   const onDelete = () => {
     const deleteCustomerInfo = async () => {
       try{
-        await axios.delete(
-          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id,
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
-          }
-        ) 
+        await axios.delete('/api/customer/'+customerInfo.id);
         alert('Delete');
         // props.fetchCustomers();
         props.onCloseClicked(false);
@@ -82,14 +68,7 @@ const DetailInputForm = (props) => {
   const onUpdate = () => {
     const updateCustomerInfo = async () => {
       try{
-        await axios.put(
-          process.env.REACT_APP_API_URL + '/api/customer/'+customerInfo.id, customerInfo,
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
-          }
-        ) 
+        await axios.put('/api/customer/'+customerInfo.id, customerInfo);
         alert('Update');
         props.fetchCustomers();
         props.onCloseClicked(false);

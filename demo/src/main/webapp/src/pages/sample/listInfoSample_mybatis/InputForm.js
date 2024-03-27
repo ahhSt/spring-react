@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef, forwardRef, useImperativeHandle} from 'react';
-import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -11,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import axios from '../../common/ApiFunction';
+
 let newItem;
 
 const InputForm = (props) => {
@@ -19,7 +20,6 @@ const InputForm = (props) => {
   const selectedIndex = props.selectedIndex;
 
   console.log('InputFormInputForm');
-  const token = localStorage.getItem("accessToken");
 
   const clearInfo = () => {
     console.log('clear Info');
@@ -30,13 +30,8 @@ const InputForm = (props) => {
   const fetchCustomerInfo = async (idx) => {
     console.log('fetch info : ' + idx);
       try {
-        const response = await axios.get(
-            process.env.REACT_APP_API_URL + '/mybatis/customer/' + idx, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
+        const response = await axios.get('/mybatis/customer/' + idx);
+
         console.log(response.data);
         setCustomerInfo(response.data); // 데이터는 response.data 안에 들어있습니다.
       } catch (e) {
@@ -58,25 +53,10 @@ const InputForm = (props) => {
     const saveCustomerInfo = async () => {
       try{
         if (customerInfo.id == null){
-          await axios.post(
-            process.env.REACT_APP_API_URL + '/mybatis/customer',
-            customerInfo,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-          )
+          await axios.post('/mybatis/customer', customerInfo);
+
         }else{
-          await axios.put(
-            process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id,
-            customerInfo,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-          )
+          await axios.put('/mybatis/customer/'+customerInfo.id, customerInfo);
         }
 
         alert('Save');
@@ -97,14 +77,7 @@ const InputForm = (props) => {
   const onDelete = () => {
     const deleteCustomerInfo = async () => {
       try{
-        await axios.delete(
-          process.env.REACT_APP_API_URL + '/mybatis/customer/'+customerInfo.id,
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
-          }
-        )
+        await axios.delete('/mybatis/customer/'+customerInfo.id);
         alert('Delete');
         props.fetchCustomers();
       }

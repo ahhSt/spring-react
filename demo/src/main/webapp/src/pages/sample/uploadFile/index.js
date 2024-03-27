@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '../../common/ApiFunction';
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -61,7 +62,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Main() {
-    const token = localStorage.getItem("accessToken");
     const [files, setFiles] = useState([]);
     const [listFiles, setListFiles] = useState([]);
     const [dense, setDense] = React.useState(false);
@@ -81,11 +81,9 @@ export default function Main() {
 
         console.log(Array.from(formData));
 
-//        axios.post('/api/file/upload?${_csrf.parameterName}=${_csrf.token}', formData, {
-        axios.post(process.env.REACT_APP_API_URL + '/api/file/upload', formData, {
+        axios.post('/api/file/upload', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then((res) => {
@@ -98,14 +96,7 @@ export default function Main() {
 
     const loadAllFiles = async () => {
         try {
-            const response = await axios.get(
-                process.env.REACT_APP_API_URL + '/api/file/all',
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+            const response = await axios.get('/api/file/all');
 
             console.log(response.data);
 

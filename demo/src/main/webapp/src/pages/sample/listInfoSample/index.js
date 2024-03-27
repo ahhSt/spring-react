@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Container } from 'react-bootstrap';
 import Button from '@mui/material/Button/Button';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
@@ -18,6 +17,8 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 import InputForm from './InputForm';
+
+import axios from '../../common/ApiFunction';
 
 const SearchBox = (props) => {
   const userInput = props.userInput;
@@ -119,15 +120,17 @@ export default function TestPage(){
         // loading 상태를 true 로 바꿉니다.
         setLoading(true);
 
-        const token = localStorage.getItem("accessToken");
+//        const token = localStorage.getItem("accessToken");
         try {
-            const response = await axios.get(
-                process.env.REACT_APP_API_URL + '/api/customer',{
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
+//            const response = await axios.get(
+//                process.env.REACT_APP_API_URL + '/api/customer',{
+//                    headers: {
+//                        Authorization: `Bearer ${token}`
+//                    }
+//                }
+//            )
+
+            const response = await axios.get('/api/customer');
 
             setCustomers({query:"", list: response.data}); // 데이터는 response.data 안에 들어있습니다.
             let minId = response.data[0].id;
