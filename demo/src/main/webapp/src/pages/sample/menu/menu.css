@@ -1,0 +1,98 @@
+.menu_container{
+    width: max;
+    height: 550px;
+    margin: 20px;
+    display: flex;
+}
+
+.menuList{
+    background-color: white;
+    width:400px;
+    height: max;
+    margin-right: 20px;
+}
+
+.menuListTitle{
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    line-height: 40px;
+    font-size: 18px;
+}
+
+.menuListContent{
+    height: 450px;
+    overflow-y : scroll;
+}
+
+.menuListContent *{
+    height: 25px;
+    margin-bottom: 5px;
+
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    svg {
+        margin: 0;
+        background-color: transparent;
+    }
+}
+
+.menuListContent .mainMenu{
+
+}
+
+.menuListContent .mainMenu:hover{
+    background-color: rgb(25, 118, 210, 0.2);
+}
+
+.menuListContent .mainMenu.clicked{
+    background-color: rgb(25, 118, 210, 0.2);
+}
+
+.menuListContent .subMenu{
+    margin-left: 20px;
+
+}
+
+.menuListContent .subMenu.unable{
+    color : lightgrey;
+}
+
+.menuListContent .subMenu:hover{
+    background-color: rgb(25, 118, 210, 0.2);
+}
+
+.menuListContent .menuBtns{
+    height: 40px;
+    padding: 20px;
+}
+
+.menuForm{
+    background-color: white;
+    width:500px;
+    height: max;
+
+    .menuFormTitle{
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        line-height: 40px;
+        font-size: 18px;
+    }
+
+    .menuFormBtns{
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        line-height: 40px;
+        font-size: 18px;
+
+        button {
+            height: 35px;
+        }
+    }
+
+}
+

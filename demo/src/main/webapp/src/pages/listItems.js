@@ -16,21 +16,21 @@ import { Link, NavLink } from 'react-router-dom';
 
 export const mainListItems = (
   <React.Fragment>
-    <Link to="/dashboard">
+    <Link to="/menu">
       <ListItemButton>
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary="Menu" />
       </ListItemButton>
     </Link>
-    <Link to="/orders">
+    <Link to="/users">
       <ListItemButton>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <PeopleIcon />
         </ListItemIcon>
         <ListItemText 
-          primary="Orders" />
+          primary="Users" />
       </ListItemButton>
     </Link>
     <ListItemButton>

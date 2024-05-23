@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.MenuMapper">
+    <select id="getAllMenu" resultType="com.example.demo.dto.MenuDTO">
+        SELECT
+            menu_obj_id,parent_menu_obj_id,menu_nm,important_flg,menu_order,
+            obj_yn,menu_path,menu_desc,use_yn,reg_dtime,
+            reg_usr_id,upd_dtime,upd_usr_id
+        FROM tb_base0001
+        WHERE use_yn = 'Y'
+        ORDER BY menu_obj_id
+    </select>
+
+    <update id="deleteMenu" parameterType="String">
+        UPDATE tb_base0001
+        SET use_yn = 'N'
+        WHERE menu_obj_id = #{menu_obj_id}
+    </update>
+
+    <update id="updateMenu" parameterType="com.example.demo.dto.MenuDTO">
+        UPDATE tb_base0001
+        SET menu_nm = #{menu_nm},
+            menu_path = #{menu_path},
+            obj_yn = #{obj_yn},
+            menu_order = #{menu_order},
+            menu_desc = #{menu_desc},
+            upd_dtime = now()
+        WHERE menu_obj_id = #{menu_obj_id}
+    </update>
+
+    <!-- sub메뉴 order조정 +1 -->
+    <update id="updateMenuOrderUp" parameterType="String">
+        UPDATE tb_base0001
+        SET menu_order = menu_order + 1
+        WHERE menu_obj_id = #{menu_obj_id}
+    </update>
+
+    <!-- sub메뉴 order조정 -1 -->
+    <update id="updateMenuOrderDown" parameterType="String">
+        UPDATE tb_base0001
+        SET menu_order = menu_order - 1
+        WHERE menu_obj_id = #{menu_obj_id}
+    </update>
+
+    <!-- sub메뉴 List -->
+    <select id="getSubMenuList" parameterType="String" resultType="com.example.demo.dto.MenuDTO">
+        SELECT
+            menu_obj_id,parent_menu_obj_id,menu_nm,important_flg,menu_order,
+            obj_yn,menu_path,menu_desc,use_yn,reg_dtime,
+            reg_usr_id,upd_dtime,upd_usr_id
+        FROM tb_base0001
+        WHERE parent_menu_obj_id = #{parent_menu_obj_id} AND use_yn = 'Y'
+        ORDER BY menu_obj_id
+    </select>
+
+    <!-- 제일 마지막 요소 검색 -->
+    <select id="getLastMenu" resultType="String">
+        SELECT menu_obj_id
+        FROM tb_base0001
+        ORDER BY menu_obj_id desc
+        LIMIT 1
+    </select>
+
+    <insert id="insertMenu" parameterType="com.example.demo.dto.MenuDTO">
+        INSERT INTO tb_base0001
+            (menu_obj_id,
+            parent_menu_obj_id,
+            menu_nm,
+            important_flg,
+            menu_order,
+            obj_yn,
+            menu_path,
+            menu_desc,
+            use_yn,
+            reg_dtime,
+            reg_usr_id,
+            upd_dtime,
+            upd_usr_id )
+        VALUES
+            (#{menu_obj_id},
+            #{parent_menu_obj_id},
+            #{menu_nm},
+            null,
+            #{menu_order},
+            #{obj_yn},
+            #{menu_path},
+            #{menu_desc},
+            'Y',
+            now(),
+            'admin',
+            now(),
+            'admin' )
+    </insert>
+
+</mapper>

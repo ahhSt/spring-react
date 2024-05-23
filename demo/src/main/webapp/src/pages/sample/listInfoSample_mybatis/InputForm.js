@@ -86,7 +86,7 @@ const InputForm = (props) => {
       }
     }
 
-    if(window.confirm("삭제제하시겠습니까?")) {
+    if(window.confirm("삭제하시겠습니까?")) {
       deleteCustomerInfo();
     }
   }
