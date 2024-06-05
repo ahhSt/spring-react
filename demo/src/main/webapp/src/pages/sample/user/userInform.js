@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
+import PropTypes from "prop-types";
 import './user.css';
 
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+
+
+//propType 체크
+UserInform.propTypes = {
+    isIdEditable : PropTypes.bool,
+    selectUser : PropTypes.object,
+    setSelectUser : PropTypes.func,
+    setIsIdEditable : PropTypes.func,
+    setIsUpdate : PropTypes.func
+};
 
 function UserInform(props) {
     return (
@@ -14,22 +23,14 @@ function UserInform(props) {
              noValidate
              autoComplete="off" >
             <div>
-                <TextField disabled id="filled-disabled" label="User ID" defaultValue="001" />
-                <TextField id="outlined-required" label="User Name" defaultValue="Code" />
-                <TextField disabled id="outlined-required" label="Register Datetime" defaultValue="2000-01-01"/>
-                <TextField disabled id="outlined-required" label="Update Datetime" defaultValue="2000-01-01"/>
-                <TextField
-                    id="outlined-select-currency"
-                    disabled
-                    select
-                    label="Assigned Group"
-                    defaultValue="En" >
-                    <MenuItem key="En" value="En">Engineering</MenuItem>
-                    <MenuItem key="Oc" value="Oc">OCC</MenuItem>
-                    <MenuItem key="Bp" value="Bp">BPD</MenuItem>
-                    <MenuItem key="St" value="St">StationAgent</MenuItem>
-                    <MenuItem key="Fl" value="Fl">Floater</MenuItem>
-                </TextField>
+                {props.isIdEditable
+                ? <TextField id="filled-disabled" label="User ID(BART address, e.g. sample@bart.gov or sample)" value={props.selectUser.usr_id || ""}
+                             focused onChange={(e)=>{props.setSelectUser({...props.selectUser,'usr_id':e.target.value}); props.setIsUpdate(true);}} />
+                : <TextField disabled id="filled-disabled" label="User ID(BART address, e.g. sample@bart.gov or sample)" value={props.selectUser.usr_id || "User ID"} /> }
+                 <TextField id="outlined-required" label="User Name" value={props.selectUser.usr_nm || "User Name"}
+                            onChange={(e)=>{props.setSelectUser({...props.selectUser,'usr_nm':e.target.value}); props.setIsUpdate(true);}} />
+                <TextField disabled id="outlined-required" label="Register Datetime" value={props.selectUser.reg_dtime || "YYYY-MM-DD"}/>
+                <TextField disabled id="outlined-required" label="Update Datetime" value={props.selectUser.upd_dtime || "YYYY-MM-DD"}/>
             </div>
         </Box>
     );

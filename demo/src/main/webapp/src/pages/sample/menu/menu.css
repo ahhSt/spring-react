@@ -1,33 +1,32 @@
 .menu_container{
-    width: max;
-    height: 550px;
+    width: 100%;
+    height: 100%;
     margin: 20px;
     display: flex;
 }
 
 .menuList{
     background-color: white;
-    width:400px;
-    height: max;
+    width: 400px;
     margin-right: 20px;
 }
 
 .menuListTitle{
-    height: 40px;
+    padding: 10px;
     display: flex;
     justify-content: center;
-    line-height: 40px;
     font-size: 18px;
+    border-bottom: 1px solid lightblue;
 }
 
 .menuListContent{
-    height: 450px;
+    height: 550px;
     overflow-y : scroll;
 }
 
 .menuListContent *{
-    height: 25px;
-    margin-bottom: 5px;
+    padding: 2px;
+    margin-bottom: 3px;
 
     display: flex;
     justify-content: left;
@@ -38,22 +37,15 @@
         background-color: transparent;
     }
 }
-
-.menuListContent .mainMenu{
-
-}
-
 .menuListContent .mainMenu:hover{
     background-color: rgb(25, 118, 210, 0.2);
 }
 
-.menuListContent .mainMenu.clicked{
-    background-color: rgb(25, 118, 210, 0.2);
-}
-
 .menuListContent .subMenu{
-    margin-left: 20px;
-
+    margin-left: 30px;
+    width: 90%;
+    background-color: white;
+    border: 1px solid transparent;
 }
 
 .menuListContent .subMenu.unable{
@@ -64,30 +56,29 @@
     background-color: rgb(25, 118, 210, 0.2);
 }
 
-.menuListContent .menuBtns{
-    height: 40px;
-    padding: 20px;
+.menuList .menuBtns{
+    padding: 10px;
+    border-top: 1px solid lightblue;
 }
 
 .menuForm{
     background-color: white;
     width:500px;
-    height: max;
 
     .menuFormTitle{
-        height: 40px;
+        padding: 10px;
         display: flex;
         justify-content: center;
-        line-height: 40px;
         font-size: 18px;
+        border-bottom: 1px solid lightblue;
     }
 
     .menuFormBtns{
         height: 40px;
         display: flex;
         justify-content: center;
-        line-height: 40px;
         font-size: 18px;
+        gap:10px;
 
         button {
             height: 35px;

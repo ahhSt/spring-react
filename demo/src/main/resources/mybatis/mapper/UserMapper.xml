@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.UserMapper">
+    <select id="getAllUser" parameterType="hashmap" resultType="com.example.demo.dto.UserDTO">
+        SELECT
+            usr_id,usr_nm,use_yn,
+            reg_dtime,reg_usr_id,
+            upd_dtime,upd_usr_id
+        FROM tb_base0030
+        WHERE usr_id LIKE concat('%',#{userId},'%') AND use_yn = 'Y'
+        ORDER BY usr_id asc
+        LIMIT 10
+        OFFSET #{page}
+    </select>
+
+    <select id="getAllUserPaging" parameterType="com.example.demo.pagination.SearchDTO" resultType="com.example.demo.dto.UserDTO">
+        SELECT
+            usr_id,usr_nm,use_yn,
+            reg_dtime,reg_usr_id,
+            upd_dtime,upd_usr_id
+        FROM tb_base0030
+        WHERE usr_id LIKE concat('%',#{searchKeyword},'%') AND use_yn = 'Y'
+        ORDER BY usr_id asc
+        LIMIT 10
+        OFFSET #{pagination.limitStart}
+    </select>
+
+    <select id="getCount" parameterType="com.example.demo.pagination.SearchDTO" resultType="int">
+        SELECT count(*)
+        FROM tb_base0030
+        WHERE usr_id LIKE concat('%',#{searchKeyword},'%') AND use_yn = 'Y'
+    </select>
+
+    <update id="deleteUser" parameterType="String">
+        UPDATE tb_base0030
+        SET use_yn = 'N'
+        WHERE usr_id = #{usr_id}
+    </update>
+
+    <insert id="insertUser" parameterType="com.example.demo.dto.UserDTO">
+        INSERT INTO tb_base0030
+            (usr_id,
+             usr_nm,
+             use_yn,
+             reg_dtime,
+             reg_usr_id,
+             upd_dtime,
+             upd_usr_id)
+        VALUES
+            (#{usr_id},
+             #{usr_nm},
+             'Y',
+             now(),
+             'admin',
+             now(),
+             'admin');
+    </insert>
+
+    <update id="updateUser" parameterType="com.example.demo.dto.UserDTO">
+        UPDATE tb_base0030
+        SET usr_id = #{usr_id},
+            usr_nm = #{usr_nm},
+            upd_dtime = now(),
+            upd_usr_id = 'admin'
+        WHERE usr_id = #{usr_id}
+    </update>
+
+</mapper>

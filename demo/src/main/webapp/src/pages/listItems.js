@@ -33,7 +33,7 @@ export const mainListItems = (
           primary="Users" />
       </ListItemButton>
     </Link>
-    <ListItemButton>
+    {/*<ListItemButton>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -44,7 +44,7 @@ export const mainListItems = (
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Reports" />
-    </ListItemButton>
+    </ListItemButton>*/}
   </React.Fragment>
 );
 

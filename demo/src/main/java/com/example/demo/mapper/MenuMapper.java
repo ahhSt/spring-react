@@ -1,6 +1,5 @@
 package com.example.demo.mapper;
 
-import com.example.demo.domain.Customer;
 import com.example.demo.dto.MenuDTO;
 import org.apache.ibatis.annotations.Mapper;
 
